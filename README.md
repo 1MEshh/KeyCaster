@@ -24,25 +24,7 @@
 
 </div>
 
-## 💡 Why I Built KeyCaster
 
-Traditional typing tutors and speed-test benchmarks (such as Monkeytype and TypeRacer) measure your ability to **visually transcribe** words already displayed on the screen. 
-
-In real-world engineering, writing, and communication, that is rarely how typing works:
-1. **You formulate a thought** or hear a word spoken.
-2. **Your auditory-phonetic processor** identifies the target vocabulary.
-3. **Your fingers must instantly execute** the orthographic keystrokes without reading ahead.
-
-I built **KeyCaster** to train pure phonetic-to-keystroke recall. By default, the application runs in **Blind Mode**: it dictates the target word or phrase via speech synthesis, visually conceals upcoming letters behind non-intrusive placeholders, and requires your motor memory to produce the correct spelling. When mistakes happen, our mathematical **SM-2 engine** tracks your accuracy, backspaces, and response latency to schedule reviews precisely at the moment of cognitive decay.
-
----
-
-## 🔒 100% Local-First & Zero-Telemetry Guarantee
-
-- 🛡️ **Zero Remote Databases**: No Postgres, no MongoDB, no Supabase. Everything runs entirely client-side.
-- 📦 **IndexedDB via Dexie.js**: All SRS decay states, custom decks, and typing history persist locally on your machine with ACID compliance.
-- 🚫 **Zero Third-Party Trackers**: No Google Analytics, no tracking pixels, no telemetry cookies, and no telemetry pings.
-- ⚡ **Zero-Cost Deployment**: Completely static export compatible. Deploy to Vercel, Cloudflare Pages, or GitHub Pages with zero operational overhead.
 
 ---
 
