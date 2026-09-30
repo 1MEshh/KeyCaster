@@ -5,7 +5,6 @@ import { TopNav } from "@/components/Navigation/TopNav";
 import { TypingStage } from "@/components/TypingEngine/TypingStage";
 import { SettingsModal } from "@/components/Modals/SettingsModal";
 import { CustomDeckModal } from "@/components/Modals/CustomDeckModal";
-import { SessionSummaryModal } from "@/components/Modals/SessionSummaryModal";
 import { ProgressDashboard } from "@/components/Dashboard/ProgressDashboard";
 import { OnboardingFlow } from "@/components/Onboarding/OnboardingFlow";
 import { useSettingsStore } from "@/store/useSettingsStore";
@@ -115,7 +114,7 @@ export default function Home() {
             <div className="w-6 h-6 border-2 border-main border-t-transparent rounded-full animate-spin" />
             <span>Loading SRS deck...</span>
           </div>
-        ) : isSessionActive && currentWord ? (
+        ) : isSessionActive && (currentWord || isSessionComplete) ? (
           <TypingStage />
         ) : (
           /* Empty / All Caught Up State */
@@ -165,14 +164,6 @@ export default function Home() {
       <CustomDeckModal
         isOpen={isCustomDeckOpen}
         onClose={() => setIsCustomDeckOpen(false)}
-      />
-
-      <SessionSummaryModal
-        isOpen={isSessionComplete && mainQueue.length > 0}
-        onNewSession={() => initSession(activeCategory, sessionSize)}
-        onOpenDashboard={() => {
-          setIsDashboardOpen(true);
-        }}
       />
 
       <ProgressDashboard
