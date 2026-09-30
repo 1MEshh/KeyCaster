@@ -5,8 +5,8 @@ export type CaretStyle = "default" | "block" | "underline" | "outline";
 export type SmoothCaretSpeed = "off" | "fast" | "medium" | "slow";
 export type ConfidenceMode = "off" | "on" | "max";
 export type StopOnError = "off" | "letter" | "word";
-export type Theme = "nord" | "dracula" | "serika_dark" | "midnight";
-export type FontFamily = "JetBrains Mono" | "Roboto Mono" | "Fira Code";
+export type Theme = "monochrome" | "nord" | "dracula" | "serika_dark" | "midnight";
+export type FontFamily = "Thmanyah Sans" | "JetBrains Mono" | "Roboto Mono" | "Fira Code";
 export type LiveStatsMode = "off" | "text" | "mini";
 export type KeyboardLayout = "qwerty" | "dvorak" | "colemak";
 
@@ -75,6 +75,15 @@ export const THEME_VARIABLES: Record<
     errorExtra: string;
   }
 > = {
+  monochrome: {
+    bg: "#09090b",
+    main: "#ffffff",
+    caret: "#ffffff",
+    sub: "#71717a",
+    text: "#f4f4f5",
+    error: "#ef4444",
+    errorExtra: "#7f1d1d",
+  },
   nord: {
     bg: "#2e3440",
     main: "#88c0d0",
@@ -126,8 +135,8 @@ const DEFAULT_SETTINGS = {
   confidenceMode: "off" as ConfidenceMode,
   blindMode: true,
   stopOnError: "letter" as StopOnError,
-  theme: "midnight" as Theme,
-  fontFamily: "JetBrains Mono" as FontFamily,
+  theme: "monochrome" as Theme,
+  fontFamily: "Thmanyah Sans" as FontFamily,
   fontSize: 1.75,
   liveStats: "text" as LiveStatsMode,
   showKeyboard: true,
@@ -173,10 +182,11 @@ export const useSettingsStore = create<SettingsState>()(
       resetToDefaults: () => {
         set(DEFAULT_SETTINGS);
         applyThemeCSS(DEFAULT_SETTINGS.theme);
+        applyFontCSS(DEFAULT_SETTINGS.fontFamily);
       },
     }),
     {
-      name: "keycaster_settings_v1",
+      name: "keycaster_settings_v2",
       onRehydrateStorage: () => (state) => {
         if (state) {
           applyThemeCSS(state.theme);
@@ -192,10 +202,16 @@ export function applyFontCSS(font: FontFamily): void {
   const root = document.documentElement;
   if (font === "Roboto Mono") {
     root.style.setProperty("--font-mono", "var(--font-roboto), monospace");
+    document.body.style.fontFamily = "var(--font-roboto), monospace";
   } else if (font === "Fira Code") {
     root.style.setProperty("--font-mono", "var(--font-fira), monospace");
-  } else {
+    document.body.style.fontFamily = "var(--font-fira), monospace";
+  } else if (font === "JetBrains Mono") {
     root.style.setProperty("--font-mono", "var(--font-jetbrains), monospace");
+    document.body.style.fontFamily = "var(--font-jetbrains), monospace";
+  } else {
+    root.style.setProperty("--font-mono", "var(--font-thmanyah)");
+    document.body.style.fontFamily = "var(--font-thmanyah)";
   }
 }
 

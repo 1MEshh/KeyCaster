@@ -48,10 +48,15 @@
 - **Strict Letter Mode**: Halts cursor progression on error, illuminates the typo in vivid warning crimson, triggers a CSS shake animation, and requires <kbd>Backspace</kbd> to correct.
 - **Precision Caret Engine**: 4 caret geometries (`line`, `block`, `underline`, `outline`) paired with 4 transition speeds (`off`, `fast`, `medium`, `slow`).
 - **Curated Colorways**: Built-in high-contrast themes:
-  - 🌌 **Midnight** (Default — deep obsidian with warm accents)
+  - 🖤 **Monochrome (B&W)** (Default — pure obsidian black `#09090b` and crisp paper-white `#f4f4f5`)
+  - 🌌 **Midnight** (Deep navy obsidian with warm cyan accents)
   - ❄️ **Nord** (Arctic blue & muted slate)
   - 🧛 **Dracula** (Vibrant vampire purple & neon pink)
   - 🟡 **Serika Dark** (Classic dark charcoal & amber yellow)
+- **Typography Engine**: Integrated **Thmanyah Sans (خط ثمانية)** locally as the application-wide default typography, paired with selectable monospace options (JetBrains Mono, Roboto Mono, Fira Code).
+- **Session Completion & Queue Progress**:
+  - **Sleek Queue Progress Bar**: Real-time progress bar under `QUEUE X / 15` smoothly animating toward completion.
+  - **15-Word Completion Flow**: An inline animated completion screen offering **Preview 15 Words** (with audio pronunciation replays) and **Next 15 Words** (<kbd>Enter</kbd> hotkey).
 - **Virtual Keyboard**: Real-time visual layout supporting **QWERTY**, **Dvorak**, and **Colemak** with dynamic key illumination and finger-zone indicators.
 
 ### 📚 Pre-Configured Curated Decks

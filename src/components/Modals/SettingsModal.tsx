@@ -291,8 +291,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                 <label className="text-xs uppercase text-sub font-semibold block mb-2">
                   Theme Preset
                 </label>
-                <div className="grid grid-cols-2 gap-3">
-                  {(["serika_dark", "nord", "dracula", "midnight"] as Theme[]).map((thm) => {
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {(["monochrome", "midnight", "nord", "dracula", "serika_dark"] as Theme[]).map((thm) => {
                     const colors = THEME_VARIABLES[thm];
                     const isCur = theme === thm;
                     return (
@@ -307,7 +307,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                       >
                         <div>
                           <div className="text-xs font-bold capitalize text-text">
-                            {thm.replace("_", " ")}
+                            {thm === "monochrome" ? "Monochrome (B&W)" : thm.replace("_", " ")}
                           </div>
                           <div className="text-[10px] text-sub">Preset</div>
                         </div>
@@ -342,8 +342,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                 <label className="text-xs uppercase text-sub font-semibold block mb-2">
                   Font Family
                 </label>
-                <div className="grid grid-cols-3 gap-2">
-                  {(["JetBrains Mono", "Roboto Mono", "Fira Code"] as FontFamily[]).map((font) => (
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {(["Thmanyah Sans", "JetBrains Mono", "Roboto Mono", "Fira Code"] as FontFamily[]).map((font) => (
                     <button
                       key={font}
                       onClick={() => setFontFamily(font)}
@@ -353,7 +353,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                           : "border-sub/20 text-sub hover:border-sub/50"
                       }`}
                     >
-                      {font}
+                      {font === "Thmanyah Sans" ? "ثمانية (Default)" : font}
                     </button>
                   ))}
                 </div>

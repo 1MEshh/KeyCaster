@@ -9,6 +9,7 @@ import { playMechanicalClick, playErrorThud, TTSController } from "@/lib/audio";
 import { AudioIndicator } from "@/components/HUD/AudioIndicator";
 import { LiveStats } from "@/components/HUD/LiveStats";
 import { VirtualKeyboard } from "@/components/VirtualKeyboard/VirtualKeyboard";
+import { SessionEndActions } from "@/components/TypingEngine/SessionEndActions";
 
 interface LetterStatus {
   char: string;
@@ -29,6 +30,8 @@ export const TypingStage: React.FC = () => {
     soundOnError,
     speechRate,
     ttsVoiceURI,
+    activeCategory,
+    sessionSize,
   } = useSettingsStore();
 
   const {
@@ -41,6 +44,8 @@ export const TypingStage: React.FC = () => {
     skipCurrentWord,
     isSessionActive,
     isSessionComplete,
+    completedWords,
+    initSession,
   } = useSessionStore();
 
   const setActiveKey = useKeyStore((s) => s.setActiveKey);
@@ -365,7 +370,41 @@ export const TypingStage: React.FC = () => {
     setActiveKey(null);
   }, [setActiveKey]);
 
-  if (!currentWord || isSessionComplete) {
+  if (isSessionComplete) {
+    const finalWpm =
+      completedWords.length > 0
+        ? Math.round(completedWords.reduce((acc, c) => acc + c.wpm, 0) / completedWords.length)
+        : liveWpm;
+    const finalAcc =
+      completedWords.length > 0
+        ? Math.round(completedWords.reduce((acc, c) => acc + c.accuracy, 0) / completedWords.length)
+        : liveAccuracy;
+
+    return (
+      <div className="w-full flex flex-col items-center justify-center py-6 px-4">
+        {/* Live Stats Bar with 100% Progress */}
+        <div className="mb-8 w-full max-w-2xl">
+          <LiveStats
+            wpm={finalWpm}
+            accuracy={finalAcc}
+            streak={liveStreak}
+            currentWordIndex={mainQueue.length}
+            totalWords={mainQueue.length || sessionSize}
+            retryCount={0}
+            isRetryAttempt={false}
+            isComplete={true}
+          />
+        </div>
+
+        {/* 15-Word Completion Actions (Preview & Next) */}
+        <SessionEndActions
+          onNextSession={() => initSession(activeCategory, sessionSize)}
+        />
+      </div>
+    );
+  }
+
+  if (!currentWord) {
     return null;
   }
 

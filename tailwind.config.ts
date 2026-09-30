@@ -19,6 +19,7 @@ const config: Config = {
       },
       fontFamily: {
         mono: ["var(--font-mono)", "monospace"],
+        thmanyah: ["var(--font-thmanyah)", "sans-serif"],
       },
       animation: {
         pulseFast: "pulse 1s cubic-bezier(0.4, 0, 0.6, 1) infinite",
