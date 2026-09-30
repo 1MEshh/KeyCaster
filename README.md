@@ -197,6 +197,6 @@ If you find KeyCaster useful for your spelling, language learning, or touch-typi
 
 ---
 
-## 📄 License
+
 
 This project is licensed under the **MIT License** — feel free to use, modify, and distribute it in your own projects.
