@@ -25,8 +25,13 @@ export const SessionEndActions: React.FC<SessionEndActionsProps> = ({ onNextSess
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [speakingWord, setSpeakingWord] = useState<string | null>(null);
 
-  const { completedWords, startTime, endTime } = useSessionStore();
+  const { completedWords, startTime, endTime, startRetryMistakes } = useSessionStore();
   const { activeCategory, speechRate, ttsVoiceURI } = useSettingsStore();
+
+  const mistakeWords = completedWords.filter(
+    (c) => c.grade < 3 || c.errors > 0 || c.wasSkipped
+  );
+  const mistakeCount = mistakeWords.length;
 
   // Fire celebratory micro-confetti on mount
   useEffect(() => {
@@ -35,17 +40,16 @@ export const SessionEndActions: React.FC<SessionEndActionsProps> = ({ onNextSess
         particleCount: 65,
         spread: 60,
         origin: { y: 0.65 },
-        colors: ["#ffffff", "#71717a", "#38bdf8", "#e2b714"],
+        colors: ["#38bdf8", "#88c0d0", "#ffffff", "#e2b714"],
       });
     } catch {
       // Confetti fallback
     }
   }, []);
 
-  // Keyboard shortcut listener for Enter (Next) and P (Preview)
+  // Keyboard shortcut listener for Enter (Next), P (Preview), and R (Retry Mistakes)
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Don't trigger if user is inside an input or textarea
       if (
         document.activeElement instanceof HTMLInputElement ||
         document.activeElement instanceof HTMLTextAreaElement
@@ -59,12 +63,15 @@ export const SessionEndActions: React.FC<SessionEndActionsProps> = ({ onNextSess
       } else if (e.key === "p" || e.key === "P") {
         e.preventDefault();
         setIsPreviewOpen((prev) => !prev);
+      } else if ((e.key === "r" || e.key === "R") && mistakeCount > 0) {
+        e.preventDefault();
+        startRetryMistakes();
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [onNextSession]);
+  }, [onNextSession, mistakeCount, startRetryMistakes]);
 
   const speakWord = (wordText: string) => {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
@@ -121,7 +128,7 @@ export const SessionEndActions: React.FC<SessionEndActionsProps> = ({ onNextSess
         </div>
 
         <h3 className="text-2xl sm:text-3xl font-extrabold text-text tracking-tight mb-2">
-          15 Words Mastered
+          {totalWords} Words Completed
         </h3>
 
         {/* Quick Compact Stats Pill */}
@@ -139,14 +146,14 @@ export const SessionEndActions: React.FC<SessionEndActionsProps> = ({ onNextSess
           </span>
         </div>
 
-        {/* 2 Animated Action Buttons */}
-        <div className="flex flex-col sm:flex-row items-center gap-3.5 w-full max-w-md">
+        {/* Animated Action Buttons */}
+        <div className="flex flex-col sm:flex-row items-center gap-3 w-full max-w-lg">
           {/* Button 1: Preview Words */}
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => setIsPreviewOpen((prev) => !prev)}
-            className={`flex-1 w-full py-3 px-5 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2.5 transition-colors ${
+            className={`flex-1 w-full py-3 px-4 rounded-xl border text-xs font-semibold flex items-center justify-center gap-2 transition-colors ${
               isPreviewOpen
                 ? "bg-sub/20 border-sub text-text"
                 : "bg-transparent border-sub/40 text-sub hover:text-text hover:border-sub"
@@ -160,7 +167,7 @@ export const SessionEndActions: React.FC<SessionEndActionsProps> = ({ onNextSess
             ) : (
               <>
                 <Eye className="w-4 h-4" />
-                <span>Preview 15 Words</span>
+                <span>Preview {totalWords} Words</span>
               </>
             )}
             <kbd className="text-[10px] px-1.5 py-0.5 rounded bg-sub/20 text-sub border border-sub/20 font-mono">
@@ -168,7 +175,23 @@ export const SessionEndActions: React.FC<SessionEndActionsProps> = ({ onNextSess
             </kbd>
           </motion.button>
 
-          {/* Button 2: Next 15 Words */}
+          {/* Button 2: Retry Mistakes (if any) */}
+          {mistakeCount > 0 && (
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={startRetryMistakes}
+              className="w-full sm:w-auto py-3 px-4 rounded-xl border border-error/30 bg-error/10 text-error hover:bg-error/20 text-xs font-bold flex items-center justify-center gap-2 transition-colors"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              <span>Retry Mistakes ({mistakeCount})</span>
+              <kbd className="text-[10px] px-1.5 py-0.5 rounded bg-error/20 text-error border border-error/30 font-mono">
+                R
+              </kbd>
+            </motion.button>
+          )}
+
+          {/* Button 3: Next 15 Words */}
           <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -185,7 +208,7 @@ export const SessionEndActions: React.FC<SessionEndActionsProps> = ({ onNextSess
         </div>
       </div>
 
-      {/* Expandable 15-Word Preview Grid with Audio Playback */}
+      {/* Expandable Word Preview Grid with Audio Playback */}
       <AnimatePresence>
         {isPreviewOpen && (
           <motion.div
@@ -200,12 +223,15 @@ export const SessionEndActions: React.FC<SessionEndActionsProps> = ({ onNextSess
                 <span className="text-[11px] uppercase tracking-wider text-sub font-semibold">
                   Session Words Review ({completedWords.length})
                 </span>
-                <span className="text-[10px] text-sub/70">Click speaker to replay voice</span>
+                <span className="text-[10px] text-sub/70">Click speaker to replay pronunciation</span>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 max-h-80 overflow-y-auto pr-1">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2.5 max-h-80 overflow-y-auto pr-1">
                 {completedWords.map((item, idx) => {
                   const isSpeaking = speakingWord === item.word.word;
+                  const isSkipped = item.wasSkipped;
+                  const isMistake = item.errors > 0 || item.grade < 3;
+
                   return (
                     <div
                       key={idx}
@@ -230,17 +256,19 @@ export const SessionEndActions: React.FC<SessionEndActionsProps> = ({ onNextSess
                       </div>
 
                       <div className="flex items-center gap-2 flex-shrink-0 text-[11px]">
-                        <span className="text-sub font-mono">{item.wpm} wpm</span>
+                        {!isSkipped && (
+                          <span className="text-sub font-mono">{item.wpm} wpm</span>
+                        )}
                         <span
-                          className={`font-semibold px-1.5 py-0.5 rounded text-[10px] font-mono ${
-                            item.grade >= 4
-                              ? "bg-main/15 text-main"
-                              : item.grade === 3
-                              ? "bg-sub/20 text-sub"
-                              : "bg-error/20 text-error"
+                          className={`font-semibold px-1.5 py-0.5 rounded text-[10px] font-mono border ${
+                            isSkipped
+                              ? "bg-amber-500/15 text-amber-400 border-amber-500/30"
+                              : isMistake
+                              ? "bg-error/15 text-error border-error/30"
+                              : "bg-main/15 text-main border-main/30"
                           }`}
                         >
-                          {item.accuracy}%
+                          {isSkipped ? "Skipped" : isMistake ? `Mistake` : "Mastered"}
                         </span>
                       </div>
                     </div>

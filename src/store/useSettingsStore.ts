@@ -135,7 +135,7 @@ const DEFAULT_SETTINGS = {
   confidenceMode: "off" as ConfidenceMode,
   blindMode: true,
   stopOnError: "letter" as StopOnError,
-  theme: "monochrome" as Theme,
+  theme: "midnight" as Theme,
   fontFamily: "Thmanyah Sans" as FontFamily,
   fontSize: 1.75,
   liveStats: "text" as LiveStatsMode,
@@ -186,7 +186,7 @@ export const useSettingsStore = create<SettingsState>()(
       },
     }),
     {
-      name: "keycaster_settings_v2",
+      name: "keycaster_settings_v3",
       onRehydrateStorage: () => (state) => {
         if (state) {
           applyThemeCSS(state.theme);

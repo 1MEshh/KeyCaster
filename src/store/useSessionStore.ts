@@ -13,6 +13,7 @@ export interface CompletedWordItem {
   wpm: number;
   accuracy: number;
   wasRetry: boolean;
+  wasSkipped?: boolean;
 }
 
 export interface SessionState {
@@ -34,8 +35,10 @@ export interface SessionState {
     errors: number;
     backspaces: number;
     elapsedMs: number;
+    wasSkipped?: boolean;
   }) => Promise<{ gradeResult: GradingResult; isNextAvailable: boolean }>;
   skipCurrentWord: () => Promise<void>;
+  startRetryMistakes: () => void;
   restartSession: () => void;
 }
 
@@ -77,7 +80,7 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     }
   },
 
-  completeCurrentWord: async ({ errors, backspaces, elapsedMs }) => {
+  completeCurrentWord: async ({ errors, backspaces, elapsedMs, wasSkipped = false }) => {
     const { currentWord, isRetryAttempt, mainQueue, retryQueue, currentIndex, completedWords } = get();
 
     if (!currentWord) {
@@ -88,13 +91,15 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     }
 
     // 1. Grade performance
-    const gradeResult = gradeWord({
-      word: currentWord.word,
-      errors,
-      backspaces,
-      elapsedMs,
-      wasRetry: isRetryAttempt,
-    });
+    const gradeResult = wasSkipped
+      ? { grade: 1, label: "Skipped", avgMsPerChar: 0, wpm: 0, accuracy: 0 }
+      : gradeWord({
+          word: currentWord.word,
+          errors,
+          backspaces,
+          elapsedMs,
+          wasRetry: isRetryAttempt,
+        });
 
     // 2. SM-2 Calculation
     const sm2 = calculateSM2(
@@ -129,14 +134,13 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       });
     }
 
-    // 4. SRS Routing logic (from specification diagram)
-    // If errors >= 1 or grade < 3, re-append to retryQueue for intra-day practice
+    // 4. Save retry record if needed for targeted "Retry Mistakes" button
     const nextRetryQueue = [...retryQueue];
-    if (errors > 0 || gradeResult.grade < 3) {
+    if (errors > 0 || gradeResult.grade < 3 || wasSkipped) {
       nextRetryQueue.push(updatedWordRecord);
     }
 
-    const newCompletedWords = [
+    const newCompletedWords: CompletedWordItem[] = [
       ...completedWords,
       {
         word: currentWord,
@@ -147,31 +151,32 @@ export const useSessionStore = create<SessionState>((set, get) => ({
         wpm: gradeResult.wpm,
         accuracy: gradeResult.accuracy,
         wasRetry: isRetryAttempt,
+        wasSkipped,
       },
     ];
 
     // Determine next word in queue
     let nextWord: WordRecord | null = null;
-    let nextIsRetry = false;
+    let nextIsRetry = isRetryAttempt;
     let nextIndex = currentIndex;
-    let updatedMainQueue = [...mainQueue];
 
     if (!isRetryAttempt) {
-      // We are in main queue
+      // Main 15-word queue: advance straight to next word or finish at word 15
       if (currentIndex + 1 < mainQueue.length) {
         nextIndex = currentIndex + 1;
         nextWord = mainQueue[nextIndex];
         nextIsRetry = false;
-      } else if (nextRetryQueue.length > 0) {
-        // Main queue exhausted, pop from retryQueue
-        nextWord = nextRetryQueue.shift() || null;
-        nextIsRetry = true;
+      } else {
+        // Main queue completed!
+        nextWord = null;
       }
     } else {
-      // We are already in retry queue
-      if (nextRetryQueue.length > 0) {
-        nextWord = nextRetryQueue.shift() || null;
-        nextIsRetry = true;
+      // In explicit retry round
+      if (currentIndex + 1 < mainQueue.length) {
+        nextIndex = currentIndex + 1;
+        nextWord = mainQueue[nextIndex];
+      } else {
+        nextWord = null;
       }
     }
 
@@ -214,13 +219,49 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   },
 
   skipCurrentWord: async () => {
-    // Treat skip as Grade 1
+    // Treat skip as Grade 1 and record wasSkipped
     const { completeCurrentWord } = get();
     await completeCurrentWord({
-      errors: 5,
+      errors: 1,
       backspaces: 0,
-      elapsedMs: 5000,
+      elapsedMs: 2000,
+      wasSkipped: true,
     });
+  },
+
+  startRetryMistakes: () => {
+    const { retryQueue, completedWords } = get();
+    const mistakes =
+      retryQueue.length > 0
+        ? [...retryQueue]
+        : completedWords
+            .filter((c) => c.grade < 3 || c.errors > 0 || c.wasSkipped)
+            .map((c) => c.word);
+
+    // Deduplicate by word string
+    const uniqueMistakes: WordRecord[] = [];
+    const seen = new Set<string>();
+    for (const w of mistakes) {
+      if (!seen.has(w.word)) {
+        seen.add(w.word);
+        uniqueMistakes.push(w);
+      }
+    }
+
+    if (uniqueMistakes.length > 0) {
+      set({
+        mainQueue: uniqueMistakes,
+        retryQueue: [],
+        currentIndex: 0,
+        currentWord: uniqueMistakes[0],
+        isRetryAttempt: true,
+        completedWords: [],
+        startTime: Date.now(),
+        endTime: null,
+        isSessionActive: true,
+        isSessionComplete: false,
+      });
+    }
   },
 
   restartSession: () => {
