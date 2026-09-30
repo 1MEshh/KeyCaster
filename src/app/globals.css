@@ -45,13 +45,13 @@
 :root {
   --font-thmanyah: "Thmanyah Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: var(--font-thmanyah);
-  --bg: #09090b;
-  --main: #ffffff;
-  --caret: #ffffff;
-  --sub: #71717a;
-  --text: #f4f4f5;
-  --error: #ef4444;
-  --error-extra: #7f1d1d;
+  --bg: #0f172a;
+  --main: #38bdf8;
+  --caret: #38bdf8;
+  --sub: #475569;
+  --text: #f1f5f9;
+  --error: #f43f5e;
+  --error-extra: #fb7185;
 }
 
 body {
