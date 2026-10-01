@@ -37,6 +37,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
     setConfidenceMode,
     blindMode,
     setBlindMode,
+    blindModePro,
+    setBlindModePro,
     phraseMode,
     setPhraseMode,
     stopOnError,
@@ -330,19 +332,41 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
               </div>
 
               {/* Blind Mode */}
-              <div className="flex items-center justify-between p-3 rounded-lg border border-sub/20 bg-sub/5">
-                <div>
-                  <div className="text-xs font-semibold text-text">Blind Mode</div>
-                  <div className="text-[11px] text-sub">
-                    No letters shown on screen—pure auditory spelling practice.
+              <div className="space-y-2">
+                <div className="flex items-center justify-between p-3 rounded-lg border border-sub/20 bg-sub/5">
+                  <div>
+                    <div className="text-xs font-semibold text-text">Blind Mode</div>
+                    <div className="text-[11px] text-sub">
+                      No letters shown on screen—pure auditory spelling practice.
+                    </div>
                   </div>
+                  <input
+                    type="checkbox"
+                    checked={blindMode}
+                    onChange={(e) => setBlindMode(e.target.checked)}
+                    className="w-4 h-4 accent-main cursor-pointer"
+                  />
                 </div>
-                <input
-                  type="checkbox"
-                  checked={blindMode}
-                  onChange={(e) => setBlindMode(e.target.checked)}
-                  className="w-4 h-4 accent-main cursor-pointer"
-                />
+
+                {blindMode && (
+                  <div className="flex items-center justify-between p-2.5 ml-4 rounded-lg border border-sub/20 bg-sub/10 animate-fadeIn">
+                    <div>
+                      <div className="text-xs font-semibold text-text flex items-center gap-1.5">
+                        <span>Blind Mode Pro</span>
+                        <span className="text-[9px] px-1.5 py-0.5 rounded bg-main/20 text-main uppercase font-bold">Hardcore</span>
+                      </div>
+                      <div className="text-[10px] text-sub">
+                        Strict acoustic recall: Backspace is completely disabled.
+                      </div>
+                    </div>
+                    <input
+                      type="checkbox"
+                      checked={blindModePro}
+                      onChange={(e) => setBlindModePro(e.target.checked)}
+                      className="w-4 h-4 accent-main cursor-pointer"
+                    />
+                  </div>
+                )}
               </div>
 
               {/* Phrase Mode */}
