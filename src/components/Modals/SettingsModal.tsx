@@ -37,6 +37,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
     setConfidenceMode,
     blindMode,
     setBlindMode,
+    phraseMode,
+    setPhraseMode,
     stopOnError,
     setStopOnError,
     theme,
@@ -339,6 +341,22 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                   type="checkbox"
                   checked={blindMode}
                   onChange={(e) => setBlindMode(e.target.checked)}
+                  className="w-4 h-4 accent-main cursor-pointer"
+                />
+              </div>
+
+              {/* Phrase Mode */}
+              <div className="flex items-center justify-between p-3 rounded-lg border border-sub/20 bg-sub/5">
+                <div>
+                  <div className="text-xs font-semibold text-text">Phrase Mode</div>
+                  <div className="text-[11px] text-sub">
+                    Practice natural multi-word idioms, expressions, and phrases with spaces.
+                  </div>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={phraseMode}
+                  onChange={(e) => setPhraseMode(e.target.checked)}
                   className="w-4 h-4 accent-main cursor-pointer"
                 />
               </div>
