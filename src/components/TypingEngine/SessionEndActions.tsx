@@ -27,7 +27,7 @@ export const SessionEndActions: React.FC<SessionEndActionsProps> = ({ onNextSess
   const [speakingWord, setSpeakingWord] = useState<string | null>(null);
 
   const { completedWords, startTime, endTime, startRetryMistakes } = useSessionStore();
-  const { activeCategory, speechRate, ttsVoiceURI } = useSettingsStore();
+  const { activeCategory, speechRate, ttsVoiceURI, sessionSize } = useSettingsStore();
 
   const mistakeWords = completedWords.filter(
     (c) => c.grade < 3 || c.errors > 0 || c.wasSkipped
@@ -200,7 +200,7 @@ export const SessionEndActions: React.FC<SessionEndActionsProps> = ({ onNextSess
             className="flex-1 w-full py-3 px-5 rounded-xl bg-main text-bg text-xs font-extrabold flex items-center justify-center gap-2 shadow-lg hover:opacity-95 transition-opacity"
           >
             <Sparkles className="w-4 h-4" />
-            <span>Next 15 Words</span>
+            <span>Next {sessionSize || 15} Words</span>
             <ArrowRight className="w-4 h-4" />
             <kbd className="text-[10px] px-1.5 py-0.5 rounded bg-bg/20 text-bg border border-bg/30 font-mono">
               ↵

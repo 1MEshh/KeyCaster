@@ -145,7 +145,6 @@ export const useGameModeStore = create<GameModeState>((set, get) => ({
       wordsCompleted: wordsCompleted + 1,
       currentStreak: nextStreak,
       highestStreak: Math.max(highestStreak, nextStreak),
-      errors: totalErrors + errors,
     });
   },
 

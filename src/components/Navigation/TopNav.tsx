@@ -50,6 +50,18 @@ export const TopNav: React.FC<TopNavProps> = ({
   }, [checkStreak]);
 
   useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsCategoryMenuOpen(false);
+        setIsModeMenuOpen(false);
+        setIsThemeMenuOpen(false);
+      }
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, []);
+
+  useEffect(() => {
     const fetchCustomDecks = async () => {
       try {
         const decks = await db.customDecks.toArray();
@@ -83,6 +95,18 @@ export const TopNav: React.FC<TopNavProps> = ({
 
   return (
     <header className="w-full max-w-5xl mx-auto flex items-center justify-between py-4 px-6 select-none font-mono">
+      {/* Click-outside backdrop to dismiss any open dropdown */}
+      {(isCategoryMenuOpen || isModeMenuOpen || isThemeMenuOpen) && (
+        <div
+          className="fixed inset-0 z-30 bg-transparent"
+          onClick={() => {
+            setIsCategoryMenuOpen(false);
+            setIsModeMenuOpen(false);
+            setIsThemeMenuOpen(false);
+          }}
+        />
+      )}
+
       {/* Brand Logo */}
       <div className="flex items-center gap-2.5">
         <div className="w-8 h-8 rounded-lg bg-main/15 text-main flex items-center justify-center font-black">

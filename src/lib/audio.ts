@@ -141,12 +141,27 @@ export function playErrorThud(volume = 0.5): void {
 export class TTSController {
   private static activeUtterance: SpeechSynthesisUtterance | null = null;
   private static cachedVoices: SpeechSynthesisVoice[] = [];
+  private static listenerAttached = false;
 
   public static getVoices(): SpeechSynthesisVoice[] {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) return [];
-    if (this.cachedVoices.length > 0) return this.cachedVoices;
 
-    this.cachedVoices = window.speechSynthesis.getVoices();
+    if (!this.listenerAttached) {
+      this.listenerAttached = true;
+      window.speechSynthesis.addEventListener("voiceschanged", () => {
+        const v = window.speechSynthesis.getVoices();
+        if (v.length > 0) {
+          this.cachedVoices = v;
+        }
+      });
+    }
+
+    const available = window.speechSynthesis.getVoices();
+    if (available.length > 0) {
+      this.cachedVoices = available;
+      return available;
+    }
+
     return this.cachedVoices;
   }
 
