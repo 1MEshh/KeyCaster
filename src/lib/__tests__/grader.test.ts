@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { gradeWord } from "../grader.ts";
+import { gradeWord } from "../grader";
 
 test("Grader: 0 errors, 0 backspaces, fast typing (<320ms/char) -> Grade 5", () => {
   const result = gradeWord({

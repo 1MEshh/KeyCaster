@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { calculateSM2 } from "../sm2.ts";
+import { calculateSM2 } from "../sm2";
 
 test("SM-2: Grade 5 on first attempt (repetitions = 0)", () => {
   const result = calculateSM2(5, 2.5, 0, 0);

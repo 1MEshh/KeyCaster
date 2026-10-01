@@ -95,6 +95,90 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
     }
   };
 
+  const handleExportData = async () => {
+    try {
+      const [words, customDecks, sessionHistory] = await Promise.all([
+        db.words.toArray(),
+        db.customDecks.toArray(),
+        db.sessionHistory.toArray(),
+      ]);
+      const exportData = {
+        exportedAt: new Date().toISOString(),
+        version: 1,
+        words,
+        customDecks,
+        sessionHistory,
+      };
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+        type: "application/json",
+      });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `keycaster-backup-${new Date().toISOString().split("T")[0]}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch {
+      alert("Export failed. Please try again.");
+    }
+  };
+
+  const handleImportData = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json";
+    input.onchange = async (e) => {
+      const file = (e.target as HTMLInputElement).files?.[0];
+      if (!file) return;
+      try {
+        const text = await file.text();
+        const data = JSON.parse(text);
+        if (!data.words || !data.version) {
+          alert("Invalid backup file. Please use a KeyCaster export.");
+          return;
+        }
+        if (
+          !confirm(
+            `This will merge ${data.words.length} word records and ${data.sessionHistory?.length ?? 0} sessions. Continue?`
+          )
+        )
+          return;
+
+        // Import words (upsert by word string to avoid duplicates)
+        for (const word of data.words) {
+          const existing = await db.words
+            .where("word")
+            .equals(word.word)
+            .first();
+          if (existing?.id) {
+            await db.words.update(existing.id, {
+              easeFactor: word.easeFactor,
+              interval: word.interval,
+              repetitions: word.repetitions,
+              nextReviewDate: word.nextReviewDate,
+              totalMistakes: word.totalMistakes,
+              totalReviews: word.totalReviews,
+            });
+          }
+        }
+
+        // Import session history
+        if (Array.isArray(data.sessionHistory)) {
+          for (const session of data.sessionHistory) {
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
+            const { id: _id, ...sessionData } = session;
+            await db.sessionHistory.add(sessionData);
+          }
+        }
+
+        alert("Import complete! Your data has been restored.");
+      } catch {
+        alert("Import failed. The file may be corrupted.");
+      }
+    };
+    input.click();
+  };
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
       <div className="relative w-full max-w-2xl bg-bg border border-sub/30 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
@@ -537,6 +621,30 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
           {/* TAB 5: Data & SRS */}
           {activeTab === "data" && (
             <div className="space-y-6">
+              {/* Export / Import */}
+              <div className="p-4 rounded-xl border border-sub/20 bg-sub/5 space-y-3">
+                <div className="text-xs font-semibold text-text">Backup & Restore</div>
+                <p className="text-xs text-sub leading-relaxed">
+                  Export all your SRS progress and session history as a JSON file.
+                  Import it back on any device to restore your data.
+                </p>
+                <div className="flex flex-wrap gap-3 pt-1">
+                  <button
+                    onClick={handleExportData}
+                    className="flex items-center gap-1.5 px-3 py-2 text-xs rounded-lg bg-main/10 border border-main/30 text-main hover:bg-main/20 transition-colors font-medium"
+                  >
+                    ↓ Export Data
+                  </button>
+                  <button
+                    onClick={handleImportData}
+                    className="flex items-center gap-1.5 px-3 py-2 text-xs rounded-lg border border-sub/30 text-sub hover:text-text transition-colors"
+                  >
+                    ↑ Import Backup
+                  </button>
+                </div>
+              </div>
+
+              {/* Local storage info */}
               <div className="p-4 rounded-xl border border-sub/20 bg-sub/5 space-y-3">
                 <div className="text-xs font-semibold text-text">Local-First Storage</div>
                 <p className="text-xs text-sub leading-relaxed">
@@ -562,6 +670,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
               </div>
             </div>
           )}
+
         </div>
 
         {/* Footer */}
