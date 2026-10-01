@@ -16,6 +16,7 @@ import {
 import { useSessionStore } from "@/store/useSessionStore";
 import { useSettingsStore } from "@/store/useSettingsStore";
 import { getAudioContext } from "@/lib/audio";
+import { ScoreCardCanvas } from "@/components/TypingEngine/ScoreCardCanvas";
 
 interface SessionEndActionsProps {
   onNextSession: () => void;
@@ -205,6 +206,18 @@ export const SessionEndActions: React.FC<SessionEndActionsProps> = ({ onNextSess
               ↵
             </kbd>
           </motion.button>
+        </div>
+
+        {/* Share Scorecard PNG */}
+        <div className="mt-3 w-full max-w-lg flex justify-center">
+          <ScoreCardCanvas
+            wpm={avgWpm}
+            accuracy={avgAccuracy}
+            totalWords={totalWords}
+            duration={durationSec}
+            category={activeCategory}
+            completedWords={completedWords}
+          />
         </div>
       </div>
 
