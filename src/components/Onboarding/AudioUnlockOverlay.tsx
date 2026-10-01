@@ -27,12 +27,15 @@ export const AudioUnlockOverlay: React.FC<AudioUnlockOverlayProps> = ({
   onUnlocked,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
+  const unlockedRef = React.useRef(false);
 
   useEffect(() => {
+    if (unlockedRef.current) return;
     // Only show on iOS Safari — all other platforms unlock audio fine on keypress
     if (detectIOSSafari()) {
       setIsVisible(true);
     } else {
+      unlockedRef.current = true;
       // Non-iOS: skip overlay entirely, call onUnlocked immediately
       onUnlocked();
     }

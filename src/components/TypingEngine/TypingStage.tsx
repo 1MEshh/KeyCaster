@@ -233,32 +233,40 @@ export const TypingStage: React.FC = () => {
           return;
         }
 
-        if (isErr) {
-          // Clear active error state
+        if (confMode === "on" && !isErr) {
+          // In confidence mode, cannot backspace past confirmed letters
+          return;
+        }
+
+        // 1. If current letter at caret is in error or typed, delete it back to pending
+        if (typedLetters[idx]?.state !== "pending") {
           setHasError(false);
           setIsShaking(false);
           setTypedLetters((prev) => {
             const copy = [...prev];
-            if (copy[idx]) {
-              copy[idx] = { ...copy[idx], state: "pending", typedChar: undefined };
+            for (let i = idx; i < copy.length; i++) {
+              if (copy[i]?.state !== "pending") {
+                copy[i] = { char: copy[i].char, state: "pending" };
+              }
             }
             return copy;
           });
           return;
         }
 
-        if (confMode === "on") {
-          // Cannot backspace past past mistakes or confirmed letters
-          return;
-        }
-
-        // Standard backspace
+        // 2. Current letter is already pending, move back 1 letter and clear it
         if (idx > 0) {
           const nextIdx = idx - 1;
           setCaretIndex(nextIdx);
+          setHasError(false);
+          setIsShaking(false);
           setTypedLetters((prev) => {
             const copy = [...prev];
-            copy[nextIdx] = { ...copy[nextIdx], state: "pending", typedChar: undefined };
+            for (let i = nextIdx; i < copy.length; i++) {
+              if (copy[i]?.state !== "pending") {
+                copy[i] = { char: copy[i].char, state: "pending" };
+              }
+            }
             return copy;
           });
         }
@@ -279,19 +287,13 @@ export const TypingStage: React.FC = () => {
 
       totalKeystrokesRef.current += 1;
 
-      // In strict letter mode, if in error state, require backspace first!
-      if (isErr && stopMode === "letter") {
-        if (errSfx) playErrorThud(vol);
-        setIsShaking(true);
-        setTimeout(() => setIsShaking(false), 200);
-        return;
-      }
-
       const targetChar = curWord.word[idx]?.toLowerCase();
       const pressedChar = key.toLowerCase();
 
       if (pressedChar === targetChar) {
-        // Correct character typed
+        // Correct character typed (clean instant overwrite if in error)
+        setHasError(false);
+        setIsShaking(false);
         correctKeystrokesRef.current += 1;
         if (clickSfx) playMechanicalClick(vol);
 

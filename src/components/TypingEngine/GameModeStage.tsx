@@ -60,6 +60,7 @@ export const GameModeStage: React.FC = () => {
   const [typedLetters, setTypedLetters] = useState<Array<{ char: string; state: "pending" | "correct" | "error"; typedChar?: string }>>([]);
   const [isShaking, setIsShaking] = useState(false);
   const [wordErrors, setWordErrors] = useState(0);
+  const isTransitioningRef = useRef(false);
 
   // Time Attack interval ticker
   useEffect(() => {
@@ -84,6 +85,7 @@ export const GameModeStage: React.FC = () => {
   // Initialize word state on currentWord change
   useEffect(() => {
     if (!currentWord || isGameOver) return;
+    isTransitioningRef.current = false;
     const chars = currentWord.split("").map((c) => ({
       char: c,
       state: "pending" as const,
@@ -122,13 +124,15 @@ export const GameModeStage: React.FC = () => {
 
   // Keystroke handler
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (isGameOver) {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        resetMode();
-      } else if (e.key === "Escape") {
-        e.preventDefault();
-        exitToSRS();
+    if (isGameOver || isTransitioningRef.current || !currentWord) {
+      if (isGameOver) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          resetMode();
+        } else if (e.key === "Escape") {
+          e.preventDefault();
+          exitToSRS();
+        }
       }
       return;
     }
@@ -156,13 +160,31 @@ export const GameModeStage: React.FC = () => {
         setTimeout(() => setIsShaking(false), 200);
         return;
       }
+
+      // 1. If current letter at caret is in error or typed, delete it back to pending
+      if (typedLetters[caretIndex]?.state !== "pending") {
+        setTypedLetters((prev) => {
+          const copy = [...prev];
+          for (let i = caretIndex; i < copy.length; i++) {
+            if (copy[i]?.state !== "pending") {
+              copy[i] = { char: copy[i].char, state: "pending" };
+            }
+          }
+          return copy;
+        });
+        return;
+      }
+
+      // 2. Current letter is already pending, step back 1 and clear it
       if (caretIndex > 0) {
         const nextIdx = caretIndex - 1;
         setCaretIndex(nextIdx);
         setTypedLetters((prev) => {
           const copy = [...prev];
-          if (copy[nextIdx]) {
-            copy[nextIdx] = { ...copy[nextIdx], state: "pending", typedChar: undefined };
+          for (let i = nextIdx; i < copy.length; i++) {
+            if (copy[i]?.state !== "pending") {
+              copy[i] = { char: copy[i].char, state: "pending" };
+            }
           }
           return copy;
         });
@@ -192,8 +214,11 @@ export const GameModeStage: React.FC = () => {
       setCaretIndex(nextIndex);
 
       if (nextIndex >= currentWord.length) {
-        // Complete word
-        submitWord({ errors: wordErrors, chars: currentWord.length });
+        // Complete word cleanly
+        isTransitioningRef.current = true;
+        setTimeout(() => {
+          submitWord({ errors: wordErrors, chars: currentWord.length });
+        }, 50);
       }
     } else {
       // Mistake

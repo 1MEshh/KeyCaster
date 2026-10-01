@@ -44,9 +44,13 @@ export async function buildSessionQueue(
       const shuffledPhrases = shuffleArray(phrasesOnly);
       const remainingWords = shuffleArray(allWords.filter((w) => !w.word.includes(" ")));
       candidates = [...shuffledPhrases, ...remainingWords];
+    } else {
+      candidates = shuffleArray(allWords);
     }
   } else {
-    candidates = shuffleArray(allWords);
+    // When phraseMode is disabled, practice single words without spaces
+    const singleWords = allWords.filter((w) => !w.word.includes(" "));
+    candidates = singleWords.length > 0 ? shuffleArray(singleWords) : shuffleArray(allWords);
   }
 
   const selectedBatch = candidates.slice(0, Math.min(sessionSize, candidates.length));
