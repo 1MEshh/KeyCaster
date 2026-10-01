@@ -15,6 +15,9 @@ import { db, type WordRecord, type SessionHistoryRecord } from "@/lib/db";
 import { isDue } from "@/lib/sm2";
 import { useSettingsStore } from "@/store/useSettingsStore";
 import { useSessionStore } from "@/store/useSessionStore";
+import { useProfileStore } from "@/store/useProfileStore";
+import { ACHIEVEMENTS } from "@/lib/achievements";
+import { Trophy, Flame, Award } from "lucide-react";
 import { HeatmapTab } from "./HeatmapTab";
 import { ChartsTab } from "./ChartsTab";
 import { HistoryTab } from "./HistoryTab";
@@ -51,6 +54,7 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
 
   const { activeCategory, setActiveCategory, sessionSize } = useSettingsStore();
   const initSession = useSessionStore((s) => s.initSession);
+  const { xp, level, streak, getRank, getXpForNextLevel, unlockedAchievements } = useProfileStore();
 
   useEffect(() => {
     if (!isOpen) return;
@@ -184,6 +188,68 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
           ) : (
             /* TAB 1: Overview */
             <div className="space-y-6 text-xs animate-fadeIn">
+              {/* Profile & Badges Banner */}
+              <div className="p-4 sm:p-5 rounded-2xl border border-sub/25 bg-sub/5 space-y-4">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-12 h-12 rounded-2xl bg-main/20 text-main flex items-center justify-center text-xl font-bold">
+                      {level}
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-base font-bold text-text">Level {level} Caster</span>
+                        <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-main/15 text-main border border-main/30 uppercase tracking-wider">
+                          {getRank()}
+                        </span>
+                      </div>
+                      <div className="text-[11px] text-sub mt-0.5">
+                        {xp} Total XP · {getXpForNextLevel()} XP to Level {level + 1}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-amber-500/30 bg-amber-500/10 text-amber-400 font-bold text-xs">
+                      <Flame className="w-4 h-4 fill-current text-amber-400" />
+                      <span>{streak} Day Streak</span>
+                    </div>
+                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-sub/20 bg-sub/5 text-sub text-xs">
+                      <Trophy className="w-4 h-4 text-main" />
+                      <span>{unlockedAchievements.length}/{ACHIEVEMENTS.length} Badges</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Badges Carousel / Grid */}
+                <div className="pt-2 border-t border-sub/15">
+                  <div className="text-[10px] uppercase font-bold text-sub mb-2">
+                    Achievements
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    {ACHIEVEMENTS.slice(0, 8).map((ach) => {
+                      const isUnlocked = unlockedAchievements.includes(ach.id);
+                      return (
+                        <div
+                          key={ach.id}
+                          className={`p-2 rounded-xl border flex items-center gap-2 transition-all ${
+                            isUnlocked
+                              ? "border-amber-400/30 bg-amber-400/5 text-text"
+                              : "border-sub/15 bg-sub/5 text-sub/40 opacity-50"
+                          }`}
+                          title={`${ach.title}: ${ach.description}`}
+                        >
+                          <span className="text-lg">{ach.icon}</span>
+                          <div className="truncate">
+                            <div className="font-bold text-[11px] truncate">{ach.title}</div>
+                            <div className="text-[9px] text-sub truncate">{ach.description}</div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
               {/* Category Mastery Breakdown */}
               <div>
                 <div className="flex items-center justify-between mb-3">

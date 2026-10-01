@@ -9,6 +9,7 @@ import { CustomDeckModal } from "@/components/Modals/CustomDeckModal";
 import { ProgressDashboard } from "@/components/Dashboard/ProgressDashboard";
 import { OnboardingFlow } from "@/components/Onboarding/OnboardingFlow";
 import { AudioUnlockOverlay } from "@/components/Onboarding/AudioUnlockOverlay";
+import { XPToastBadge } from "@/components/HUD/XPToastBadge";
 import { useSettingsStore } from "@/store/useSettingsStore";
 import { useSessionStore } from "@/store/useSessionStore";
 import { useGameModeStore } from "@/store/useGameModeStore";
@@ -188,6 +189,9 @@ export default function Home() {
         isOpen={isOnboardingOpen}
         onComplete={() => setIsOnboardingOpen(false)}
       />
+
+      {/* Gamification Floating Toasts */}
+      <XPToastBadge />
     </div>
   );
 }

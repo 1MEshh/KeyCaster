@@ -4,6 +4,7 @@ import { buildSessionQueue } from "@/lib/sessionQueue";
 import { calculateSM2, getNextReviewDateString } from "@/lib/sm2";
 import { gradeWord, type GradingResult } from "@/lib/grader";
 import { useSettingsStore } from "@/store/useSettingsStore";
+import { useProfileStore } from "@/store/useProfileStore";
 
 export interface CompletedWordItem {
   word: WordRecord;
@@ -205,6 +206,15 @@ export const useSessionStore = create<SessionState>((set, get) => ({
         errors: totalErrors,
         category: currentWord.category,
         duration,
+      });
+
+      // Record Gamification XP, Streaks, Achievements
+      useProfileStore.getState().recordSessionCompletion({
+        wpm: avgWpm,
+        accuracy: avgAcc,
+        totalWords,
+        category: currentWord.category,
+        blindMode: useSettingsStore.getState().blindMode,
       });
     }
 
