@@ -15,10 +15,13 @@ import {
   Skull,
   Infinity as InfinityIcon,
   BookOpen,
+  Flame,
+  Award,
 } from "lucide-react";
 import { useSettingsStore, type Theme, THEME_VARIABLES } from "@/store/useSettingsStore";
 import { useSessionStore } from "@/store/useSessionStore";
 import { useGameModeStore, type GameModeType } from "@/store/useGameModeStore";
+import { useProfileStore } from "@/store/useProfileStore";
 import { db, type CustomDeckRecord } from "@/lib/db";
 
 interface TopNavProps {
@@ -35,11 +38,16 @@ export const TopNav: React.FC<TopNavProps> = ({
   const { theme, setTheme, activeCategory, setActiveCategory, sessionSize } = useSettingsStore();
   const initSession = useSessionStore((s) => s.initSession);
   const { mode, startMode } = useGameModeStore();
+  const { streak, level, getRank, checkStreak } = useProfileStore();
 
   const [customDecks, setCustomDecks] = useState<CustomDeckRecord[]>([]);
   const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
   const [isModeMenuOpen, setIsModeMenuOpen] = useState(false);
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
+
+  useEffect(() => {
+    checkStreak();
+  }, [checkStreak]);
 
   useEffect(() => {
     const fetchCustomDecks = async () => {
@@ -256,6 +264,26 @@ export const TopNav: React.FC<TopNavProps> = ({
 
       {/* Right Controls */}
       <div className="flex items-center gap-2">
+        {/* Daily Streak */}
+        <div
+          className="flex items-center gap-1 px-2.5 py-1 rounded-full border border-amber-500/30 bg-amber-500/10 text-amber-400 text-xs font-bold select-none cursor-default"
+          title={`${streak} day practice streak! Practice daily to keep your flame lit.`}
+        >
+          <Flame className="w-3.5 h-3.5 fill-current animate-pulse text-amber-400" />
+          <span>{streak}</span>
+        </div>
+
+        {/* Typing Rank & Level */}
+        <button
+          onClick={onOpenDashboard}
+          className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-sub/30 bg-sub/5 hover:border-main/50 text-xs transition-colors"
+          title={`Level ${level} · ${getRank()} · Click to open Dashboard`}
+        >
+          <Award className="w-3.5 h-3.5 text-main" />
+          <span className="font-semibold text-text">{getRank()}</span>
+          <span className="text-[10px] text-sub">Lvl {level}</span>
+        </button>
+
         {/* Quick Theme Selector */}
         <div className="relative">
           <button
