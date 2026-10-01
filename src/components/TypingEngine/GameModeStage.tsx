@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Timer, Zap, Skull, Infinity as InfinityIcon, RotateCcw, ArrowLeft, Volume2, Trophy } from "lucide-react";
 import { useGameModeStore } from "@/store/useGameModeStore";
 import { useSettingsStore, SMOOTH_CARET_DURATIONS } from "@/store/useSettingsStore";
+import { useKeyStore } from "@/store/useKeyStore";
+import { VirtualKeyboard } from "@/components/VirtualKeyboard/VirtualKeyboard";
 import { playMechanicalClick, playErrorThud, TTSController } from "@/lib/audio";
 
 export const GameModeStage: React.FC = () => {
@@ -35,6 +37,8 @@ export const GameModeStage: React.FC = () => {
   const {
     caretStyle,
     smoothCaret,
+    blindMode,
+    blindModePro,
     soundVolume,
     soundOnClick,
     soundOnError,
@@ -42,6 +46,8 @@ export const GameModeStage: React.FC = () => {
     ttsVoiceURI,
     fontSize,
   } = useSettingsStore();
+
+  const setActiveKey = useKeyStore((s) => s.setActiveKey);
 
   const currentWord = words[currentWordIndex] || "";
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -127,6 +133,10 @@ export const GameModeStage: React.FC = () => {
       return;
     }
 
+    const key = e.key;
+    setActiveKey(key);
+    setTimeout(() => setActiveKey(null), 120);
+
     if (e.key === "Escape") {
       e.preventDefault();
       exitToSRS();
@@ -141,6 +151,11 @@ export const GameModeStage: React.FC = () => {
 
     if (e.key === "Backspace") {
       e.preventDefault();
+      if (blindMode && blindModePro) {
+        setIsShaking(true);
+        setTimeout(() => setIsShaking(false), 200);
+        return;
+      }
       if (caretIndex > 0) {
         const nextIdx = caretIndex - 1;
         setCaretIndex(nextIdx);
@@ -378,18 +393,32 @@ export const GameModeStage: React.FC = () => {
               let displayChar = l.char;
               let colorClass = "text-sub/40";
 
-              if (l.state === "correct") {
-                displayChar = isSpace ? "\u00A0" : (l.typedChar || l.char);
-                colorClass = "text-text font-medium";
-              } else if (l.state === "error") {
-                displayChar = l.typedChar || (isSpace ? "␣" : l.char);
-                colorClass = "text-error font-bold bg-error/15 rounded px-0.5";
-              } else if (isCurrent) {
-                displayChar = isSpace ? "\u00A0" : l.char;
-                colorClass = "text-sub font-medium";
+              if (blindMode) {
+                if (l.state === "correct") {
+                  displayChar = isSpace ? "\u00A0" : (l.typedChar || l.char);
+                  colorClass = "text-text font-medium";
+                } else if (l.state === "error") {
+                  displayChar = l.typedChar || (isSpace ? "␣" : l.char);
+                  colorClass = "text-error font-bold bg-error/15 rounded px-0.5";
+                } else {
+                  // Untyped in blind mode: keep spaces visible between words, letters as underscores
+                  displayChar = isSpace ? "\u00A0" : "_";
+                  colorClass = isCurrent ? "text-main/70 font-bold" : "text-sub/30";
+                }
               } else {
-                displayChar = isSpace ? "\u00A0" : l.char;
-                colorClass = "text-sub/40";
+                if (l.state === "correct") {
+                  displayChar = isSpace ? "\u00A0" : (l.typedChar || l.char);
+                  colorClass = "text-text font-medium";
+                } else if (l.state === "error") {
+                  displayChar = l.typedChar || (isSpace ? "␣" : l.char);
+                  colorClass = "text-error font-bold bg-error/15 rounded px-0.5";
+                } else if (isCurrent) {
+                  displayChar = isSpace ? "\u00A0" : l.char;
+                  colorClass = "text-sub font-medium";
+                } else {
+                  displayChar = isSpace ? "\u00A0" : l.char;
+                  colorClass = "text-sub/40";
+                }
               }
 
               return (
@@ -405,6 +434,19 @@ export const GameModeStage: React.FC = () => {
               );
             })}
           </motion.div>
+
+          {/* Keyboard Shortcuts Hint */}
+          <div className="flex items-center gap-6 mt-4 text-[11px] font-mono text-sub/60">
+            <span>
+              <kbd className="px-1.5 py-0.5 rounded bg-sub/10 border border-sub/20 text-sub">Tab</kbd> Replay
+            </span>
+            <span>
+              <kbd className="px-1.5 py-0.5 rounded bg-sub/10 border border-sub/20 text-sub">Esc</kbd> Exit
+            </span>
+          </div>
+
+          {/* Dynamic Virtual Keyboard */}
+          <VirtualKeyboard expectedNextChar={blindMode ? null : (currentWord[caretIndex] || null)} />
         </div>
       )}
     </div>
