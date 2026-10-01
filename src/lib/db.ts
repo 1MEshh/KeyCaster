@@ -63,7 +63,7 @@ export const db = new KeyCasterDB();
 export async function seedDatabaseIfNeeded(): Promise<void> {
   try {
     const seedVersion = await db.meta.get("seed_version");
-    if (seedVersion?.value === 2) {
+    if (seedVersion?.value === 3) {
       return;
     }
 
@@ -72,7 +72,7 @@ export async function seedDatabaseIfNeeded(): Promise<void> {
     // Remove legacy categories so old words do not linger
     await db.words
       .where("category")
-      .anyOf(["daily", "daily_1000", "cs_it_pro", "common_misspellings", "twitch_gaming", "gaming"])
+      .anyOf(["daily", "daily_1000", "cs_it_pro", "common_misspellings", "twitch_gaming", "gaming", "coding"])
       .delete();
 
     const initialWords: WordRecord[] = [];
@@ -119,10 +119,24 @@ export async function seedDatabaseIfNeeded(): Promise<void> {
       });
     }
 
+    // 4. Coding Syntax
+    for (const w of categoriesData.coding.words) {
+      initialWords.push({
+        word: w.toLowerCase().trim(),
+        category: "coding",
+        easeFactor: 2.5,
+        interval: 0,
+        repetitions: 0,
+        nextReviewDate: today,
+        totalMistakes: 0,
+        totalReviews: 0,
+      });
+    }
+
     await db.words.bulkAdd(initialWords);
-    await db.meta.put({ key: "seed_version", value: 2 });
+    await db.meta.put({ key: "seed_version", value: 3 });
     await db.meta.put({ key: "seeded", value: true });
-    console.log("KeyCasterDB seeded with Daily 500, Common Misspellings, and Gaming decks.");
+    console.log("KeyCasterDB seeded with Daily, Common Misspellings, Gaming, and Coding decks.");
   } catch (error) {
     console.error("Failed to seed database:", error);
   }

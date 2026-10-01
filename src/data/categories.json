@@ -33,7 +33,31 @@
     "name": "Gaming",
     "description": "Tactical gaming, esports, and competitive terminology.",
     "words": [
-      "valorant", "ultimate", "matchmaking", "smurf", "flank", "defuse", "clutch", "respawn", "hitbox", "cooldown", "griefing", "peeking", "headshot", "quickscope", "backline", "overtime", "banhammer", "tilt", "streamer", "speedrun", "hitscan", "projectile", "backseat", "clipping", "lagspike", "metagame", "overpowered", "nerfed", "buffed", "ragequit", "sandbagging", "shroud", "teleport", "wallbang", "aimbot", "bulletdrop", "camping", "chokehold", "collateral", "crosshair", "dropshot", "framerate", "grinding", "juggernaut", "killstreak", "loadout", "noscope", "playmaker", "retake", "sweat"
+      "valorant", "ultimate", "matchmaking", "smurf", "flank", "defuse", "clutch", "respawn", "hitbox", "cooldown", "griefing", "peeking", "headshot", "quickscope", "backline", "overtime", "banhammer", "tilt", "streamer", "speedrun", "hitscan", "projectile", "backseat", "clipping", "lagspike", "metagame", "overpowered", "nerfed", "buffed", "ragequit", "sandbagging", "shroud", "teleport", "wallbang", "aimbot", "bulletdrop", "camping", "chokehold", "collateral", "crosshair", "dropshot", "framerate", "grinding", "juggernaut", "killstreak", "loadout", "noscope", "playmaker", "retake", "sweat",
+      "press any key", "game over", "level up", "good game", "respawn in five", "critical hit", "out of mana", "well played", "defuse the spike", "ace the round", "capture the flag", "team wipe", "first blood", "drop the bomb"
+    ]
+  },
+  "coding": {
+    "id": "coding",
+    "name": "Coding",
+    "description": "Essential syntax keywords, data structures, algorithms, and developer vocabulary.",
+    "words": [
+      "const", "let", "function", "return", "async", "await", "import", "export",
+      "interface", "type", "extends", "implements", "class", "constructor", "private",
+      "public", "protected", "readonly", "static", "abstract", "namespace", "declare",
+      "typeof", "instanceof", "undefined", "null", "boolean", "string", "number",
+      "promise", "callback", "closure", "prototype", "payload", "middleware",
+      "endpoint", "handler", "request", "response", "parameter", "argument",
+      "variable", "constant", "iteration", "recursion", "destructure", "immutable",
+      "benchmark", "refactor", "exception", "finally", "throw", "syntax",
+      "component", "hook", "state", "props", "context", "reducer", "dispatch",
+      "schema", "database", "query", "mutation", "transaction", "migration",
+      "binary", "pointer", "reference", "garbage", "collector", "memory",
+      "compiler", "bundler", "transpile", "runtime", "package", "dependency",
+      "repository", "commit", "branch", "rebase", "pipeline", "deploy",
+      "git status", "git commit", "npm install", "npm run dev", "hello world",
+      "console log", "return null", "arrow function", "pull request", "merge conflict",
+      "binary search", "event loop", "stack overflow"
     ]
   }
 }

@@ -18,6 +18,7 @@ export interface SettingsState {
   // Typing Behavior
   confidenceMode: ConfidenceMode;
   blindMode: boolean;
+  phraseMode: boolean;
   stopOnError: StopOnError;
 
   // Visual & UI
@@ -46,6 +47,7 @@ export interface SettingsState {
   setSmoothCaret: (speed: SmoothCaretSpeed) => void;
   setConfidenceMode: (mode: ConfidenceMode) => void;
   setBlindMode: (blind: boolean) => void;
+  setPhraseMode: (phraseMode: boolean) => void;
   setStopOnError: (stop: StopOnError) => void;
   setTheme: (theme: Theme) => void;
   setFontFamily: (font: FontFamily) => void;
@@ -134,6 +136,7 @@ const DEFAULT_SETTINGS = {
   smoothCaret: "medium" as SmoothCaretSpeed,
   confidenceMode: "off" as ConfidenceMode,
   blindMode: true,
+  phraseMode: false,
   stopOnError: "letter" as StopOnError,
   theme: "midnight" as Theme,
   fontFamily: "Thmanyah Sans" as FontFamily,
@@ -159,6 +162,7 @@ export const useSettingsStore = create<SettingsState>()(
       setSmoothCaret: (smoothCaret) => set({ smoothCaret }),
       setConfidenceMode: (confidenceMode) => set({ confidenceMode }),
       setBlindMode: (blindMode) => set({ blindMode }),
+      setPhraseMode: (phraseMode) => set({ phraseMode }),
       setStopOnError: (stopOnError) => set({ stopOnError }),
       setTheme: (theme) => {
         set({ theme });
@@ -186,7 +190,7 @@ export const useSettingsStore = create<SettingsState>()(
       },
     }),
     {
-      name: "keycaster_settings_v3",
+      name: "keycaster_settings_v4",
       onRehydrateStorage: () => (state) => {
         if (state) {
           applyThemeCSS(state.theme);

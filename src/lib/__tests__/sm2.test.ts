@@ -38,3 +38,14 @@ test("SM-2: Minimum boundary of ease factor is clamped to 1.3", () => {
   }
   assert.ok(ef >= 1.3, `Ease factor should be >= 1.3, got ${ef}`);
 });
+
+test("SM-2: High lifetime mistakes reduce review interval (adaptive penalty)", () => {
+  const normal = calculateSM2(5, 2.5, 6, 2, 0);
+  const struggling = calculateSM2(5, 2.5, 6, 2, 5);
+  assert.ok(struggling.interval < normal.interval, "Struggling word should have shorter interval");
+});
+
+test("SM-2: Failing a word with >= 3 mistakes docks ease factor", () => {
+  const failStruggling = calculateSM2(2, 2.5, 6, 2, 3);
+  assert.equal(failStruggling.easeFactor, 2.3);
+});

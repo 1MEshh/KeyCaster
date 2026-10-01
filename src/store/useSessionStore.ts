@@ -3,6 +3,7 @@ import { type WordRecord, db } from "@/lib/db";
 import { buildSessionQueue } from "@/lib/sessionQueue";
 import { calculateSM2, getNextReviewDateString } from "@/lib/sm2";
 import { gradeWord, type GradingResult } from "@/lib/grader";
+import { useSettingsStore } from "@/store/useSettingsStore";
 
 export interface CompletedWordItem {
   word: WordRecord;
@@ -58,7 +59,8 @@ export const useSessionStore = create<SessionState>((set, get) => ({
   initSession: async (category: string, sessionSize: number) => {
     set({ isLoading: true });
     try {
-      const plan = await buildSessionQueue(category, sessionSize);
+      const phraseMode = useSettingsStore.getState().phraseMode;
+      const plan = await buildSessionQueue(category, sessionSize, { phraseMode });
       const firstWord = plan.queue[0] || null;
 
       set({
@@ -101,12 +103,13 @@ export const useSessionStore = create<SessionState>((set, get) => ({
           wasRetry: isRetryAttempt,
         });
 
-    // 2. SM-2 Calculation
+    // 2. SM-2 Calculation with adaptive difficulty
     const sm2 = calculateSM2(
       gradeResult.grade,
       currentWord.easeFactor,
       currentWord.interval,
-      currentWord.repetitions
+      currentWord.repetitions,
+      currentWord.totalMistakes + errors
     );
 
     const nextReviewDate = getNextReviewDateString(sm2.interval);

@@ -49,6 +49,7 @@ export const TopNav: React.FC<TopNavProps> = ({
     { id: "daily", label: "Daily" },
     { id: "common_misspellings", label: "Common Misspellings" },
     { id: "gaming", label: "Gaming" },
+    { id: "coding", label: "Coding" },
     ...customDecks.map((d) => ({
       id: `custom_${d.id}`,
       label: d.name,
@@ -95,7 +96,7 @@ export const TopNav: React.FC<TopNavProps> = ({
             <div className="px-3 py-1 text-[10px] uppercase text-sub font-semibold">
               Standard Decks
             </div>
-            {categories.slice(0, 3).map((cat) => (
+            {categories.slice(0, 4).map((cat) => (
               <button
                 key={cat.id}
                 onClick={() => handleSelectCategory(cat.id)}
@@ -108,22 +109,29 @@ export const TopNav: React.FC<TopNavProps> = ({
               </button>
             ))}
 
-            {customDecks.length > 0 && (
-              <>
-                <div className="h-px bg-sub/20 my-1" />
-                <div className="px-3 py-1 text-[10px] uppercase text-sub font-semibold">
-                  Custom Decks
-                </div>
-                {customDecks.map((d) => (
-                  <button
-                    key={d.id}
-                    onClick={() => handleSelectCategory(`custom_${d.id}`)}
-                    className="w-full text-left px-3 py-2 hover:bg-sub/10 transition-colors text-text"
-                  >
-                    {d.name}
-                  </button>
-                ))}
-              </>
+            <div className="h-px bg-sub/20 my-1" />
+            <div className="px-3 py-1 text-[10px] uppercase text-sub font-semibold flex items-center justify-between">
+              <span>Custom Decks</span>
+              <span className="text-[10px] text-sub/70">({customDecks.length})</span>
+            </div>
+
+            {customDecks.length > 0 ? (
+              customDecks.map((d) => (
+                <button
+                  key={d.id}
+                  onClick={() => handleSelectCategory(`custom_${d.id}`)}
+                  className={`w-full text-left px-3 py-2 flex items-center justify-between hover:bg-sub/10 transition-colors ${
+                    activeCategory === `custom_${d.id}` ? "text-main font-bold" : "text-text"
+                  }`}
+                >
+                  <span className="truncate">{d.name}</span>
+                  <span className="text-[10px] text-sub">{d.words?.length || 0}w</span>
+                </button>
+              ))
+            ) : (
+              <div className="px-3 py-1.5 text-[11px] text-sub/60 italic">
+                No custom decks yet
+              </div>
             )}
 
             <div className="h-px bg-sub/20 my-1" />
@@ -135,7 +143,7 @@ export const TopNav: React.FC<TopNavProps> = ({
               className="w-full text-left px-3 py-2 flex items-center gap-2 text-main hover:bg-main/10 transition-colors font-semibold"
             >
               <Plus className="w-3.5 h-3.5" />
-              <span>Create New Deck</span>
+              <span>Create Custom Deck</span>
             </button>
           </div>
         )}
@@ -155,7 +163,7 @@ export const TopNav: React.FC<TopNavProps> = ({
 
           {isThemeMenuOpen && (
             <div className="absolute right-0 top-full mt-2 w-44 rounded-xl border border-sub/30 bg-bg shadow-2xl py-1.5 z-40 animate-fadeIn text-xs">
-              {(["serika_dark", "nord", "dracula", "midnight"] as Theme[]).map((thm) => (
+              {(["midnight", "monochrome", "serika_dark", "nord", "dracula"] as Theme[]).map((thm) => (
                 <button
                   key={thm}
                   onClick={() => {
