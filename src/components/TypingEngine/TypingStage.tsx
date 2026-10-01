@@ -23,6 +23,7 @@ export const TypingStage: React.FC = () => {
     smoothCaret,
     confidenceMode,
     blindMode,
+    blindModePro,
     stopOnError,
     fontSize,
     soundVolume,
@@ -86,6 +87,8 @@ export const TypingStage: React.FC = () => {
     typedLetters,
     stopOnError,
     confidenceMode,
+    blindMode,
+    blindModePro,
     soundVolume,
     soundOnClick,
     soundOnError,
@@ -101,6 +104,8 @@ export const TypingStage: React.FC = () => {
     typedLetters,
     stopOnError,
     confidenceMode,
+    blindMode,
+    blindModePro,
     soundVolume,
     soundOnClick,
     soundOnError,
@@ -220,8 +225,11 @@ export const TypingStage: React.FC = () => {
         e.preventDefault();
         backspaceCountRef.current += 1;
 
-        if (confMode === "max") {
-          // Backspace completely disabled
+        const { blindMode: isBlind, blindModePro: isBlindPro } = stateRef.current;
+        if (confMode === "max" || (isBlind && isBlindPro)) {
+          // Backspace completely disabled in Confidence Max and Blind Mode Pro
+          setIsShaking(true);
+          setTimeout(() => setIsShaking(false), 200);
           return;
         }
 

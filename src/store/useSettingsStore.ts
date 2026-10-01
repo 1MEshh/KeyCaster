@@ -18,6 +18,7 @@ export interface SettingsState {
   // Typing Behavior
   confidenceMode: ConfidenceMode;
   blindMode: boolean;
+  blindModePro: boolean;
   phraseMode: boolean;
   stopOnError: StopOnError;
 
@@ -47,6 +48,7 @@ export interface SettingsState {
   setSmoothCaret: (speed: SmoothCaretSpeed) => void;
   setConfidenceMode: (mode: ConfidenceMode) => void;
   setBlindMode: (blind: boolean) => void;
+  setBlindModePro: (pro: boolean) => void;
   setPhraseMode: (phraseMode: boolean) => void;
   setStopOnError: (stop: StopOnError) => void;
   setTheme: (theme: Theme) => void;
@@ -136,6 +138,7 @@ const DEFAULT_SETTINGS = {
   smoothCaret: "medium" as SmoothCaretSpeed,
   confidenceMode: "off" as ConfidenceMode,
   blindMode: true,
+  blindModePro: false,
   phraseMode: false,
   stopOnError: "letter" as StopOnError,
   theme: "midnight" as Theme,
@@ -162,6 +165,7 @@ export const useSettingsStore = create<SettingsState>()(
       setSmoothCaret: (smoothCaret) => set({ smoothCaret }),
       setConfidenceMode: (confidenceMode) => set({ confidenceMode }),
       setBlindMode: (blindMode) => set({ blindMode }),
+      setBlindModePro: (blindModePro) => set({ blindModePro }),
       setPhraseMode: (phraseMode) => set({ phraseMode }),
       setStopOnError: (stopOnError) => set({ stopOnError }),
       setTheme: (theme) => {

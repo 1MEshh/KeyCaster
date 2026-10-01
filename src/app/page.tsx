@@ -3,6 +3,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { TopNav } from "@/components/Navigation/TopNav";
 import { TypingStage } from "@/components/TypingEngine/TypingStage";
+import { GameModeStage } from "@/components/TypingEngine/GameModeStage";
 import { SettingsModal } from "@/components/Modals/SettingsModal";
 import { CustomDeckModal } from "@/components/Modals/CustomDeckModal";
 import { ProgressDashboard } from "@/components/Dashboard/ProgressDashboard";
@@ -10,6 +11,7 @@ import { OnboardingFlow } from "@/components/Onboarding/OnboardingFlow";
 import { AudioUnlockOverlay } from "@/components/Onboarding/AudioUnlockOverlay";
 import { useSettingsStore } from "@/store/useSettingsStore";
 import { useSessionStore } from "@/store/useSessionStore";
+import { useGameModeStore } from "@/store/useGameModeStore";
 import { seedDatabaseIfNeeded, db } from "@/lib/db";
 import { getAudioContext } from "@/lib/audio";
 import { Sparkles, RotateCcw } from "lucide-react";
@@ -31,6 +33,7 @@ export default function Home() {
     mainQueue,
     isLoading,
   } = useSessionStore();
+  const { mode: gameMode, isActive: isGameModeActive } = useGameModeStore();
 
   // Initialize DB and Session on mount — only after audio is unlocked
   useEffect(() => {
@@ -116,7 +119,9 @@ export default function Home() {
 
       {/* Main Content Area */}
       <main className="flex-1 flex flex-col items-center justify-center max-w-5xl w-full mx-auto px-4 py-8">
-        {!isInitialized || isLoading ? (
+        {isGameModeActive && gameMode !== "srs" ? (
+          <GameModeStage />
+        ) : !isInitialized || isLoading ? (
           <div className="flex flex-col items-center gap-3 font-mono text-xs text-sub">
             <div className="w-6 h-6 border-2 border-main border-t-transparent rounded-full animate-spin" />
             <span>Loading SRS deck...</span>
