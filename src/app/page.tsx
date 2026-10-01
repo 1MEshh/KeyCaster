@@ -7,11 +7,12 @@ import { SettingsModal } from "@/components/Modals/SettingsModal";
 import { CustomDeckModal } from "@/components/Modals/CustomDeckModal";
 import { ProgressDashboard } from "@/components/Dashboard/ProgressDashboard";
 import { OnboardingFlow } from "@/components/Onboarding/OnboardingFlow";
+import { AudioUnlockOverlay } from "@/components/Onboarding/AudioUnlockOverlay";
 import { useSettingsStore } from "@/store/useSettingsStore";
 import { useSessionStore } from "@/store/useSessionStore";
 import { seedDatabaseIfNeeded, db } from "@/lib/db";
 import { getAudioContext } from "@/lib/audio";
-import { Sparkles, Calendar, RotateCcw } from "lucide-react";
+import { Sparkles, RotateCcw } from "lucide-react";
 
 export default function Home() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -19,6 +20,7 @@ export default function Home() {
   const [isCustomDeckOpen, setIsCustomDeckOpen] = useState(false);
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
+  const [audioUnlocked, setAudioUnlocked] = useState(false);
 
   const { activeCategory, sessionSize, showKeyboard, setShowKeyboard } = useSettingsStore();
   const {
@@ -30,8 +32,10 @@ export default function Home() {
     isLoading,
   } = useSessionStore();
 
-  // Initialize DB and Session on mount
+  // Initialize DB and Session on mount — only after audio is unlocked
   useEffect(() => {
+    if (!audioUnlocked) return;
+
     const initialize = async () => {
       await seedDatabaseIfNeeded();
 
@@ -47,7 +51,7 @@ export default function Home() {
     };
 
     initialize();
-  }, [activeCategory, sessionSize, initSession]);
+  }, [audioUnlocked, activeCategory, sessionSize, initSession]);
 
   // Global keyboard shortcuts
   useEffect(() => {
@@ -100,6 +104,9 @@ export default function Home() {
       className="flex flex-col min-h-screen bg-bg text-text transition-colors duration-200"
       onClick={() => getAudioContext()}
     >
+      {/* iOS Safari Audio Unlock Overlay — only visible on iOS before session starts */}
+      <AudioUnlockOverlay onUnlocked={() => setAudioUnlocked(true)} />
+
       {/* Top Navigation */}
       <TopNav
         onOpenSettings={() => setIsSettingsOpen(true)}
