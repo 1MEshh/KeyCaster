@@ -23,6 +23,8 @@
 
 </div>
 
+
+
 ## 🌟 KeyCaster 2.0 Highlights
 
 KeyCaster 2.0 transforms the client into a full-fledged typing suite with 20 major features:
