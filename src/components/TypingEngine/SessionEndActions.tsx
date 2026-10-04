@@ -17,6 +17,7 @@ import { useSessionStore } from "@/store/useSessionStore";
 import { useSettingsStore } from "@/store/useSettingsStore";
 import { getAudioContext } from "@/lib/audio";
 import { ScoreCardCanvas } from "@/components/TypingEngine/ScoreCardCanvas";
+import { getWordMetadata } from "@/lib/wordDictionary";
 
 interface SessionEndActionsProps {
   onNextSession: () => void;
@@ -244,18 +245,21 @@ export const SessionEndActions: React.FC<SessionEndActionsProps> = ({ onNextSess
                   const isSpeaking = speakingWord === item.word.word;
                   const isSkipped = item.wasSkipped;
                   const isMistake = item.errors > 0 || item.grade < 3;
+                  const meta = getWordMetadata(item.word.word);
+                  const definition = meta?.definition || item.word.definition;
+                  const partOfSpeech = meta?.partOfSpeech || item.word.partOfSpeech;
 
                   return (
                     <div
                       key={idx}
                       className="flex items-center justify-between p-2.5 rounded-xl bg-sub/10 border border-sub/15 hover:border-sub/35 transition-all text-xs group"
                     >
-                      <div className="flex items-center gap-2 min-w-0">
+                      <div className="flex items-center gap-2.5 min-w-0 pr-2">
                         <button
                           type="button"
                           onClick={() => speakWord(item.word.word)}
                           title="Listen to pronunciation"
-                          className={`p-1.5 rounded-lg border transition-all ${
+                          className={`p-1.5 rounded-lg border transition-all flex-shrink-0 ${
                             isSpeaking
                               ? "bg-main text-bg border-main scale-105"
                               : "bg-sub/10 text-sub border-sub/20 hover:text-text hover:bg-sub/20"
@@ -263,9 +267,23 @@ export const SessionEndActions: React.FC<SessionEndActionsProps> = ({ onNextSess
                         >
                           <Volume2 className="w-3.5 h-3.5" />
                         </button>
-                        <span className="font-bold text-text truncate tracking-wide">
-                          {item.word.word}
-                        </span>
+                        <div className="flex flex-col min-w-0 text-left">
+                          <div className="flex items-center gap-1.5">
+                            <span className="font-bold text-text truncate tracking-wide">
+                              {item.word.word}
+                            </span>
+                            {partOfSpeech && (
+                              <span className="text-[9px] uppercase text-sub font-semibold">
+                                [{partOfSpeech}]
+                              </span>
+                            )}
+                          </div>
+                          {definition && (
+                            <span className="text-[10px] text-sub/80 truncate max-w-[170px]" title={definition}>
+                              {definition}
+                            </span>
+                          )}
+                        </div>
                       </div>
 
                       <div className="flex items-center gap-2 flex-shrink-0 text-[11px]">
