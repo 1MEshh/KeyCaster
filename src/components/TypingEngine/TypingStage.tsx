@@ -132,6 +132,21 @@ export const TypingStage: React.FC = () => {
     }, 40);
   }, [currentWord?.word, speechRate, ttsVoiceURI]);
 
+  // Play slow-motion audio for current word (0.7x)
+  const speakCurrentWordSlow = useCallback(() => {
+    if (!currentWord?.word) return;
+    setIsSpeaking(true);
+    setTimeout(() => {
+      TTSController.speakWord(currentWord.word, {
+        rate: speechRate,
+        voiceURI: ttsVoiceURI,
+        slow: true,
+        onStart: () => setIsSpeaking(true),
+        onEnd: () => setIsSpeaking(false),
+      });
+    }, 40);
+  }, [currentWord?.word, speechRate, ttsVoiceURI]);
+
   // Initialize new word
   useEffect(() => {
     if (!currentWord) return;
@@ -209,10 +224,14 @@ export const TypingStage: React.FC = () => {
       const key = e.key;
       setActiveKey(key);
 
-      // Replay audio shortcut
+      // Replay audio shortcut (Tab = normal, Shift+Tab = slow 0.7x)
       if (key === "Tab") {
         e.preventDefault();
-        speakCurrentWord();
+        if (e.shiftKey) {
+          speakCurrentWordSlow();
+        } else {
+          speakCurrentWord();
+        }
         return;
       }
 
@@ -482,6 +501,15 @@ export const TypingStage: React.FC = () => {
       <div className="mb-6 flex flex-col items-center gap-2.5">
         <div className="flex items-center gap-2">
           <AudioIndicator isPlaying={isSpeaking} onReplay={speakCurrentWord} />
+          <button
+            type="button"
+            onClick={speakCurrentWordSlow}
+            className="flex items-center gap-1.5 px-3 py-2 rounded-full border border-sub/30 bg-bg text-sub hover:text-text hover:border-sub/60 text-xs font-mono transition-all shadow-sm active:scale-95"
+            title="Slow-Motion Pronunciation (Shift+Tab)"
+          >
+            <span className="text-[10px] font-bold text-amber-400 bg-amber-400/10 px-1 py-0.5 rounded border border-amber-400/20">0.7x</span>
+            <span>Slow</span>
+          </button>
           {displayHint && (
             <button
               type="button"
@@ -607,9 +635,12 @@ export const TypingStage: React.FC = () => {
       </div>
 
       {/* Keyboard Shortcuts Hint */}
-      <div className="flex items-center gap-6 mt-4 text-[11px] font-mono text-sub/60">
+      <div className="flex items-center gap-5 mt-4 text-[11px] font-mono text-sub/60">
         <span>
           <kbd className="px-1.5 py-0.5 rounded bg-sub/10 border border-sub/20 text-sub">Tab</kbd> Replay
+        </span>
+        <span>
+          <kbd className="px-1.5 py-0.5 rounded bg-sub/10 border border-sub/20 text-sub">Shift+Tab</kbd> Slow
         </span>
         <span>
           <kbd className="px-1.5 py-0.5 rounded bg-sub/10 border border-sub/20 text-sub">Esc</kbd> Skip

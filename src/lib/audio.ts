@@ -170,6 +170,7 @@ export class TTSController {
     options: {
       rate?: number;
       voiceURI?: string;
+      slow?: boolean;
       onStart?: () => void;
       onEnd?: () => void;
     } = {}
@@ -180,7 +181,8 @@ export class TTSController {
       window.speechSynthesis.cancel();
 
       const utterance = new SpeechSynthesisUtterance(word);
-      utterance.rate = options.rate ?? 0.95;
+      const baseRate = options.rate ?? 0.95;
+      utterance.rate = options.slow ? Math.max(0.5, baseRate * 0.72) : baseRate;
       utterance.lang = "en-US";
 
       const voices = this.getVoices();

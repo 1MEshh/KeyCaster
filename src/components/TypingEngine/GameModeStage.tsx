@@ -84,6 +84,18 @@ export const GameModeStage: React.FC = () => {
     }, 40);
   }, [currentWord, speechRate, ttsVoiceURI]);
 
+  // Audio slow-motion pronunciation for new word (0.7x)
+  const speakCurrentWordSlow = useCallback(() => {
+    if (!currentWord) return;
+    setTimeout(() => {
+      TTSController.speakWord(currentWord, {
+        rate: speechRate,
+        voiceURI: ttsVoiceURI,
+        slow: true,
+      });
+    }, 40);
+  }, [currentWord, speechRate, ttsVoiceURI]);
+
   // Initialize word state on currentWord change
   useEffect(() => {
     if (!currentWord || isGameOver) return;
@@ -150,9 +162,14 @@ export const GameModeStage: React.FC = () => {
       return;
     }
 
+    // Replay audio shortcut (Tab = normal, Shift+Tab = slow 0.7x)
     if (e.key === "Tab") {
       e.preventDefault();
-      speakCurrentWord();
+      if (e.shiftKey) {
+        speakCurrentWordSlow();
+      } else {
+        speakCurrentWord();
+      }
       return;
     }
 
@@ -398,6 +415,15 @@ export const GameModeStage: React.FC = () => {
                 <Volume2 className="w-3.5 h-3.5" />
                 <span>Replay Audio (Tab)</span>
               </button>
+              <button
+                type="button"
+                onClick={speakCurrentWordSlow}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-sub/30 bg-bg text-sub hover:text-text hover:border-sub/60 text-xs font-mono transition-all shadow-sm active:scale-95"
+                title="Slow-Motion Pronunciation (Shift+Tab)"
+              >
+                <span className="text-[10px] font-bold text-amber-400 bg-amber-400/10 px-1 py-0.5 rounded border border-amber-400/20">0.7x</span>
+                <span>Slow</span>
+              </button>
               {displayHint && (
                 <button
                   type="button"
@@ -512,9 +538,12 @@ export const GameModeStage: React.FC = () => {
           </motion.div>
 
           {/* Keyboard Shortcuts Hint */}
-          <div className="flex items-center gap-6 mt-4 text-[11px] font-mono text-sub/60">
+          <div className="flex items-center gap-5 mt-4 text-[11px] font-mono text-sub/60">
             <span>
               <kbd className="px-1.5 py-0.5 rounded bg-sub/10 border border-sub/20 text-sub">Tab</kbd> Replay
+            </span>
+            <span>
+              <kbd className="px-1.5 py-0.5 rounded bg-sub/10 border border-sub/20 text-sub">Shift+Tab</kbd> Slow
             </span>
             <span>
               <kbd className="px-1.5 py-0.5 rounded bg-sub/10 border border-sub/20 text-sub">Esc</kbd> Exit
