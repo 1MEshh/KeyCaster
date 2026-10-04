@@ -1,10 +1,15 @@
 import Dexie, { type Table } from "dexie";
 import categoriesData from "@/data/categories.json";
+import { getWordMetadata } from "./wordDictionary";
 
 export interface WordRecord {
   id?: number;
   word: string;
   category: string;
+  definition?: string;
+  partOfSpeech?: string;
+  hint?: string;
+  phonetic?: string;
   easeFactor: number;
   interval: number;
   repetitions: number;
@@ -63,7 +68,7 @@ export const db = new KeyCasterDB();
 export async function seedDatabaseIfNeeded(): Promise<void> {
   try {
     const seedVersion = await db.meta.get("seed_version");
-    if (seedVersion?.value === 3) {
+    if (seedVersion?.value === 4) {
       return;
     }
 
@@ -77,66 +82,49 @@ export async function seedDatabaseIfNeeded(): Promise<void> {
 
     const initialWords: WordRecord[] = [];
 
-    // 1. Daily (500 focus words, adverbs & phrases)
-    for (const w of categoriesData.daily.words) {
-      initialWords.push({
-        word: w.toLowerCase().trim(),
-        category: "daily",
+    const createWordRecord = (rawWord: string, category: string): WordRecord => {
+      const clean = rawWord.toLowerCase().trim();
+      const meta = getWordMetadata(clean);
+      return {
+        word: clean,
+        category,
+        definition: meta?.definition,
+        partOfSpeech: meta?.partOfSpeech,
+        hint: meta?.hint,
+        phonetic: meta?.phonetic,
         easeFactor: 2.5,
         interval: 0,
         repetitions: 0,
         nextReviewDate: today,
         totalMistakes: 0,
         totalReviews: 0,
-      });
+      };
+    };
+
+    // 1. Daily
+    for (const w of categoriesData.daily.words) {
+      initialWords.push(createWordRecord(w, "daily"));
     }
 
-    // 2. Common Misspellings (250+ tricky words)
+    // 2. Common Misspellings
     for (const w of categoriesData.common_misspellings.words) {
-      initialWords.push({
-        word: w.toLowerCase().trim(),
-        category: "common_misspellings",
-        easeFactor: 2.5,
-        interval: 0,
-        repetitions: 0,
-        nextReviewDate: today,
-        totalMistakes: 0,
-        totalReviews: 0,
-      });
+      initialWords.push(createWordRecord(w, "common_misspellings"));
     }
 
     // 3. Gaming
     for (const w of categoriesData.gaming.words) {
-      initialWords.push({
-        word: w.toLowerCase().trim(),
-        category: "gaming",
-        easeFactor: 2.5,
-        interval: 0,
-        repetitions: 0,
-        nextReviewDate: today,
-        totalMistakes: 0,
-        totalReviews: 0,
-      });
+      initialWords.push(createWordRecord(w, "gaming"));
     }
 
     // 4. Coding Syntax
     for (const w of categoriesData.coding.words) {
-      initialWords.push({
-        word: w.toLowerCase().trim(),
-        category: "coding",
-        easeFactor: 2.5,
-        interval: 0,
-        repetitions: 0,
-        nextReviewDate: today,
-        totalMistakes: 0,
-        totalReviews: 0,
-      });
+      initialWords.push(createWordRecord(w, "coding"));
     }
 
     await db.words.bulkAdd(initialWords);
-    await db.meta.put({ key: "seed_version", value: 3 });
+    await db.meta.put({ key: "seed_version", value: 4 });
     await db.meta.put({ key: "seeded", value: true });
-    console.log("KeyCasterDB seeded with Daily, Common Misspellings, Gaming, and Coding decks.");
+    console.log("KeyCasterDB seeded with enriched word metadata and definitions.");
   } catch (error) {
     console.error("Failed to seed database:", error);
   }

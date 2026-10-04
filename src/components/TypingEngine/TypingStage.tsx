@@ -2,10 +2,12 @@
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { motion } from "framer-motion";
+import { Lightbulb } from "lucide-react";
 import { useSettingsStore, SMOOTH_CARET_DURATIONS } from "@/store/useSettingsStore";
 import { useSessionStore } from "@/store/useSessionStore";
 import { useKeyStore } from "@/store/useKeyStore";
 import { playMechanicalClick, playErrorThud, TTSController } from "@/lib/audio";
+import { getWordMetadata } from "@/lib/wordDictionary";
 import { AudioIndicator } from "@/components/HUD/AudioIndicator";
 import { LiveStats } from "@/components/HUD/LiveStats";
 import { VirtualKeyboard } from "@/components/VirtualKeyboard/VirtualKeyboard";
@@ -65,6 +67,7 @@ export const TypingStage: React.FC = () => {
   const [isShaking, setIsShaking] = useState<boolean>(false);
   const [isFocused, setIsFocused] = useState<boolean>(true);
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
+  const [showHint, setShowHint] = useState<boolean>(false);
 
   // Transition & timing refs
   const isTransitioningRef = useRef<boolean>(false);
@@ -149,6 +152,7 @@ export const TypingStage: React.FC = () => {
     setCaretLeft(0);
     setHasError(false);
     setIsShaking(false);
+    setShowHint(false);
 
     // Speak word on load
     speakCurrentWord();
@@ -217,6 +221,13 @@ export const TypingStage: React.FC = () => {
         e.preventDefault();
         isTransitioningRef.current = true;
         await skipCurrentWord();
+        return;
+      }
+
+      // Word definition & hint shortcut (Alt+H)
+      if ((e.altKey || e.ctrlKey) && (key === "h" || key === "H")) {
+        e.preventDefault();
+        setShowHint((prev) => !prev);
         return;
       }
 
@@ -422,6 +433,17 @@ export const TypingStage: React.FC = () => {
   const expectedNextChar = blindMode ? null : (currentWord.word[caretIndex] || null);
   const wordKey = currentWord.id ? `${currentWord.id}-${currentWord.word}` : currentWord.word;
 
+  const wordMeta = currentWord
+    ? getWordMetadata(currentWord.word) || {
+        definition: currentWord.definition,
+        partOfSpeech: currentWord.partOfSpeech,
+        hint: currentWord.hint,
+        phonetic: currentWord.phonetic,
+      }
+    : null;
+  const isHomophone = Boolean(wordMeta?.isHomophone);
+  const displayHint = wordMeta?.hint || wordMeta?.definition;
+
   return (
     <div
       className="w-full flex flex-col items-center justify-center py-6 px-4"
@@ -456,9 +478,45 @@ export const TypingStage: React.FC = () => {
         />
       </div>
 
-      {/* Audio Speaker & Replay Badge */}
-      <div className="mb-6">
-        <AudioIndicator isPlaying={isSpeaking} onReplay={speakCurrentWord} />
+      {/* Audio Speaker, Replay & Context Hint */}
+      <div className="mb-6 flex flex-col items-center gap-2.5">
+        <div className="flex items-center gap-2">
+          <AudioIndicator isPlaying={isSpeaking} onReplay={speakCurrentWord} />
+          {displayHint && (
+            <button
+              type="button"
+              onClick={() => setShowHint((prev) => !prev)}
+              className={`flex items-center gap-1.5 px-3 py-2 rounded-full border text-xs font-mono transition-all shadow-sm active:scale-95 ${
+                showHint || isHomophone
+                  ? "border-main/50 bg-main/10 text-main font-semibold"
+                  : "border-sub/30 bg-bg text-sub hover:text-text hover:border-sub/60"
+              }`}
+              title="Toggle Word Meaning & Hint (Alt+H)"
+            >
+              <Lightbulb className="w-3.5 h-3.5 text-main" />
+              <span>Hint</span>
+            </button>
+          )}
+        </div>
+
+        {/* Word Meaning & Homophone Context Pill */}
+        {(isHomophone || showHint) && displayHint && (
+          <motion.div
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-main/10 border border-main/30 text-xs font-mono text-text shadow-sm max-w-md text-center"
+          >
+            <Lightbulb className="w-3.5 h-3.5 text-main shrink-0" />
+            <span>
+              {wordMeta?.partOfSpeech && (
+                <span className="text-sub uppercase text-[10px] font-bold mr-1.5">
+                  [{wordMeta.partOfSpeech}]
+                </span>
+              )}
+              <span className="text-text font-medium">{displayHint}</span>
+            </span>
+          </motion.div>
+        )}
       </div>
 
       {/* Unfocused Warning Prompt */}
@@ -555,6 +613,9 @@ export const TypingStage: React.FC = () => {
         </span>
         <span>
           <kbd className="px-1.5 py-0.5 rounded bg-sub/10 border border-sub/20 text-sub">Esc</kbd> Skip
+        </span>
+        <span>
+          <kbd className="px-1.5 py-0.5 rounded bg-sub/10 border border-sub/20 text-sub">Alt+H</kbd> Hint
         </span>
       </div>
 

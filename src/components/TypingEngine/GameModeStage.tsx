@@ -2,12 +2,13 @@
 
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Timer, Zap, Skull, Infinity as InfinityIcon, RotateCcw, ArrowLeft, Volume2, Trophy } from "lucide-react";
+import { Timer, Zap, Skull, Infinity as InfinityIcon, RotateCcw, ArrowLeft, Volume2, Trophy, Lightbulb } from "lucide-react";
 import { useGameModeStore } from "@/store/useGameModeStore";
 import { useSettingsStore, SMOOTH_CARET_DURATIONS } from "@/store/useSettingsStore";
 import { useKeyStore } from "@/store/useKeyStore";
 import { VirtualKeyboard } from "@/components/VirtualKeyboard/VirtualKeyboard";
 import { playMechanicalClick, playErrorThud, TTSController } from "@/lib/audio";
+import { getWordMetadata } from "@/lib/wordDictionary";
 
 export const GameModeStage: React.FC = () => {
   const {
@@ -60,6 +61,7 @@ export const GameModeStage: React.FC = () => {
   const [typedLetters, setTypedLetters] = useState<Array<{ char: string; state: "pending" | "correct" | "error"; typedChar?: string }>>([]);
   const [isShaking, setIsShaking] = useState(false);
   const [wordErrors, setWordErrors] = useState(0);
+  const [showHint, setShowHint] = useState(false);
   const isTransitioningRef = useRef(false);
 
   // Time Attack interval ticker
@@ -94,6 +96,7 @@ export const GameModeStage: React.FC = () => {
     setCaretIndex(0);
     setCaretLeft(0);
     setWordErrors(0);
+    setShowHint(false);
     speakCurrentWord();
 
     setTimeout(() => {
@@ -150,6 +153,12 @@ export const GameModeStage: React.FC = () => {
     if (e.key === "Tab") {
       e.preventDefault();
       speakCurrentWord();
+      return;
+    }
+
+    if ((e.altKey || e.ctrlKey) && (e.key === "h" || e.key === "H")) {
+      e.preventDefault();
+      setShowHint((prev) => !prev);
       return;
     }
 
@@ -246,6 +255,10 @@ export const GameModeStage: React.FC = () => {
   const totalSecs = Math.max(1, Math.round(((endTime || Date.now()) - (startTime || Date.now())) / 1000));
   const finalWpm = Math.round((correctKeystrokes / 5) / (totalSecs / 60));
   const accuracy = totalKeystrokes > 0 ? Math.round((correctKeystrokes / totalKeystrokes) * 100) : 100;
+
+  const wordMeta = currentWord ? getWordMetadata(currentWord) : null;
+  const isHomophone = Boolean(wordMeta?.isHomophone);
+  const displayHint = wordMeta?.hint || wordMeta?.definition;
 
   return (
     <div
@@ -375,14 +388,52 @@ export const GameModeStage: React.FC = () => {
       {/* Active Word Typing Area */}
       {!isGameOver && (
         <div className="relative min-h-[160px] flex flex-col items-center justify-center">
-          {/* Audio hint */}
-          <button
-            onClick={speakCurrentWord}
-            className="mb-4 flex items-center gap-1.5 px-3 py-1 rounded-full bg-main/10 border border-main/20 text-main text-xs font-mono hover:bg-main/20 transition-colors"
-          >
-            <Volume2 className="w-3.5 h-3.5" />
-            <span>Replay Audio (Tab)</span>
-          </button>
+          {/* Audio hint & Context Clue */}
+          <div className="mb-4 flex flex-col items-center gap-2">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={speakCurrentWord}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-main/10 border border-main/20 text-main text-xs font-mono hover:bg-main/20 transition-colors shadow-sm"
+              >
+                <Volume2 className="w-3.5 h-3.5" />
+                <span>Replay Audio (Tab)</span>
+              </button>
+              {displayHint && (
+                <button
+                  type="button"
+                  onClick={() => setShowHint((prev) => !prev)}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-mono transition-all shadow-sm ${
+                    showHint || isHomophone
+                      ? "border-main/50 bg-main/15 text-main font-semibold"
+                      : "border-sub/30 bg-bg text-sub hover:text-text"
+                  }`}
+                  title="Toggle Word Meaning & Hint (Alt+H)"
+                >
+                  <Lightbulb className="w-3.5 h-3.5 text-main" />
+                  <span>Hint</span>
+                </button>
+              )}
+            </div>
+
+            {/* Word Meaning & Homophone Context Pill */}
+            {(isHomophone || showHint) && displayHint && (
+              <motion.div
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-center gap-2 px-3.5 py-1 rounded-full bg-main/10 border border-main/30 text-xs font-mono text-text shadow-sm max-w-md text-center"
+              >
+                <Lightbulb className="w-3.5 h-3.5 text-main shrink-0" />
+                <span>
+                  {wordMeta?.partOfSpeech && (
+                    <span className="text-sub uppercase text-[10px] font-bold mr-1.5">
+                      [{wordMeta.partOfSpeech}]
+                    </span>
+                  )}
+                  <span className="text-text font-medium">{displayHint}</span>
+                </span>
+              </motion.div>
+            )}
+          </div>
 
           <motion.div
             key={currentWord}
@@ -467,6 +518,9 @@ export const GameModeStage: React.FC = () => {
             </span>
             <span>
               <kbd className="px-1.5 py-0.5 rounded bg-sub/10 border border-sub/20 text-sub">Esc</kbd> Exit
+            </span>
+            <span>
+              <kbd className="px-1.5 py-0.5 rounded bg-sub/10 border border-sub/20 text-sub">Alt+H</kbd> Hint
             </span>
           </div>
 
