@@ -1,7 +1,19 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { X, Volume2, RotateCcw, Sliders, Type, Keyboard, HardDrive, Sparkles } from "lucide-react";
+import {
+  X,
+  Volume2,
+  RotateCcw,
+  Sliders,
+  Type,
+  Keyboard,
+  HardDrive,
+  Sparkles,
+  Orbit,
+  Grid,
+  CircleOff,
+} from "lucide-react";
 import {
   useSettingsStore,
   THEME_VARIABLES,
@@ -13,6 +25,7 @@ import {
   type FontFamily,
   type LiveStatsMode,
   type KeyboardLayout,
+  type AmbientBackdrop,
 } from "@/store/useSettingsStore";
 import { playMechanicalClick, TTSController } from "@/lib/audio";
 import { db } from "@/lib/db";
@@ -67,6 +80,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
     setTtsVoiceURI,
     sessionSize,
     setSessionSize,
+    ambientBackdrop,
+    setAmbientBackdrop,
     resetToDefaults,
   } = useSettingsStore();
 
@@ -463,6 +478,68 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                 </div>
               </div>
 
+              {/* Ambient Backdrop Canvas */}
+              <div>
+                <label className="text-xs uppercase text-sub font-semibold block mb-2">
+                  Ambient Backdrop Canvas
+                </label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {[
+                    {
+                      id: "constellation" as AmbientBackdrop,
+                      label: "Constellation",
+                      desc: "Kinetic nodes & filaments",
+                      icon: Orbit,
+                    },
+                    {
+                      id: "grid" as AmbientBackdrop,
+                      label: "Grid",
+                      desc: "Dot mesh with keystroke ripple",
+                      icon: Grid,
+                    },
+                    {
+                      id: "particles" as AmbientBackdrop,
+                      label: "Particles",
+                      desc: "Floating ambient star dust",
+                      icon: Sparkles,
+                    },
+                    {
+                      id: "off" as AmbientBackdrop,
+                      label: "Off",
+                      desc: "Solid background (zero GPU)",
+                      icon: CircleOff,
+                    },
+                  ].map((opt) => {
+                    const Icon = opt.icon;
+                    const isSelected = ambientBackdrop === opt.id;
+                    return (
+                      <button
+                        key={opt.id}
+                        onClick={() => setAmbientBackdrop(opt.id)}
+                        className={`p-3 rounded-xl border text-left flex flex-col justify-between transition-all ${
+                          isSelected
+                            ? "border-main bg-main/10 text-main ring-1 ring-main"
+                            : "border-sub/20 bg-sub/5 text-sub hover:border-sub/40 hover:text-text"
+                        }`}
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <Icon className={`w-4 h-4 ${isSelected ? "text-main" : "text-sub"}`} />
+                          {isSelected && <span className="w-1.5 h-1.5 rounded-full bg-main" />}
+                        </div>
+                        <div>
+                          <div className={`text-xs font-bold ${isSelected ? "text-main" : "text-text"}`}>
+                            {opt.label}
+                          </div>
+                          <div className="text-[10px] opacity-70 leading-tight mt-0.5 font-normal">
+                            {opt.desc}
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
               {/* Font Family */}
               <div>
                 <label className="text-xs uppercase text-sub font-semibold block mb-2">
@@ -585,8 +662,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                 >
                   <option value="">Default System English Voice</option>
                   {voices
-                    .filter((v) => v.lang.startsWith("en"))
-                    .map((v) => (
+                    .filter((v: SpeechSynthesisVoice) => v.lang.startsWith("en"))
+                    .map((v: SpeechSynthesisVoice) => (
                       <option key={v.voiceURI} value={v.voiceURI}>
                         {v.name} ({v.lang})
                       </option>
