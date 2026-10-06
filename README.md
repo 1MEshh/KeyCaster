@@ -108,30 +108,6 @@ KeyCaster 3.0 strictly adheres to production-grade, human-crafted frontend aesth
 
 ---
 
-## 🛠️ Getting Started
-
-### Local Setup
-```bash
-git clone https://github.com/1MEshh/KeyCaster.git
-cd KeyCaster
-npm install
-npm run dev
-```
-Visit [http://localhost:3000](http://localhost:3000) in your browser.
-
-### Running Test Suite
-```bash
-npm test
-```
-Executes all **59 unit and integration tests** covering linguistic dictionaries, SM-2 scheduling, sentence grading, and translation resilience.
-
-### Production Build
-```bash
-npm run build
-npm start
-```
-
----
 
 ## 📄 License
 
