@@ -11,6 +11,7 @@ import {
   Trophy,
   CheckCircle2,
   BookOpen,
+  Headphones,
 } from "lucide-react";
 import confetti from "canvas-confetti";
 import { useSentenceStore } from "@/store/useSentenceStore";
@@ -84,8 +85,8 @@ export const SentenceStage: React.FC = () => {
   });
   const [isFocused, setIsFocused] = useState<boolean>(true);
 
-  // Audio synthesis triggers
-  const speakSentence = useCallback(
+  // Audio synthesis: speak full target sentence
+  const speakFullSentence = useCallback(
     (slow = false) => {
       const targetText = getTargetText(currentSentence);
       if (!targetText) return;
@@ -104,16 +105,38 @@ export const SentenceStage: React.FC = () => {
     [currentSentence, speechRate, ttsVoiceURI, setIsSpeaking]
   );
 
-  // Speak sentence on initial mount / new sentence
+  // Audio synthesis: speak remaining sentence from active word
+  const speakRemainingSentence = useCallback(
+    (slow = false) => {
+      const remainingWords = words.slice(currentWordIndex).map((w) => w.word).join(" ");
+      const targetText = getTargetText(currentSentence);
+      const textToSpeak = remainingWords.trim() || targetText;
+      if (!textToSpeak) return;
+
+      setIsSpeaking(true);
+      setTimeout(() => {
+        TTSController.speakWord(textToSpeak, {
+          rate: speechRate,
+          voiceURI: ttsVoiceURI,
+          slow,
+          onStart: () => setIsSpeaking(true),
+          onEnd: () => setIsSpeaking(false),
+        });
+      }, 50);
+    },
+    [words, currentWordIndex, currentSentence, speechRate, ttsVoiceURI, setIsSpeaking]
+  );
+
+  // Speak full sentence on initial mount / new sentence
   useEffect(() => {
     if (currentSentence && !isSentenceComplete && !isSessionComplete) {
-      speakSentence(false);
+      speakFullSentence(false);
       // Ensure focus on new sentence
       setTimeout(() => {
         inputRef.current?.focus();
       }, 50);
     }
-  }, [currentSentence, isSentenceComplete, isSessionComplete, speakSentence]);
+  }, [currentSentence, isSentenceComplete, isSessionComplete, speakFullSentence]);
 
   // Trigger celebration micro-confetti upon completing batch
   useEffect(() => {
@@ -190,10 +213,10 @@ export const SentenceStage: React.FC = () => {
       const key = e.key;
       setActiveKey(key);
 
-      // Replay audio (Tab = normal, Shift+Tab = 0.72x slow)
+      // Replay audio (Tab = normal from current word, Shift+Tab = 0.72x slow from current word)
       if (key === "Tab") {
         e.preventDefault();
-        speakSentence(e.shiftKey);
+        speakRemainingSentence(e.shiftKey);
         return;
       }
 
@@ -258,7 +281,7 @@ export const SentenceStage: React.FC = () => {
     },
     [
       setActiveKey,
-      speakSentence,
+      speakRemainingSentence,
       toggleVocabHint,
       isSentenceComplete,
       nextSentence,
@@ -411,26 +434,40 @@ export const SentenceStage: React.FC = () => {
 
         {/* Audio Dictation & Hint Buttons */}
         <div className="flex items-center gap-2">
+          {/* Audio Listen Pill (Remaining Words) */}
           <button
-            onClick={() => speakSentence(false)}
+            type="button"
+            onClick={() => speakRemainingSentence(false)}
             className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all text-xs font-medium border ${
               isSpeaking
                 ? "bg-main/20 text-main border-main/40 shadow-sm shadow-main/20 animate-pulse"
-                : "bg-sub/10 text-sub hover:text-text border-sub/20"
+                : "bg-sub/10 text-sub hover:text-text border-sub/20 hover:border-sub/40"
             }`}
-            title="Press Tab to listen, Shift+Tab for slow motion (0.72x)"
+            title="Press Tab to listen remaining words, Shift+Tab for slow motion (0.72x)"
           >
             <Volume2 className="w-3.5 h-3.5" />
             <span>{isSpeaking ? "Speaking..." : "Listen"}</span>
             <kbd className="hidden sm:inline px-1 py-0.5 bg-sub/20 text-[10px] rounded text-sub">Tab</kbd>
           </button>
 
+          {/* Full Audio Pill (Whole sentence from start) */}
           <button
+            type="button"
+            onClick={() => speakFullSentence(false)}
+            className="px-2.5 py-1.5 rounded-lg flex items-center gap-1.5 transition-all text-xs font-medium border bg-sub/10 text-sub hover:text-text border-sub/20 hover:border-sub/40"
+            title="Full Audio: Replay entire sentence from the beginning"
+          >
+            <Headphones className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Full Audio</span>
+          </button>
+
+          <button
+            type="button"
             onClick={toggleVocabHint}
             className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all text-xs font-medium border ${
               showVocabHint
                 ? "bg-amber-500/20 text-amber-400 border-amber-500/40"
-                : "bg-sub/10 text-sub hover:text-text border-sub/20"
+                : "bg-sub/10 text-sub hover:text-text border-sub/20 hover:border-sub/40"
             }`}
             title="Toggle Hint (Alt+H)"
           >
@@ -470,7 +507,7 @@ export const SentenceStage: React.FC = () => {
           />
         )}
 
-        {/* Word Wrapped Multi-word Sentence */}
+        {/* Word Wrapped Multi-word Sentence with Word Masking */}
         <div className="flex flex-wrap items-center gap-x-3 gap-y-3 font-mono leading-relaxed select-none">
           {words.map((w, wIdx) => {
             const isActiveWord = wIdx === currentWordIndex;
@@ -481,24 +518,44 @@ export const SentenceStage: React.FC = () => {
                   isActiveWord ? "bg-sub/15 ring-1 ring-main/30" : ""
                 }`}
               >
-                {w.letters.map((l, lIdx) => (
-                  <span
-                    key={lIdx}
-                    ref={(el) => {
-                      if (el) letterRefs.current.set(`${wIdx}-${lIdx}`, el);
-                      else letterRefs.current.delete(`${wIdx}-${lIdx}`);
-                    }}
-                    className={`transition-colors duration-75 inline-block ${
-                      l.state === "correct"
-                        ? "text-main font-semibold"
-                        : l.state === "error"
-                        ? "text-error bg-error/20 rounded-sm font-semibold underline decoration-error"
-                        : "text-sub/40"
-                    }`}
-                  >
-                    {l.char}
-                  </span>
-                ))}
+                {w.letters.map((l, lIdx) => {
+                  const isCurrentCaret = isActiveWord && lIdx === currentLetterIndex;
+                  let displayChar: string;
+                  let letterClass: string;
+
+                  if (l.state === "correct") {
+                    displayChar = l.typedChar || l.char;
+                    letterClass = "text-text font-semibold";
+                  } else if (l.state === "error") {
+                    displayChar = l.typedChar || l.char;
+                    letterClass = "text-error font-bold bg-error/20 rounded px-0.5";
+                  } else {
+                    // state === "pending"
+                    if (l.char === " ") {
+                      displayChar = "\u00A0";
+                      letterClass = "text-sub/40";
+                    } else if (/[.,?!'"\-;:—–’“”«»]/.test(l.char)) {
+                      displayChar = l.char;
+                      letterClass = "text-sub/50";
+                    } else {
+                      displayChar = "_";
+                      letterClass = isCurrentCaret ? "text-main/60 font-semibold" : "text-sub/40";
+                    }
+                  }
+
+                  return (
+                    <span
+                      key={lIdx}
+                      ref={(el) => {
+                        if (el) letterRefs.current.set(`${wIdx}-${lIdx}`, el);
+                        else letterRefs.current.delete(`${wIdx}-${lIdx}`);
+                      }}
+                      className={`transition-colors duration-75 inline-block ${letterClass}`}
+                    >
+                      {displayChar}
+                    </span>
+                  );
+                })}
               </div>
             );
           })}
@@ -594,7 +651,8 @@ export const SentenceStage: React.FC = () => {
 
             <div className="flex items-center gap-2 w-full sm:w-auto">
               <button
-                onClick={() => speakSentence(false)}
+                type="button"
+                onClick={() => speakFullSentence(false)}
                 className="px-4 py-2.5 rounded-xl border border-sub/30 text-sub hover:text-text text-xs font-semibold flex items-center gap-2 transition-colors"
               >
                 <Volume2 className="w-3.5 h-3.5" />
