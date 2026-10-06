@@ -1,0 +1,282 @@
+[
+  {
+    "id": "en-conv-01",
+    "category": "conversation",
+    "difficulty": "beginner",
+    "text": "Could you please pass me the salt and pepper across the dining table?",
+    "author": null
+  },
+  {
+    "id": "en-conv-02",
+    "category": "conversation",
+    "difficulty": "beginner",
+    "text": "I was thinking we could catch the evening train to avoid rush hour traffic.",
+    "author": null
+  },
+  {
+    "id": "en-conv-03",
+    "category": "conversation",
+    "difficulty": "beginner",
+    "text": "Let's grab a warm cup of coffee before the morning presentation begins.",
+    "author": null
+  },
+  {
+    "id": "en-conv-04",
+    "category": "conversation",
+    "difficulty": "intermediate",
+    "text": "I really enjoyed our conversation yesterday, and I would love to continue exploring those ideas.",
+    "author": null
+  },
+  {
+    "id": "en-conv-05",
+    "category": "conversation",
+    "difficulty": "intermediate",
+    "text": "If you have some free time this afternoon, we could review the itinerary for our upcoming trip.",
+    "author": null
+  },
+  {
+    "id": "en-conv-06",
+    "category": "conversation",
+    "difficulty": "intermediate",
+    "text": "Could you clarify what you meant during the meeting regarding the new project deadline?",
+    "author": null
+  },
+  {
+    "id": "en-conv-07",
+    "category": "conversation",
+    "difficulty": "intermediate",
+    "text": "It was wonderful bumping into you at the bookstore after so many years of losing touch.",
+    "author": null
+  },
+  {
+    "id": "en-conv-08",
+    "category": "conversation",
+    "difficulty": "advanced",
+    "text": "Navigating difficult interpersonal disagreements requires active listening and an empathetic understanding of conflicting viewpoints.",
+    "author": null
+  },
+  {
+    "id": "en-conv-09",
+    "category": "conversation",
+    "difficulty": "advanced",
+    "text": "She graciously deflected the unsolicited compliment by redirecting praise toward the tireless dedication of her entire crew.",
+    "author": null
+  },
+  {
+    "id": "en-conv-10",
+    "category": "conversation",
+    "difficulty": "advanced",
+    "text": "Having weighed all prospective options, we collectively resolved that postponing the decision until next quarter was the prudent choice.",
+    "author": null
+  },
+  {
+    "id": "en-prog-01",
+    "category": "programming",
+    "difficulty": "beginner",
+    "text": "Functions should do one thing and do it well without causing unexpected side effects.",
+    "author": "Robert C. Martin"
+  },
+  {
+    "id": "en-prog-02",
+    "category": "programming",
+    "difficulty": "beginner",
+    "text": "Always write clean code that is easy for humans to read and understand.",
+    "author": "Martin Fowler"
+  },
+  {
+    "id": "en-prog-03",
+    "category": "programming",
+    "difficulty": "beginner",
+    "text": "A good programmer is someone who always looks both ways before crossing a one-way street.",
+    "author": "Doug Linder"
+  },
+  {
+    "id": "en-prog-04",
+    "category": "programming",
+    "difficulty": "intermediate",
+    "text": "Premature optimization is the root of all evil in software development.",
+    "author": "Donald Knuth"
+  },
+  {
+    "id": "en-prog-05",
+    "category": "programming",
+    "difficulty": "intermediate",
+    "text": "There are only two hard things in Computer Science: cache invalidation and naming things.",
+    "author": "Phil Karlton"
+  },
+  {
+    "id": "en-prog-06",
+    "category": "programming",
+    "difficulty": "intermediate",
+    "text": "Debugging is twice as hard as writing the code in the first place.",
+    "author": "Brian Kernighan"
+  },
+  {
+    "id": "en-prog-07",
+    "category": "programming",
+    "difficulty": "intermediate",
+    "text": "Walking on water and developing software from a specification are easy if both are frozen.",
+    "author": "Edward V. Berard"
+  },
+  {
+    "id": "en-prog-08",
+    "category": "programming",
+    "difficulty": "advanced",
+    "text": "Simplicity is prerequisite for reliability, whereas unbridled complexity breeds subtle, elusive bugs.",
+    "author": "Edsger W. Dijkstra"
+  },
+  {
+    "id": "en-prog-09",
+    "category": "programming",
+    "difficulty": "advanced",
+    "text": "The most dangerous thought you can have as a creative person is to think you know what you are doing.",
+    "author": "Bret Victor"
+  },
+  {
+    "id": "en-prog-10",
+    "category": "programming",
+    "difficulty": "advanced",
+    "text": "Controlling complexity is the essence of computer programming, as systems inevitably tend toward entropy.",
+    "author": "Brian Kernighan"
+  },
+  {
+    "id": "en-phil-01",
+    "category": "philosophy",
+    "difficulty": "beginner",
+    "text": "The unexamined life is not worth living.",
+    "author": "Socrates"
+  },
+  {
+    "id": "en-phil-02",
+    "category": "philosophy",
+    "difficulty": "beginner",
+    "text": "Knowing yourself is the beginning of all wisdom.",
+    "author": "Aristotle"
+  },
+  {
+    "id": "en-phil-03",
+    "category": "philosophy",
+    "difficulty": "beginner",
+    "text": "I think, therefore I am.",
+    "author": "René Descartes"
+  },
+  {
+    "id": "en-phil-04",
+    "category": "philosophy",
+    "difficulty": "intermediate",
+    "text": "He who has a why to live can bear almost any how.",
+    "author": "Friedrich Nietzsche"
+  },
+  {
+    "id": "en-phil-05",
+    "category": "philosophy",
+    "difficulty": "intermediate",
+    "text": "We are what we repeatedly do; excellence, then, is not an act, but a habit.",
+    "author": "Will Durant"
+  },
+  {
+    "id": "en-phil-06",
+    "category": "philosophy",
+    "difficulty": "intermediate",
+    "text": "Happiness depends upon ourselves rather than external circumstances.",
+    "author": "Aristotle"
+  },
+  {
+    "id": "en-phil-07",
+    "category": "philosophy",
+    "difficulty": "intermediate",
+    "text": "Man is condemned to be free; because once thrown into the world, he is responsible for everything he does.",
+    "author": "Jean-Paul Sartre"
+  },
+  {
+    "id": "en-phil-08",
+    "category": "philosophy",
+    "difficulty": "advanced",
+    "text": "The greatest blessing to humanity is tranquility of mind, achieved by accepting things outside our control.",
+    "author": "Marcus Aurelius"
+  },
+  {
+    "id": "en-phil-09",
+    "category": "philosophy",
+    "difficulty": "advanced",
+    "text": "Out of the crooked timber of humanity, no entirely straight thing was ever made.",
+    "author": "Immanuel Kant"
+  },
+  {
+    "id": "en-phil-10",
+    "category": "philosophy",
+    "difficulty": "advanced",
+    "text": "To perceive is to suffer, but through reflective reason we transform mere existence into profound meaning.",
+    "author": "Arthur Schopenhauer"
+  },
+  {
+    "id": "en-lit-01",
+    "category": "literature",
+    "difficulty": "beginner",
+    "text": "It is our choices that show what we truly are, far more than our abilities.",
+    "author": "J.K. Rowling"
+  },
+  {
+    "id": "en-lit-02",
+    "category": "literature",
+    "difficulty": "beginner",
+    "text": "Not all those who wander are lost.",
+    "author": "J.R.R. Tolkien"
+  },
+  {
+    "id": "en-lit-03",
+    "category": "literature",
+    "difficulty": "beginner",
+    "text": "Whatever our souls are made of, his and mine are the same.",
+    "author": "Emily Brontë"
+  },
+  {
+    "id": "en-lit-04",
+    "category": "literature",
+    "difficulty": "intermediate",
+    "text": "All animals are equal, but some animals are more equal than others.",
+    "author": "George Orwell"
+  },
+  {
+    "id": "en-lit-05",
+    "category": "literature",
+    "difficulty": "intermediate",
+    "text": "It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.",
+    "author": "Jane Austen"
+  },
+  {
+    "id": "en-lit-06",
+    "category": "literature",
+    "difficulty": "intermediate",
+    "text": "There is no greater agony than bearing an untold story inside you.",
+    "author": "Maya Angelou"
+  },
+  {
+    "id": "en-lit-07",
+    "category": "literature",
+    "difficulty": "intermediate",
+    "text": "So we beat on, boats against the current, borne back ceaselessly into the past.",
+    "author": "F. Scott Fitzgerald"
+  },
+  {
+    "id": "en-lit-08",
+    "category": "literature",
+    "difficulty": "advanced",
+    "text": "In the depth of winter, I finally learned that within me there lay an invincible summer.",
+    "author": "Albert Camus"
+  },
+  {
+    "id": "en-lit-09",
+    "category": "literature",
+    "difficulty": "advanced",
+    "text": "Beware; for I am fearless, and therefore powerful beyond the reckoning of ordinary mortals.",
+    "author": "Mary Shelley"
+  },
+  {
+    "id": "en-lit-10",
+    "category": "literature",
+    "difficulty": "advanced",
+    "text": "The curves of your lips rewrite history, echoing ancient ballads beneath the quiet moonlight.",
+    "author": "Oscar Wilde"
+  }
+]
