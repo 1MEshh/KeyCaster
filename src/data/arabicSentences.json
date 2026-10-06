@@ -1,0 +1,882 @@
+[
+  {
+    "id": "ar-daily-01",
+    "category": "daily",
+    "difficulty": "beginner",
+    "arabic": "صَبَاحُ الخَيْرِ، كَيْفَ حَالُكَ اليَوْمَ؟",
+    "english": "Good morning, how are you today?",
+    "acceptedAlternatives": [
+      "Good morning, how're you today?",
+      "Good morning, how are you doing today?",
+      "Good morning, how do you do today?"
+    ],
+    "literalMeaning": "Morning of the good, how is your condition today?",
+    "vocabularyCards": [
+      { "ar": "صَبَاحُ الخَيْر", "en": "good morning" },
+      { "ar": "حَالُك", "en": "your condition / how are you" },
+      { "ar": "اليَوْم", "en": "today" }
+    ]
+  },
+  {
+    "id": "ar-daily-02",
+    "category": "daily",
+    "difficulty": "beginner",
+    "arabic": "هَلْ يُمْكِنُنِي الحُصُولُ عَلَى كُوبٍ مِنَ المَاءِ، مِنْ فَضْلِكَ؟",
+    "english": "Can I have a cup of water, please?",
+    "acceptedAlternatives": [
+      "Could I have a cup of water, please?",
+      "May I have a glass of water, please?",
+      "Can I get a cup of water, please?",
+      "Can I get a glass of water, please?"
+    ],
+    "literalMeaning": "Is it possible for me obtaining on a cup of water, from your favor?",
+    "vocabularyCards": [
+      { "ar": "كُوب", "en": "cup / glass" },
+      { "ar": "مَاء", "en": "water" },
+      { "ar": "مِنْ فَضْلِك", "en": "please" }
+    ]
+  },
+  {
+    "id": "ar-daily-03",
+    "category": "daily",
+    "difficulty": "beginner",
+    "arabic": "أَيْنَ تَقَعُ أَقْرَبُ مَحَطَّةِ قِطَارٍ مِنْ هُنَا؟",
+    "english": "Where is the nearest train station from here?",
+    "acceptedAlternatives": [
+      "Where's the nearest train station from here?",
+      "Where is the closest train station from here?",
+      "Where's the closest train station from here?"
+    ],
+    "literalMeaning": "Where falls nearest station of train from here?",
+    "vocabularyCards": [
+      { "ar": "أَقْرَب", "en": "nearest / closest" },
+      { "ar": "مَحَطَّة", "en": "station" },
+      { "ar": "قِطَار", "en": "train" }
+    ]
+  },
+  {
+    "id": "ar-daily-04",
+    "category": "daily",
+    "difficulty": "beginner",
+    "arabic": "أَنَا مُمْتَنٌّ جِدًّا لِمُسَاعَدَتِكَ اللَّطِيفَةِ.",
+    "english": "I am very grateful for your kind help.",
+    "acceptedAlternatives": [
+      "I'm very grateful for your kind help.",
+      "I am really grateful for your kind help.",
+      "I'm really grateful for your kind help."
+    ],
+    "literalMeaning": "I am grateful very for your help the kind.",
+    "vocabularyCards": [
+      { "ar": "مُمْتَنّ", "en": "grateful" },
+      { "ar": "مُسَاعَدَة", "en": "help / assistance" },
+      { "ar": "لَطِيفَة", "en": "kind" }
+    ]
+  },
+  {
+    "id": "ar-daily-05",
+    "category": "daily",
+    "difficulty": "intermediate",
+    "arabic": "سَأَلْتَقِي بِأَصْدِقَائِي فِي المَقْهَى بَعْدَ انْتِهَاءِ العَمَلِ.",
+    "english": "I will meet my friends at the cafe after work.",
+    "acceptedAlternatives": [
+      "I'll meet my friends at the cafe after work.",
+      "I will meet my friends at the coffee shop after finishing work.",
+      "I'll meet my friends at the cafe after finishing work."
+    ],
+    "literalMeaning": "I will meet with my friends in the cafe after end of the work.",
+    "vocabularyCards": [
+      { "ar": "سَأَلْتَقِي", "en": "I will meet" },
+      { "ar": "أَصْدِقَائِي", "en": "my friends" },
+      { "ar": "المَقْهَى", "en": "the cafe" }
+    ]
+  },
+  {
+    "id": "ar-daily-06",
+    "category": "daily",
+    "difficulty": "intermediate",
+    "arabic": "يَبْدُو أَنَّ الطَّقْسَ سَيَكُونُ مَاطِرًا هَذَا المَسَاءَ.",
+    "english": "It looks like the weather will be rainy this evening.",
+    "acceptedAlternatives": [
+      "It seems that the weather will be rainy this evening.",
+      "It looks like it will rain this evening.",
+      "It seems like the weather will be rainy tonight."
+    ],
+    "literalMeaning": "It appears that the weather will be rainy this evening.",
+    "vocabularyCards": [
+      { "ar": "يَبْدُو", "en": "it seems / it looks" },
+      { "ar": "الطَّقْس", "en": "weather" },
+      { "ar": "مَاطِر", "en": "rainy" }
+    ]
+  },
+  {
+    "id": "ar-daily-07",
+    "category": "daily",
+    "difficulty": "intermediate",
+    "arabic": "لَا تَنْسَ شِرَاءَ بَعْضِ الخُضْرَاوَاتِ الطَّازَجَةِ فِي طَرِيقِ عَوْدَتِكَ.",
+    "english": "Don't forget to buy some fresh vegetables on your way back.",
+    "acceptedAlternatives": [
+      "Do not forget to buy some fresh vegetables on your way back.",
+      "Don't forget to get some fresh vegetables on your way home.",
+      "Do not forget to buy some fresh vegetables on your way home."
+    ],
+    "literalMeaning": "Do not forget buying some of the vegetables fresh in path of your return.",
+    "vocabularyCards": [
+      { "ar": "لَا تَنْسَ", "en": "do not forget" },
+      { "ar": "خُضْرَاوَات", "en": "vegetables" },
+      { "ar": "طَازَجَة", "en": "fresh" }
+    ]
+  },
+  {
+    "id": "ar-daily-08",
+    "category": "daily",
+    "difficulty": "intermediate",
+    "arabic": "أُفَضِّلُ القِرَاءَةَ فِي هُدُوءِ اللَّيْلِ عَلَى مُشَاهَدَةِ التِّلْفَازِ.",
+    "english": "I prefer reading in the quiet of the night over watching television.",
+    "acceptedAlternatives": [
+      "I prefer reading in the quiet of the night to watching TV.",
+      "I prefer reading in the quiet of night rather than watching television.",
+      "I prefer reading in the quiet of the night to watching television."
+    ],
+    "literalMeaning": "I prefer the reading in quiet of the night over watching the television.",
+    "vocabularyCards": [
+      { "ar": "أُفَضِّل", "en": "I prefer" },
+      { "ar": "هُدُوء", "en": "quiet / calm" },
+      { "ar": "مُشَاهَدَة", "en": "watching" }
+    ]
+  },
+  {
+    "id": "ar-daily-09",
+    "category": "daily",
+    "difficulty": "advanced",
+    "arabic": "يَتَطَلَّبُ الحِفَاظُ عَلَى نَمَطِ حَيَاةٍ صِحِّيٍّ التِزَامًا يَوْمِيًّا بِالتَّغْذِيَةِ السَّلِيمَةِ وَالمُمَارَسَةِ الرِّيَاضِيَّةِ.",
+    "english": "Maintaining a healthy lifestyle requires a daily commitment to proper nutrition and physical exercise.",
+    "acceptedAlternatives": [
+      "Maintaining a healthy lifestyle requires daily commitment to proper nutrition and exercise.",
+      "Keeping a healthy lifestyle requires a daily commitment to balanced nutrition and physical exercise."
+    ],
+    "literalMeaning": "Preserving on style of life healthy requires commitment daily to nutrition sound and practice sports.",
+    "vocabularyCards": [
+      { "ar": "نَمَط حَيَاة", "en": "lifestyle" },
+      { "ar": "التِزَام", "en": "commitment" },
+      { "ar": "تَغْذِيَة سَلِيمَة", "en": "proper nutrition" }
+    ]
+  },
+  {
+    "id": "ar-daily-10",
+    "category": "daily",
+    "difficulty": "advanced",
+    "arabic": "تُسْهِمُ مُشَارَكَةُ الوَجَبَاتِ العَائِلِيَّةِ فِي تَعْزِيزِ الرَّوَابِطِ العَاطِفِيَّةِ بَيْنَ أَفْرَادِ الأُسْرَةِ.",
+    "english": "Sharing family meals contributes to strengthening emotional bonds among family members.",
+    "acceptedAlternatives": [
+      "Sharing family meals helps strengthen emotional bonds between family members.",
+      "Sharing family meals contributes to strengthening the emotional bonds between family members."
+    ],
+    "literalMeaning": "Sharing family meals contributes in strengthening emotional bonds between members of the family.",
+    "vocabularyCards": [
+      { "ar": "تُسْهِم", "en": "contributes" },
+      { "ar": "تَعْزِيز", "en": "strengthening / enhancing" },
+      { "ar": "رَوَابِط", "en": "bonds / ties" }
+    ]
+  },
+  {
+    "id": "ar-daily-11",
+    "category": "daily",
+    "difficulty": "advanced",
+    "arabic": "عَلَى الرَّغْمِ مِنِ ازْدِحَامِ جَدْوَلِ مَوَاعِيدِهِ، فَإِنَّهُ يَحْرِصُ دَائِمًا عَلَى تَخْصِيصِ وَقْتٍ لِلِاسْتِرْخَاءِ.",
+    "english": "Despite his busy schedule, he always makes sure to set aside time for relaxation.",
+    "acceptedAlternatives": [
+      "Despite a busy schedule, he always ensures setting aside time for relaxation.",
+      "Although his schedule is crowded, he always makes sure to allocate time for relaxation.",
+      "In spite of his busy schedule, he always makes sure to set aside time to relax."
+    ],
+    "literalMeaning": "Despite crowd of schedule of his appointments, indeed he is keen always on allocating time for relaxation.",
+    "vocabularyCards": [
+      { "ar": "عَلَى الرَّغْمِ مِنْ", "en": "despite / although" },
+      { "ar": "جَدْوَل مَوَاعِيد", "en": "schedule of appointments" },
+      { "ar": "اسْتِرْخَاء", "en": "relaxation" }
+    ]
+  },
+  {
+    "id": "ar-daily-12",
+    "category": "daily",
+    "difficulty": "intermediate",
+    "arabic": "هَلْ يُمْكِنُكَ إِعَارَتِي مِظَلَّتَكَ لِبِضْعِ دَقَائِقَ حَتَّى يَتَوَقَّفَ الهَطْلُ؟",
+    "english": "Can you lend me your umbrella for a few minutes until the downpour stops?",
+    "acceptedAlternatives": [
+      "Could you lend me your umbrella for a few minutes until the rain stops?",
+      "Can you lend me your umbrella for a few minutes until the rain stops?"
+    ],
+    "literalMeaning": "Is it possible for you lending me your umbrella for a few minutes until stops the downpour?",
+    "vocabularyCards": [
+      { "ar": "إِعَارَتِي", "en": "lending me" },
+      { "ar": "مِظَلَّة", "en": "umbrella" },
+      { "ar": "الهَطْل", "en": "downpour / heavy rainfall" }
+    ]
+  },
+  {
+    "id": "ar-daily-13",
+    "category": "daily",
+    "difficulty": "beginner",
+    "arabic": "سَأَتَّصِلُ بِكَ عِنْدَمَا أَصِلُ إِلَى المَنْزِلِ.",
+    "english": "I will call you when I arrive home.",
+    "acceptedAlternatives": [
+      "I'll call you when I arrive home.",
+      "I will call you when I get home.",
+      "I'll call you when I get home.",
+      "I will phone you when I get home."
+    ],
+    "literalMeaning": "I will contact with you when I reach to the house.",
+    "vocabularyCards": [
+      { "ar": "سَأَتَّصِلُ بِك", "en": "I will call you" },
+      { "ar": "عِنْدَمَا", "en": "when" },
+      { "ar": "المَنْزِل", "en": "the house / home" }
+    ]
+  },
+  {
+    "id": "ar-tech-01",
+    "category": "tech",
+    "difficulty": "beginner",
+    "arabic": "هَذَا التَّطْبِيقُ سَهْلُ الِاسْتِخْدَامِ وَيَعْمَلُ بِسُرْعَةٍ فَائِقَةٍ.",
+    "english": "This application is easy to use and runs extremely fast.",
+    "acceptedAlternatives": [
+      "This app is easy to use and works very fast.",
+      "This application is easy to use and works extremely fast.",
+      "This app is user-friendly and runs extremely fast."
+    ],
+    "literalMeaning": "This application easy of use and works with speed superior.",
+    "vocabularyCards": [
+      { "ar": "تَطْبِيق", "en": "application / app" },
+      { "ar": "سَهْل الِاسْتِخْدَام", "en": "easy to use" },
+      { "ar": "سُرْعَة فَائِقَة", "en": "extreme speed" }
+    ]
+  },
+  {
+    "id": "ar-tech-02",
+    "category": "tech",
+    "difficulty": "beginner",
+    "arabic": "يَجِبُ عَلَيْكَ تَحْدِيثُ كَلِمَةِ المُرُورِ بِانْتِظَامٍ لِحِمَايَةِ حِسَابِكَ.",
+    "english": "You must update your password regularly to protect your account.",
+    "acceptedAlternatives": [
+      "You should update your password regularly to protect your account.",
+      "You have to update your password regularly to protect your account.",
+      "You need to update your password regularly to protect your account."
+    ],
+    "literalMeaning": "Must upon you updating word of pass with regularity to protect your account.",
+    "vocabularyCards": [
+      { "ar": "كَلِمَة المُرُور", "en": "password" },
+      { "ar": "بِانْتِظَام", "en": "regularly" },
+      { "ar": "حِمَايَة حِسَابِك", "en": "protecting your account" }
+    ]
+  },
+  {
+    "id": "ar-tech-03",
+    "category": "tech",
+    "difficulty": "beginner",
+    "arabic": "تَمَّ حِفْظُ التَّعْدِيلَاتِ فِي قَاعِدَةِ البَيَانَاتِ بِنَجَاحٍ.",
+    "english": "The changes were saved to the database successfully.",
+    "acceptedAlternatives": [
+      "The changes have been saved to the database successfully.",
+      "Modifications were saved to the database successfully.",
+      "The edits were saved in the database successfully."
+    ],
+    "literalMeaning": "Completed saving the modifications in base of data with success.",
+    "vocabularyCards": [
+      { "ar": "تَعْدِيلَات", "en": "modifications / changes" },
+      { "ar": "قَاعِدَة البَيَانَات", "en": "database" },
+      { "ar": "بِنَجَاح", "en": "successfully" }
+    ]
+  },
+  {
+    "id": "ar-tech-04",
+    "category": "tech",
+    "difficulty": "intermediate",
+    "arabic": "تُسَاعِدُ حَوْسَبَةُ السَّحَابَةِ فِي تَقْلِيلِ تَكَالِيفِ البِنْيَةِ التَّحْتِيَّةِ لِلشَّرِكَاتِ النَّاشِئَةِ.",
+    "english": "Cloud computing helps reduce infrastructure costs for startups.",
+    "acceptedAlternatives": [
+      "Cloud computing helps to reduce infrastructure costs for startups.",
+      "Cloud computing assists in reducing infrastructure costs for startup companies."
+    ],
+    "literalMeaning": "Helps computing of cloud in reducing costs of structure under for companies emerging.",
+    "vocabularyCards": [
+      { "ar": "حَوْسَبَة السَّحَابَة", "en": "cloud computing" },
+      { "ar": "بِنْيَة تَحْتِيَّة", "en": "infrastructure" },
+      { "ar": "شَرِكَات نَاشِئَة", "en": "startups" }
+    ]
+  },
+  {
+    "id": "ar-tech-05",
+    "category": "tech",
+    "difficulty": "intermediate",
+    "arabic": "تَحْتَاجُ الخَوَارِزْمِيَّةُ إِلَى تَحْسِينٍ لِتَقْلِيلِ اسْتِهْلَاكِ الذَّاكِرَةِ وَزَمَنِ التَّنْفِيذِ.",
+    "english": "The algorithm needs optimization to reduce memory consumption and execution time.",
+    "acceptedAlternatives": [
+      "The algorithm requires optimization to reduce memory consumption and execution time.",
+      "The algorithm needs optimization to lower memory usage and execution time."
+    ],
+    "literalMeaning": "Needs the algorithm to improvement to reduce consumption of memory and time of execution.",
+    "vocabularyCards": [
+      { "ar": "خَوَارِزْمِيَّة", "en": "algorithm" },
+      { "ar": "تَحْسِين", "en": "optimization / improvement" },
+      { "ar": "زَمَن التَّنْفِيذ", "en": "execution time" }
+    ]
+  },
+  {
+    "id": "ar-tech-06",
+    "category": "tech",
+    "difficulty": "intermediate",
+    "arabic": "قَامَ الفَرِيقُ بِإِصْلَاحِ الخَلَلِ البَرْمَجِيِّ الَّذِي تَسَبَّبَ فِي تَعَطُّلِ النِّظَامِ.",
+    "english": "The team fixed the bug that caused the system crash.",
+    "acceptedAlternatives": [
+      "The team resolved the software bug that caused the system crash.",
+      "The team fixed the software defect that caused the system breakdown.",
+      "The team repaired the bug that crashed the system."
+    ],
+    "literalMeaning": "Did the team with repairing the defect programming which caused in disruption of system.",
+    "vocabularyCards": [
+      { "ar": "خَلَل بَرْمَجِيّ", "en": "software bug" },
+      { "ar": "تَسَبَّبَ فِي", "en": "caused" },
+      { "ar": "تَعَطُّل النِّظَام", "en": "system crash" }
+    ]
+  },
+  {
+    "id": "ar-tech-07",
+    "category": "tech",
+    "difficulty": "intermediate",
+    "arabic": "تَعْتَمِدُ نَمَاذِجُ التَّعَلُّمِ العَمِيقِ عَلَى شَبَكَاتٍ عَصَبِيَّةٍ مُعَقَّدَةٍ لِمُعَالَجَةِ الصُّوَرِ.",
+    "english": "Deep learning models rely on complex neural networks to process images.",
+    "acceptedAlternatives": [
+      "Deep learning models depend on complex neural networks for image processing.",
+      "Deep learning models rely on intricate neural networks to process images."
+    ],
+    "literalMeaning": "Rely models of learning deep on networks neural complex to process the images.",
+    "vocabularyCards": [
+      { "ar": "تَعَلُّم عَمِيق", "en": "deep learning" },
+      { "ar": "شَبَكَات عَصَبِيَّة", "en": "neural networks" },
+      { "ar": "مُعَالَجَة", "en": "processing" }
+    ]
+  },
+  {
+    "id": "ar-tech-08",
+    "category": "tech",
+    "difficulty": "advanced",
+    "arabic": "يُعَدُّ التَّشْفِيرُ طَرَفًا لِطَرَفٍ مِعْيَارًا أَسَاسِيًّا لِحِمَايَةِ خُصُوصِيَّةِ المُسْتَخْدِمِينَ عَبْرَ الإِنْتَرْنِت.",
+    "english": "End-to-end encryption is considered an essential standard for protecting user privacy on the internet.",
+    "acceptedAlternatives": [
+      "End-to-end encryption is a fundamental standard for protecting user privacy online.",
+      "End-to-end encryption is considered a fundamental benchmark for securing user privacy over the internet."
+    ],
+    "literalMeaning": "Is counted the encryption end to end standard fundamental to protect privacy of users across the internet.",
+    "vocabularyCards": [
+      { "ar": "تَشْفِير", "en": "encryption" },
+      { "ar": "طَرَفًا لِطَرَف", "en": "end-to-end" },
+      { "ar": "خُصُوصِيَّة", "en": "privacy" }
+    ]
+  },
+  {
+    "id": "ar-tech-09",
+    "category": "tech",
+    "difficulty": "advanced",
+    "arabic": "تَتَطَلَّبُ المِعْمَارِيَّةُ القَائِمَةُ عَلَى الخَدَمَاتِ المُصَغَّرَةِ اسْتِرَاتِيجِيَّاتٍ قَوِيَّةً لِمُرَاقَبَةِ الأَدَاءِ وَإِدَارَةِ الأَخْطَاءِ.",
+    "english": "Microservices architecture requires robust strategies for performance monitoring and error management.",
+    "acceptedAlternatives": [
+      "A microservices architecture requires robust strategies for monitoring performance and error handling.",
+      "Microservices architecture demands strong strategies for performance monitoring and error management."
+    ],
+    "literalMeaning": "Requires architecture based on services miniaturized strategies strong for monitoring of performance and management of errors.",
+    "vocabularyCards": [
+      { "ar": "مِعْمَارِيَّة", "en": "architecture" },
+      { "ar": "خَدَمَات مُصَغَّرَة", "en": "microservices" },
+      { "ar": "مُرَاقَبَة الأَدَاءِ", "en": "performance monitoring" }
+    ]
+  },
+  {
+    "id": "ar-tech-10",
+    "category": "tech",
+    "difficulty": "advanced",
+    "arabic": "يُتِيحُ اسْتِخْدَامُ وَاجِهَاتِ بَرْمَجَةِ التَّطْبِيقَاتِ تَكَامُلًا سَلِسًا بَيْنَ الأَنْظِمَةِ غَيْرِ المُتَجَانِسَةِ.",
+    "english": "The use of application programming interfaces enables seamless integration between heterogeneous systems.",
+    "acceptedAlternatives": [
+      "Using APIs enables seamless integration among heterogeneous systems.",
+      "The use of APIs enables seamless integration between disparate systems.",
+      "Using application programming interfaces allows seamless integration between heterogeneous systems."
+    ],
+    "literalMeaning": "Allows use of interfaces programming of applications integration smooth between systems non-homogeneous.",
+    "vocabularyCards": [
+      { "ar": "وَاجِهَات بَرْمَجَةِ التَّطْبِيقَات", "en": "APIs / application programming interfaces" },
+      { "ar": "تَكَامُل سَلِس", "en": "seamless integration" },
+      { "ar": "غَيْرِ مُتَجَانِسَة", "en": "heterogeneous / disparate" }
+    ]
+  },
+  {
+    "id": "ar-tech-11",
+    "category": "tech",
+    "difficulty": "advanced",
+    "arabic": "تَسْتَخْدِمُ خَوَارِزْمِيَّاتُ التَّوَافُقِ فِي سَلَاسِلِ الكُتَلِ آَلِيَّاتِ إِثْبَاتِ الحِصَّةِ لِتَقْلِيلِ اسْتِهْلَاكِ الطَّاقَةِ.",
+    "english": "Consensus algorithms in blockchains use proof-of-stake mechanisms to reduce energy consumption.",
+    "acceptedAlternatives": [
+      "Consensus algorithms in blockchain use proof of stake mechanisms to cut energy consumption.",
+      "Blockchain consensus algorithms utilize proof-of-stake mechanisms to minimize energy consumption."
+    ],
+    "literalMeaning": "Use algorithms of consensus in chains of blocks mechanisms proof of share to reduce consumption of energy.",
+    "vocabularyCards": [
+      { "ar": "سَلَاسِل الكُتَل", "en": "blockchain" },
+      { "ar": "تَوَافُق", "en": "consensus" },
+      { "ar": "إِثْبَات الحِصَّة", "en": "proof-of-stake" }
+    ]
+  },
+  {
+    "id": "ar-tech-12",
+    "category": "tech",
+    "difficulty": "beginner",
+    "arabic": "تَأَكَّدْ مِنْ أَخْذِ نُسْخَةٍ احْتِيَاطِيَّةٍ لِمَلَفَّاتِكَ قَبْلَ بَدْءِ التَّرْقِيَةِ.",
+    "english": "Make sure to back up your files before starting the upgrade.",
+    "acceptedAlternatives": [
+      "Make sure to make a backup of your files before starting the upgrade.",
+      "Ensure you back up your files before beginning the upgrade.",
+      "Make sure you take a backup of your files before starting the upgrade."
+    ],
+    "literalMeaning": "Make sure from taking copy backup for your files before start of the upgrade.",
+    "vocabularyCards": [
+      { "ar": "نُسْخَة احْتِيَاطِيَّة", "en": "backup copy" },
+      { "ar": "تَرْقِيَة", "en": "upgrade" },
+      { "ar": "مَلَفَّات", "en": "files" }
+    ]
+  },
+  {
+    "id": "ar-tech-13",
+    "category": "tech",
+    "difficulty": "intermediate",
+    "arabic": "يَسْمَحُ لَنَا مُسْتَوْدَعُ الشِّفْرَةِ المَصْدَرِيَّةِ بِتَتَبُّعِ التَّغْيِيرَاتِ وَالتَّعَاوُنِ بِفَعَّالِيَّةٍ.",
+    "english": "The source code repository allows us to track changes and collaborate effectively.",
+    "acceptedAlternatives": [
+      "The source code repository lets us track changes and collaborate effectively.",
+      "The source code repo allows us to trace changes and collaborate effectively."
+    ],
+    "literalMeaning": "Allows to us repository of code source with tracking changes and collaboration with effectiveness.",
+    "vocabularyCards": [
+      { "ar": "شِفْرَة مَصْدَرِيَّة", "en": "source code" },
+      { "ar": "تَتَبُّع", "en": "tracking / tracing" },
+      { "ar": "تَعَاوُن", "en": "collaboration" }
+    ]
+  },
+  {
+    "id": "ar-wisdom-01",
+    "category": "wisdom",
+    "difficulty": "beginner",
+    "arabic": "الصَّبْرُ مِفْتَاحُ الفَرَجِ.",
+    "english": "Patience is the key to relief.",
+    "acceptedAlternatives": [
+      "Patience is the key to ease.",
+      "Patience is key to relief."
+    ],
+    "literalMeaning": "The patience key of the relief.",
+    "vocabularyCards": [
+      { "ar": "الصَّبْر", "en": "patience" },
+      { "ar": "مِفْتَاح", "en": "key" },
+      { "ar": "الفَرَج", "en": "relief" }
+    ]
+  },
+  {
+    "id": "ar-wisdom-02",
+    "category": "wisdom",
+    "difficulty": "beginner",
+    "arabic": "رِحْلَةُ الأَلْفِ مِيلٍ تَبْدَأُ بِخُطْوَةٍ وَاحِدَةٍ.",
+    "english": "A journey of a thousand miles begins with a single step.",
+    "acceptedAlternatives": [
+      "The journey of a thousand miles begins with a single step.",
+      "A journey of a thousand miles starts with one step.",
+      "A journey of a thousand miles begins with one step."
+    ],
+    "literalMeaning": "Journey of the thousand miles begins with step one.",
+    "vocabularyCards": [
+      { "ar": "رِحْلَة", "en": "journey" },
+      { "ar": "أَلْف مِيل", "en": "a thousand miles" },
+      { "ar": "خُطْوَة", "en": "step" }
+    ]
+  },
+  {
+    "id": "ar-wisdom-03",
+    "category": "wisdom",
+    "difficulty": "beginner",
+    "arabic": "العِلْمُ فِي الصِّغَرِ كَالنَّقْشِ عَلَى الحَجَرِ.",
+    "english": "Learning in youth is like engraving on stone.",
+    "acceptedAlternatives": [
+      "Knowledge in childhood is like carving on stone.",
+      "Learning at a young age is like engraving on stone.",
+      "Learning in youth is like carving in stone."
+    ],
+    "literalMeaning": "The knowledge in the youth like the engraving on the stone.",
+    "vocabularyCards": [
+      { "ar": "العِلْم", "en": "knowledge / learning" },
+      { "ar": "الصِّغَر", "en": "youth / childhood" },
+      { "ar": "النَّقْش", "en": "engraving / carving" }
+    ]
+  },
+  {
+    "id": "ar-wisdom-04",
+    "category": "wisdom",
+    "difficulty": "intermediate",
+    "arabic": "لَا تَحْكُمْ عَلَى الكِتَابِ مِنْ غِلَافِهِ فَالجَوْهَرُ يَكْمُنُ فِي الدَّاخِلِ.",
+    "english": "Do not judge a book by its cover, for the essence lies within.",
+    "acceptedAlternatives": [
+      "Don't judge a book by its cover, for the essence lies within.",
+      "Don't judge a book by its cover; the essence lies within.",
+      "Do not judge a book by its cover, as the true essence lies inside."
+    ],
+    "literalMeaning": "Do not judge on the book from its cover, for the jewel lies in the inside.",
+    "vocabularyCards": [
+      { "ar": "غِلَاف", "en": "cover" },
+      { "ar": "جَوْهَر", "en": "essence / substance" },
+      { "ar": "يَكْمُن", "en": "lies / resides" }
+    ]
+  },
+  {
+    "id": "ar-wisdom-05",
+    "category": "wisdom",
+    "difficulty": "intermediate",
+    "arabic": "مَنْ لَمْ يُجَرِّبْ طَعْمَ الفَشَلِ لَنْ يَتَذَوَّقَ حَلَاوَةَ النَّجَاحِ.",
+    "english": "He who has not tasted failure will never appreciate the sweetness of success.",
+    "acceptedAlternatives": [
+      "Whoever has not tasted failure will not taste the sweetness of success.",
+      "Those who have not tasted failure will never taste the sweetness of success.",
+      "He who has not experienced failure will not relish the sweetness of success."
+    ],
+    "literalMeaning": "Who did not try taste of the failure will not taste sweetness of the success.",
+    "vocabularyCards": [
+      { "ar": "طَعْم", "en": "taste" },
+      { "ar": "فَشَل", "en": "failure" },
+      { "ar": "حَلَاوَة النَّجَاح", "en": "sweetness of success" }
+    ]
+  },
+  {
+    "id": "ar-wisdom-06",
+    "category": "wisdom",
+    "difficulty": "intermediate",
+    "arabic": "الوَقْتُ كَالسَّيْفِ إِنْ لَمْ تَقْطَعْهُ قَطَعَكَ.",
+    "english": "Time is like a sword; if you do not cut it, it will cut you.",
+    "acceptedAlternatives": [
+      "Time is like a sword; if you don't cut it, it cuts you.",
+      "Time is like a sword: if you do not cut it, it will sever you.",
+      "Time is like a sword, if you don't cut it, it will cut you."
+    ],
+    "literalMeaning": "The time like the sword if you do not cut it, it cuts you.",
+    "vocabularyCards": [
+      { "ar": "سَيْف", "en": "sword" },
+      { "ar": "تَقْطَعْه", "en": "you cut it" },
+      { "ar": "قَطَعَك", "en": "it cut you" }
+    ]
+  },
+  {
+    "id": "ar-wisdom-07",
+    "category": "wisdom",
+    "difficulty": "intermediate",
+    "arabic": "الصَّدِيقُ وَقْتَ الضِّيقِ هُوَ الكَنْزُ الحَقِيقِيُّ فِي الحَيَاةِ.",
+    "english": "A friend in need is a true treasure in life.",
+    "acceptedAlternatives": [
+      "A friend in times of distress is the true treasure in life.",
+      "A true friend in times of trouble is life's real treasure."
+    ],
+    "literalMeaning": "The friend time of hardship is the treasure real in the life.",
+    "vocabularyCards": [
+      { "ar": "وَقْت الضِّيق", "en": "time of distress / hardship" },
+      { "ar": "كَنْز", "en": "treasure" },
+      { "ar": "حَقِيقِيّ", "en": "real / true" }
+    ]
+  },
+  {
+    "id": "ar-wisdom-08",
+    "category": "wisdom",
+    "difficulty": "advanced",
+    "arabic": "لَيْسَتِ القُوَّةُ فِي التَّغَلُّبِ عَلَى الآخَرِينَ، بَلْ فِي السَّيْطَرَةِ عَلَى النَّفْسِ عِنْدَ الغَضَبِ.",
+    "english": "Strength is not in conquering others, but in mastering oneself during anger.",
+    "acceptedAlternatives": [
+      "Real strength lies not in defeating others, but in controlling oneself when angry.",
+      "True strength is not in overcoming others, but in self-control during anger.",
+      "Strength is not in overcoming others, but in mastering oneself when angry."
+    ],
+    "literalMeaning": "Not the strength in overcoming on others, but in controlling on the self at anger.",
+    "vocabularyCards": [
+      { "ar": "قُوَّة", "en": "strength / power" },
+      { "ar": "التَّغَلُّب", "en": "overcoming / conquering" },
+      { "ar": "السَّيْطَرَة عَلَى النَّفْس", "en": "self-control" }
+    ]
+  },
+  {
+    "id": "ar-wisdom-09",
+    "category": "wisdom",
+    "difficulty": "advanced",
+    "arabic": "الحِكْمَةُ ضَالَّةُ المُؤْمِنِ، أَنَّى وَجَدَهَا فَهُوَ أَحَقُّ النَّاسِ بِهَا.",
+    "english": "Wisdom is the lost property of the believer; wherever he finds it, he is most entitled to it.",
+    "acceptedAlternatives": [
+      "Wisdom is the believer's lost property; wherever they find it, they have the greatest right to it.",
+      "Wisdom is the lost treasure of the seeker; wherever found, they are most deserving of it."
+    ],
+    "literalMeaning": "The wisdom lost-stray of the believer, wherever he found it, so he most rightful of people with it.",
+    "vocabularyCards": [
+      { "ar": "حِكْمَة", "en": "wisdom" },
+      { "ar": "ضَالَّة", "en": "lost property / stray" },
+      { "ar": "أَحَقّ", "en": "most entitled" }
+    ]
+  },
+  {
+    "id": "ar-wisdom-10",
+    "category": "wisdom",
+    "difficulty": "advanced",
+    "arabic": "إِنَّ الشَّجَاعَةَ لَيْسَتْ غِيَابَ الخَوْفِ، بَلْ هِيَ القُدْرَةُ عَلَى التَّصَرُّفِ رَغْمَ وُجُودِهِ.",
+    "english": "Courage is not the absence of fear, but the ability to act despite its presence.",
+    "acceptedAlternatives": [
+      "Courage isn't the absence of fear, but the capacity to act despite it.",
+      "Courage is not the lack of fear, but rather the ability to act despite its existence."
+    ],
+    "literalMeaning": "Indeed the courage not absence of fear, but it is the ability on behaving despite existence of it.",
+    "vocabularyCards": [
+      { "ar": "شَجَاعَة", "en": "courage" },
+      { "ar": "غِيَاب", "en": "absence" },
+      { "ar": "القُدْرَة عَلَى التَّصَرُّف", "en": "ability to act" }
+    ]
+  },
+  {
+    "id": "ar-wisdom-11",
+    "category": "wisdom",
+    "difficulty": "advanced",
+    "arabic": "تَجْرِي الرِّيَاحُ بِمَا لَا تَشْتَهِي السُّفُنُ، لَكِنَّ البَحَّارَ المَاهِرَ يَتَكَيَّفُ مَعَ الأَمْوَاجِ.",
+    "english": "Winds blow contrary to what ships desire, yet the skilled sailor adapts to the waves.",
+    "acceptedAlternatives": [
+      "The winds blow as ships do not desire, but the skilled sailor adapts to the waves.",
+      "Winds do not blow as ships desire, yet the skilled sailor adapts to the waves."
+    ],
+    "literalMeaning": "Run the winds with what not desire the ships, but the sailor skilled adapts with the waves.",
+    "vocabularyCards": [
+      { "ar": "تَجْرِي الرِّيَاح", "en": "the winds blow" },
+      { "ar": "بَحَّار مَاهِر", "en": "skilled sailor" },
+      { "ar": "يَتَكَيَّف", "en": "adapts" }
+    ]
+  },
+  {
+    "id": "ar-wisdom-12",
+    "category": "wisdom",
+    "difficulty": "beginner",
+    "arabic": "مَنْ جَدَّ وَجَدَ، وَمَنْ زَرَعَ حَصَدَ.",
+    "english": "Whoever strives shall find, and whoever sows shall reap.",
+    "acceptedAlternatives": [
+      "He who strives finds, and he who sows reaps.",
+      "Whoever works hard finds success, and whoever sows reaps.",
+      "Those who strive succeed, and those who sow reap."
+    ],
+    "literalMeaning": "Who strived found, and who sowed harvested.",
+    "vocabularyCards": [
+      { "ar": "مَنْ جَدَّ", "en": "whoever strives" },
+      { "ar": "زَرَع", "en": "sowed / planted" },
+      { "ar": "حَصَد", "en": "reaped / harvested" }
+    ]
+  },
+  {
+    "id": "ar-biz-01",
+    "category": "business",
+    "difficulty": "beginner",
+    "arabic": "سَنَعْقِدُ اجْتِمَاعًا صَبَاحَ الغَدِ لِمُنَاقَشَةِ خِطَّةِ المَشْرُوعِ.",
+    "english": "We will hold a meeting tomorrow morning to discuss the project plan.",
+    "acceptedAlternatives": [
+      "We'll hold a meeting tomorrow morning to discuss the project plan.",
+      "We will have a meeting tomorrow morning to discuss the project plan.",
+      "We'll have a meeting tomorrow morning to discuss the project plan."
+    ],
+    "literalMeaning": "We will hold a meeting morning of tomorrow to discuss plan of the project.",
+    "vocabularyCards": [
+      { "ar": "اجْتِمَاع", "en": "meeting" },
+      { "ar": "مُنَاقَشَة", "en": "discussing" },
+      { "ar": "خِطَّة المَشْرُوع", "en": "project plan" }
+    ]
+  },
+  {
+    "id": "ar-biz-02",
+    "category": "business",
+    "difficulty": "beginner",
+    "arabic": "يُرْجَى إِرْسَالُ التَّقْرِيرِ المَالِيِّ قَبْلَ نِهَايَةِ يَوْمِ العَمَلِ.",
+    "english": "Please send the financial report before the end of the business day.",
+    "acceptedAlternatives": [
+      "Please send the financial report before the end of the workday.",
+      "Kindly send the financial report before the close of business.",
+      "Please submit the financial report before the end of the day."
+    ],
+    "literalMeaning": "Please sending the report financial before end of day of the work.",
+    "vocabularyCards": [
+      { "ar": "تَقْرِير مَالِيّ", "en": "financial report" },
+      { "ar": "يَوْم العَمَل", "en": "business day / workday" },
+      { "ar": "نِهَايَة", "en": "end / close" }
+    ]
+  },
+  {
+    "id": "ar-biz-03",
+    "category": "business",
+    "difficulty": "beginner",
+    "arabic": "نَحْنُ نَهْدِفُ إِلَى زِيَادَةِ المَبِيعَاتِ بِنِسْبَةِ عَشَرَةٍ فِي المِائَةِ هَذَا الرُّبْعَ.",
+    "english": "We aim to increase sales by ten percent this quarter.",
+    "acceptedAlternatives": [
+      "We aim to increase sales by 10% this quarter.",
+      "Our goal is to increase sales by ten percent this quarter.",
+      "We are aiming to raise sales by ten percent this quarter."
+    ],
+    "literalMeaning": "We aim to increase sales by percentage ten in the hundred this quarter.",
+    "vocabularyCards": [
+      { "ar": "مَبِيعَات", "en": "sales" },
+      { "ar": "نِسْبَة", "en": "percentage / rate" },
+      { "ar": "الرُّبْع", "en": "quarter" }
+    ]
+  },
+  {
+    "id": "ar-biz-04",
+    "category": "business",
+    "difficulty": "intermediate",
+    "arabic": "تَتَطَلَّبُ المُفَاوَضَاتُ النَّاجِحَةُ فَهْمًا دَقِيقًا لِاحْتِيَاجَاتِ الطَّرَفِ الآخَرِ.",
+    "english": "Successful negotiations require a precise understanding of the other party's needs.",
+    "acceptedAlternatives": [
+      "Successful negotiations require an accurate understanding of the other party's needs.",
+      "Successful bargaining requires a deep understanding of the other side's needs."
+    ],
+    "literalMeaning": "Requires negotiations successful understanding precise to needs of party the other.",
+    "vocabularyCards": [
+      { "ar": "مُفَاوَضَات", "en": "negotiations" },
+      { "ar": "فَهْم دَقِيق", "en": "precise understanding" },
+      { "ar": "الطَّرَف الآخَر", "en": "the other party" }
+    ]
+  },
+  {
+    "id": "ar-biz-05",
+    "category": "business",
+    "difficulty": "intermediate",
+    "arabic": "يَجِبُ أَنْ نَلْتَزِمَ بِالمَوْعِدِ النِّهَائِيِّ لِتَسْلِيمِ المُنْتَجِ لِلعَمِيلِ.",
+    "english": "We must adhere to the deadline for delivering the product to the client.",
+    "acceptedAlternatives": [
+      "We must meet the deadline to deliver the product to the customer.",
+      "We have to adhere to the deadline for delivering the product to the client.",
+      "We should stick to the deadline for delivering the product to the client."
+    ],
+    "literalMeaning": "Must that we commit with the time final to delivery of the product to the client.",
+    "vocabularyCards": [
+      { "ar": "مَوْعِد نِهَائِيّ", "en": "deadline" },
+      { "ar": "تَسْلِيم", "en": "delivering / delivery" },
+      { "ar": "عَمِيل", "en": "client / customer" }
+    ]
+  },
+  {
+    "id": "ar-biz-06",
+    "category": "business",
+    "difficulty": "intermediate",
+    "arabic": "يُعْتَبَرُ رِضَا العُمَلَاءِ المِعْيَارَ الرَّئِيسِيَّ لِقِيَاسِ نَجَاحِ حَمْلَتِنَا التَّسْوِيقِيَّةِ.",
+    "english": "Customer satisfaction is considered the main metric for measuring the success of our marketing campaign.",
+    "acceptedAlternatives": [
+      "Customer satisfaction is the main criterion for measuring our marketing campaign's success.",
+      "Client satisfaction is considered the primary benchmark for measuring the success of our marketing campaign."
+    ],
+    "literalMeaning": "Is considered satisfaction of customers the metric main to measuring success of campaign our marketing.",
+    "vocabularyCards": [
+      { "ar": "رِضَا العُمَلَاء", "en": "customer satisfaction" },
+      { "ar": "مِعْيَار رَئِيسِيّ", "en": "main metric" },
+      { "ar": "حَمْلَة تَسْوِيقِيَّة", "en": "marketing campaign" }
+    ]
+  },
+  {
+    "id": "ar-biz-07",
+    "category": "business",
+    "difficulty": "intermediate",
+    "arabic": "سَنَقُومُ بِمُرَاجَعَةِ المِيزَانِيَّةِ التَّقْدِيرِيَّةِ مَعَ مُدِيرِ الحِسَابَاتِ غَدًا.",
+    "english": "We will review the estimated budget with the account manager tomorrow.",
+    "acceptedAlternatives": [
+      "We'll review the estimated budget with the account manager tomorrow.",
+      "We will review the projected budget with the accounting manager tomorrow.",
+      "We'll review the budget estimate with the account manager tomorrow."
+    ],
+    "literalMeaning": "We will do with reviewing budget estimated with manager of accounts tomorrow.",
+    "vocabularyCards": [
+      { "ar": "مُدِير الحِسَابَات", "en": "account manager" },
+      { "ar": "مِيزَانِيَّة تَقْدِيرِيَّة", "en": "estimated budget" },
+      { "ar": "مُرَاجَعَة", "en": "review / auditing" }
+    ]
+  },
+  {
+    "id": "ar-biz-08",
+    "category": "business",
+    "difficulty": "advanced",
+    "arabic": "يَتَطَلَّبُ التَّوَسُّعُ فِي الأَسْوَاقِ الإِقْلِيمِيَّةِ إِجْرَاءَ دِرَاسَةِ جَدْوَى شَامِلَةٍ وَتَحْلِيلِ المَخَاطِرِ.",
+    "english": "Expanding into regional markets requires conducting a comprehensive feasibility study and risk analysis.",
+    "acceptedAlternatives": [
+      "Expansion into regional markets requires a comprehensive feasibility study and risk assessment.",
+      "Expanding into regional markets requires conducting a thorough feasibility study and risk analysis."
+    ],
+    "literalMeaning": "Requires expansion in markets regional conducting study of feasibility comprehensive and analysis of risks.",
+    "vocabularyCards": [
+      { "ar": "دِرَاسَة جَدْوَى", "en": "feasibility study" },
+      { "ar": "تَحْلِيل المَخَاطِر", "en": "risk analysis" },
+      { "ar": "أَسْوَاق إِقْلِيمِيَّة", "en": "regional markets" }
+    ]
+  },
+  {
+    "id": "ar-biz-09",
+    "category": "business",
+    "difficulty": "advanced",
+    "arabic": "تَسْعَى الشَّرِكَةُ إِلَى تَنْوِيعِ مَصَادِرِ إِيرَادَاتِهَا لِضَمَانِ الِاسْتِدَامَةِ المَالِيَّةِ عَلَى المَدَى الطَّوِيلِ.",
+    "english": "The company seeks to diversify its revenue streams to ensure long-term financial sustainability.",
+    "acceptedAlternatives": [
+      "The company is seeking to diversify its revenue sources to guarantee long-term financial sustainability.",
+      "The company aims to diversify its revenue streams to ensure long-term financial sustainability."
+    ],
+    "literalMeaning": "Strives the company to diversification sources of revenues its to ensure sustainability financial on term long.",
+    "vocabularyCards": [
+      { "ar": "تَنْوِيع الإِيرَادَات", "en": "revenue diversification" },
+      { "ar": "اسْتِدَامَة مَالِيَّة", "en": "financial sustainability" },
+      { "ar": "عَلَى المَدَى الطَّوِيل", "en": "long-term" }
+    ]
+  },
+  {
+    "id": "ar-biz-10",
+    "category": "business",
+    "difficulty": "advanced",
+    "arabic": "تَمَّ التَّوَقِيعُ عَلَى اتِّفَاقِيَّةِ الشَّرَاكَةِ الِاسْتِرَاتِيجِيَّةِ بَعْدَ مُفَاوَضَاتٍ مُكَثَّفَةٍ دَامَتْ عِدَّةَ أَشْهُرٍ.",
+    "english": "The strategic partnership agreement was signed after intensive negotiations lasting several months.",
+    "acceptedAlternatives": [
+      "The strategic partnership agreement was signed after intensive negotiations that lasted several months.",
+      "The strategic partnership agreement was signed following months of intensive negotiations."
+    ],
+    "literalMeaning": "Completed signing on agreement of partnership strategic after negotiations intensive lasted several months.",
+    "vocabularyCards": [
+      { "ar": "شَرَاكَة اسْتِرَاتِيجِيَّة", "en": "strategic partnership" },
+      { "ar": "اتِّفَاقِيَّة", "en": "agreement / contract" },
+      { "ar": "مُفَاوَضَات مُكَثَّفَة", "en": "intensive negotiations" }
+    ]
+  },
+  {
+    "id": "ar-biz-11",
+    "category": "business",
+    "difficulty": "advanced",
+    "arabic": "يَسْتَهْدِفُ رَأْسُ المَالِ الجَرِيءُ دَعْمَ المَشَارِيعِ الِابْتِكَارِيَّةِ ذَاتِ الفُرَصِ النَّمَائِيَّةِ العَالِيَةِ.",
+    "english": "Venture capital aims to support innovative ventures with high growth potential.",
+    "acceptedAlternatives": [
+      "Venture capital targets supporting innovative projects with high growth potential.",
+      "Venture capital aims to back innovative startups with high growth potential."
+    ],
+    "literalMeaning": "Targets capital daring supporting projects innovative with opportunities developmental high.",
+    "vocabularyCards": [
+      { "ar": "رَأْس المَال الجَرِيء", "en": "venture capital" },
+      { "ar": "مَشَارِيع ابْتِكَارِيَّة", "en": "innovative ventures" },
+      { "ar": "فُرَص نَمَائِيَّة", "en": "growth potential" }
+    ]
+  },
+  {
+    "id": "ar-biz-12",
+    "category": "business",
+    "difficulty": "intermediate",
+    "arabic": "يَنْبَغِي تَوْزِيعُ المَهَامِّ عَلَى أَعْضَاءِ الفَرِيقِ بِنَاءً عَلَى خِبْرَاتِهِمْ وَكِفَايَاتِهِمْ المِهْنِيَّةِ.",
+    "english": "Tasks should be distributed among team members based on their expertise and professional competencies.",
+    "acceptedAlternatives": [
+      "Tasks should be delegated to team members based on their expertise and professional skills.",
+      "Tasks ought to be distributed among team members based on their experience and professional competencies."
+    ],
+    "literalMeaning": "Ought distribution of tasks on members of the team building on their experiences and competencies professional.",
+    "vocabularyCards": [
+      { "ar": "تَوْزِيع المَهَام", "en": "task distribution" },
+      { "ar": "خِبْرَات", "en": "expertise" },
+      { "ar": "كِفَايَات مِهْنِيَّة", "en": "professional competencies" }
+    ]
+  }
+]
