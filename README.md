@@ -1,8 +1,8 @@
 <div align="center">
 
-# 🎙️ KeyCaster 2.0
+# 🎙️ KeyCaster 3.0
 
-### Audio-First SRS Typing Engine, Arcade Modes & Orthographic Muscle Memory Trainer
+### Acoustic SRS Typing, Sentence Mastery, Arabic Dictation & Translation, and Human-Crafted Visuals
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Next.js 15](https://img.shields.io/badge/Next.js-15.1.7-black?logo=next.js)](https://nextjs.org/)
@@ -10,139 +10,83 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 [![PWA Ready](https://img.shields.io/badge/PWA-Installable-blueviolet)](https://github.com/1MEshh/KeyCaster)
 [![Storage](https://img.shields.io/badge/Storage-IndexedDB_%2F_Dexie.js-orange)](https://dexie.org/)
+[![Tests](https://img.shields.io/badge/Tests-59%20Passing-success)](https://github.com/1MEshh/KeyCaster)
 [![Privacy](https://img.shields.io/badge/Privacy-100%25_Local--First-success)](https://github.com/1MEshh/KeyCaster)
 
 <p align="center">
-  <b>KeyCaster 2.0</b> bridges the gap between auditory recall, phonetics, and touch-typing muscle memory.<br/>
-  Powered by an exact implementation of the <b>SuperMemo-2 (SM-2)</b> spaced repetition algorithm, real-time <b>Web Audio procedural synthesis</b>, <b>Arcade Game Modes</b>, and an offline-first PWA architecture.
+  <b>KeyCaster 3.0</b> elevates spelling and typing practice into a comprehensive <b>bilingual fluency & muscle memory platform</b>.<br/>
+  Featuring <b>Full Sentence Mastery</b>, a dedicated <b>Arabic-to-English Dictation & Translation Section (ترجمة وإملاء)</b>,<br/>
+  a GPU-accelerated <b>Interactive Ambient Canvas Backdrop</b> (Zero AI Slop), and local-first <b>SM-2 cognitive scheduling</b>.
 </p>
 
-[Key Features](#-key-features) • [KeyCaster 2.0 Highlights](#-keycaster-20-highlights) • [Technical Architecture](#-technical-architecture) • [Getting Started](#-getting-started) • [Global Shortcuts](#-global-shortcuts) • [License](#-license)
+[KeyCaster 3.0 Highlights](#-keycaster-30-highlights) • [4-in-1 Section Architecture](#-4-in-1-section-architecture) • [Anti-Slop Design Philosophy](#-anti-slop-design-philosophy) • [Global Shortcuts](#-global-shortcuts) • [Getting Started](#-getting-started) • [License](#-license)
 
 ---
 
 </div>
 
+## 🌟 KeyCaster 3.0 Highlights
 
+KeyCaster 3.0 takes the app to the next level with groundbreaking features:
 
-## 🌟 KeyCaster 2.0 Highlights
+1. **✍️ Full Sentence Typing Engine**:
+   - Multi-line word-wrap fluid caret tracking with zero layout shifts.
+   - Intelligent space advancement: completes valid words and handles punctuation gracefully.
+   - Punctuation & contraction tolerance: smart matching for curly vs straight quotes (`’` ↔ `'`, `“”` ↔ `"`), hyphens, and dashes.
+   - Curated English sentence dataset (40+ sentences across conversation, programming, philosophy, and literature).
 
-KeyCaster 2.0 transforms the client into a full-fledged typing suite with 20 major features:
+2. **🌐 Arabic-to-English Translation & Dictation (قسم الترجمة والإملاء: العربية ⇄ الإنجليزية)**:
+   - High-contrast Arabic prompt cards rendered in authentic **Thmanyah Sans** (`ثمانية`) with native RTL isolation.
+   - **Dual Dictation Modes**:
+     - *Audio Dictation*: Listen to the English pronunciation via TTS while reading the Arabic contextual prompt.
+     - *Blind Translation*: Translate the Arabic sentence into English from memory with hints via <kbd>Alt+H</kbd>.
+   - 50+ curated bilingual sentence pairs across 4 domains (`daily`, `tech`, `wisdom`, `business`).
+   - Contraction expansion (`don't` ↔ `do not`, `I'm` ↔ `I am`), alternative translations support, and bilingual vocabulary flashcards.
 
-1. **📱 iOS Audio Unlock Overlay**: Single-tap gesture unlock for both Web Audio API and SpeechSynthesis on Safari/iOS.
-2. **📲 Progressive Web App (PWA)**: Installable on iOS, Android, macOS, and Windows with standalone fullscreen mode.
-3. **📶 100% Offline-First**: Service worker caching and Dexie.js IndexedDB storage ensure zero external server reliance.
-4. **💾 Full Backup & Restore**: One-click JSON data export and import for seamless multi-device progress migration.
-5. **⚡ Arcade Game Modes**: 60s Time Attack, Sudden Death (1 error = game over), and Zen/Endless mode.
-6. **💻 Coding Syntax Deck**: 80+ software engineering terms, keywords, and terminal commands.
-7. **💬 Phrase Mode**: Practice multi-word idioms and expressions with natural spacing.
-8. **🧠 Adaptive SM-2 Tuning**: Intelligent review interval tightening for words with persistent mistake history.
-9. **⌨️ Keyboard Mistake Heatmap**: Visual QWERTY keyboard color-coded from clean to critical error hotspots.
-10. **📈 Performance Trend Charts**: Pure zero-dependency SVG line charts tracking WPM and Accuracy progression.
-11. **📜 Complete Session History**: Filterable, searchable log of all completed practice runs.
-12. **🔥 Daily Streak Tracker**: Visual flame streak counter rewarding consistent daily practice.
-13. **🏆 Leveling & XP Engine**: Scaled experience points rewarding speed, accuracy, and volume.
-14. **🎖️ 11 Unlockable Badges**: Achievements ranging from *Flawless Cast* to *Mach 2 (120+ WPM)*.
-15. **⚡ Dynamic Typing Ranks**: Automated ranking from Novice to Grandmaster based on lifetime speed.
-16. **🎨 Shareable 16:9 PNG Scorecards**: Downloadable high-DPI social media summary cards generated client-side.
-17. **🕶️ Blind Mode Pro**: Strict acoustic training that locks backspace to test pure phonetic recall.
-18. **🗂️ Enhanced Custom Deck Studio**: Permanent deck picker tab with word count badges.
-19. **🖤 Monochrome Obsidian Theme**: High-contrast minimal black & white aesthetic alongside Midnight, Dracula, and Nord.
-20. **🖋️ Embedded Thmanyah Sans (خط ثمانية)**: Local typography fallback with zero Google Fonts telemetry.
+3. **🎨 Zero AI-Slop Ambient Canvas Backdrop (`AmbientCanvas.tsx`)**:
+   - High-performance, GPU-accelerated HTML5 interactive background canvas.
+   - **Zero AI Clichés**: No generic purple/cyan blur blobs. Pure mathematical kinetic geometry.
+   - 3 dynamic styles:
+     - **Constellation**: Connected kinetic nodes reacting to typing energy.
+     - **Grid**: Linear-inspired high-density dot mesh with concentric keystroke shockwaves.
+     - **Particles**: Subtle organic drifting dust motes.
+   - Auto-adapts to active theme colors (`Midnight`, `Nord`, `Dracula`, `Serika Dark`, `Monochrome`).
+   - Pauses when tab is hidden; respects `prefers-reduced-motion`.
 
----
+4. **🚀 Unified 4-in-1 Navigation**:
+   - High-density Linear/Raycast top navigation with instant section switching:
+     - 📖 **SRS Words** (<kbd>Ctrl+1</kbd>)
+     - ✍️ **Sentences** (<kbd>Ctrl+2</kbd>)
+     - 🌐 **Arabic Dictation** (<kbd>Ctrl+3</kbd>)
+     - ⚡ **Arcade Speedrun** (<kbd>Ctrl+4</kbd>)
 
-## 🚀 Key Features
+5. **🐢 Slow-Motion Pronunciation Engine**:
+   - Dual-speed speech synthesis: normal speed and slow 0.72x speed via <kbd>Shift+Tab</kbd>.
+   - Instant auditory phonetic disambiguation for homophones and subtle phonemes.
 
-### 🎧 Audio-First Dictation & Procedural Synthesis
-- **Web Speech Synthesis**: Immediately enunciates words and phrases on display. Hit <kbd>Tab</kbd> anytime to replay pronunciation without losing typing focus.
-- **Synthesized Mechanical Switches**: Custom Web Audio API synthesizer modeling tactile mechanical switches (Cherry MX Brown profile) using bandpass-filtered noise bursts and damped sine oscillation.
-- **Sub-Bass Error Cues**: Instantaneous 150Hz triangle-wave low-pass acoustic thud triggered on typo with zero external audio assets loaded.
-
-### 🧠 SuperMemo-2 (SM-2) Spaced Repetition Core
-- **Mathematical Cognitive Scheduling**: Implements the official SM-2 algorithm:
-  $$\text{EF}' = \text{EF} + \left(0.1 - (5 - q) \times (0.08 + (5 - q) \times 0.02)\right)$$
-- **Quality Grading ($q \in [0, 5]$)**: Dynamically calculated using a combined metric of raw accuracy, backspace count, and response latency.
-- **Intra-Day Mastery Loop**: Any word failed ($q < 3$) is immediately recycled into the active session queue for instant reinforcement before advancing.
-
-### 🎮 Arcade Game Modes
-- **60s Time Attack**: High-energy countdown timer with score multipliers and dynamic streak tracking.
-- **Sudden Death**: One typo ends the run. Tests maximum precision and nerve.
-- **Zen / Endless Mode**: Relaxed infinite word stream without timers or fail conditions.
+6. **🛡️ 59 Comprehensive Unit & Integration Tests**:
+   - 100% test pass rate covering SM-2 calculations, sentence WPM math, bilingual translations, contractions, and error boundaries.
 
 ---
 
-## 🏗️ Technical Architecture
+## 🎯 4-in-1 Section Architecture
 
-```
-KeyCaster/
-├── public/
-│   ├── manifest.json               # PWA configuration
-│   ├── icons/                      # 192x192 & 512x512 PWA icons
-│   └── fonts/thmanyah/             # Embedded Thmanyah Sans typography
-├── src/
-│   ├── app/
-│   │   ├── layout.tsx              # PWA meta, theme-color, font variables
-│   │   ├── page.tsx                # Master orchestrator & mode renderer
-│   │   └── globals.css             # Theme tokens, custom caret animations
-│   ├── components/
-│   │   ├── TypingEngine/
-│   │   │   ├── TypingStage.tsx     # Zero-latency SRS typing engine
-│   │   │   ├── GameModeStage.tsx   # Arcade modes (Time Attack, Sudden Death, Zen)
-│   │   │   ├── SessionEndActions.tsx # Post-session summary, preview & retry
-│   │   │   └── ScoreCardCanvas.tsx # 16:9 canvas PNG social card generator
-│   │   ├── Dashboard/
-│   │   │   ├── ProgressDashboard.tsx # 4-tab analytics hub
-│   │   │   ├── HeatmapTab.tsx      # Visual keyboard error heatmap
-│   │   │   ├── ChartsTab.tsx       # Zero-dependency SVG trend charts
-│   │   │   └── HistoryTab.tsx      # Full session history table
-│   │   ├── HUD/
-│   │   │   ├── LiveStats.tsx       # Real-time stats & animated queue bar
-│   │   │   └── XPToastBadge.tsx    # Level-up & achievement toast notifications
-│   │   ├── Navigation/
-│   │   │   └── TopNav.tsx          # Deck picker, Arcade switcher, streaks & ranks
-│   │   └── Onboarding/
-│   │       └── AudioUnlockOverlay.tsx # iOS Safari gesture audio unlock
-│   ├── lib/
-│   │   ├── sm2.ts                  # SM-2 algorithm with adaptive difficulty
-│   │   ├── audio.ts                # Web Audio synthesizer & speech controller
-│   │   ├── db.ts                   # Dexie.js IndexedDB schema & v3 seeder
-│   │   └── achievements.ts         # Badge definitions & unlock logic
-│   └── store/
-│       ├── useSessionStore.ts      # SRS session queue & word grader
-│       ├── useSettingsStore.ts     # Monkeytype-grade preferences & themes
-│       ├── useGameModeStore.ts     # Arcade game loop state
-│       └── useProfileStore.ts      # XP, levels, daily streaks & ranks
-```
+| Section | Focus | Audio / Visual Experience |
+|---|---|---|
+| **SRS Words** | Vocabulary & orthographic muscle memory | Speech synthesis + procedural mechanical switch sounds + SM-2 spaced repetition |
+| **Sentences** | Natural typing cadence, punctuation, and rhythm | Full sentence TTS narration + multi-line caret tracking |
+| **Arabic Dictation** | Bilingual fluency & cognitive translation | Arabic cue in Thmanyah Sans + English TTS dictation + vocab cards (<kbd>Alt+H</kbd>) |
+| **Arcade Modes** | High-intensity reaction & endurance | 60s Time Attack, Sudden Death (1 error = game over), and Zen Endless mode |
 
 ---
 
-## 🛠️ Getting Started
+## 💎 Anti-Slop Design Philosophy
 
-### Prerequisites
-- Node.js 18+ (tested on Node 20 & 22)
-- npm, pnpm, or bun
-
-### Local Installation
-```bash
-git clone https://github.com/1MEshh/KeyCaster.git
-cd KeyCaster
-npm install
-npm run dev
-```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
-### Running Test Suite
-```bash
-npm test
-```
-Runs 16 unit tests covering SM-2 calculations, word grading, adaptive difficulty tuning, and XP leveling.
-
-### Building for Production
-```bash
-npm run build
-npm start
-```
+KeyCaster 3.0 strictly adheres to production-grade, human-crafted frontend aesthetics:
+- **No Card Soup**: Clean spatial rhythm using an authentic 8pt layout grid.
+- **High-Density Utility (Linear / Raycast)**: Subtle 1px borders (`border-white/[0.08]`), deep charcoal surfaces, and tactile micro-interactions.
+- **Typography Excellence**: High-contrast pairing of **Thmanyah Sans** (for Arabic cues) and **JetBrains Mono** / **Geist Mono** (for English monospace typing).
+- **Accessible Contrast**: Strict adherence to WCAG AA contrast ratios ($\ge 4.5:1$) across all themes.
 
 ---
 
@@ -150,14 +94,42 @@ npm start
 
 | Shortcut | Action |
 |---|---|
-| <kbd>Tab</kbd> | Replay word audio pronunciation |
-| <kbd>Esc</kbd> | Skip word / Exit arcade mode to SRS |
-| <kbd>Enter</kbd> | Advance to Next 15 Words / Restart arcade game |
-| <kbd>P</kbd> | Toggle preview grid on session completion |
-| <kbd>R</kbd> | Practice mistakes from finished session |
+| <kbd>Tab</kbd> | Replay normal-speed audio pronunciation |
+| <kbd>Shift</kbd> + <kbd>Tab</kbd> | Replay slow-motion audio pronunciation (0.72x) |
+| <kbd>Alt</kbd> + <kbd>H</kbd> / <kbd>Ctrl</kbd> + <kbd>H</kbd> | Toggle vocabulary flashcards & hints |
+| <kbd>Ctrl</kbd> + <kbd>1</kbd> | Switch to **SRS Words** |
+| <kbd>Ctrl</kbd> + <kbd>2</kbd> | Switch to **Sentences** |
+| <kbd>Ctrl</kbd> + <kbd>3</kbd> | Switch to **Arabic Dictation & Translation** |
+| <kbd>Ctrl</kbd> + <kbd>4</kbd> | Switch to **Arcade Speedrun** |
 | <kbd>Ctrl</kbd> + <kbd>,</kbd> | Open Settings Drawer |
-| <kbd>Ctrl</kbd> + <kbd>D</kbd> | Open Analytics Dashboard |
+| <kbd>Ctrl</kbd> + <kbd>D</kbd> | Open Progress & Analytics Dashboard |
 | <kbd>Ctrl</kbd> + <kbd>K</kbd> | Toggle Virtual Keyboard |
+| <kbd>Esc</kbd> | Skip current item / Exit to main stage |
+
+---
+
+## 🛠️ Getting Started
+
+### Local Setup
+```bash
+git clone https://github.com/1MEshh/KeyCaster.git
+cd KeyCaster
+npm install
+npm run dev
+```
+Visit [http://localhost:3000](http://localhost:3000) in your browser.
+
+### Running Test Suite
+```bash
+npm test
+```
+Executes all **59 unit and integration tests** covering linguistic dictionaries, SM-2 scheduling, sentence grading, and translation resilience.
+
+### Production Build
+```bash
+npm run build
+npm start
+```
 
 ---
 
