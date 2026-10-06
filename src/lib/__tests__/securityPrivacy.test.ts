@@ -27,7 +27,15 @@ test("Privacy Guard: No local filesystem home directories (/home/ or /Users/) ex
     const trackedFiles = execSync("git ls-files", { encoding: "utf-8" })
       .trim()
       .split("\n")
-      .filter((f) => f && !f.endsWith(".png") && !f.endsWith(".woff2") && !f.endsWith(".ico") && !f.endsWith(".lock"));
+      .filter(
+        (f) =>
+          f &&
+          !f.endsWith(".png") &&
+          !f.endsWith(".woff2") &&
+          !f.endsWith(".ico") &&
+          !f.endsWith(".lock") &&
+          !f.includes("securityPrivacy.test.ts")
+      );
 
     for (const relPath of trackedFiles) {
       const fullPath = path.resolve(process.cwd(), relPath);
