@@ -14,6 +14,7 @@ import {
   HelpCircle,
   Eye,
   EyeOff,
+  Headphones,
 } from "lucide-react";
 import confetti from "canvas-confetti";
 import { useSentenceStore } from "@/store/useSentenceStore";
@@ -79,8 +80,13 @@ export const TranslationStage: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const letterRefs = useRef<Map<string, HTMLSpanElement>>(new Map());
 
-  // Show literal translation toggle
-  const [showLiteral, setShowLiteral] = useState<boolean>(true);
+  // Show literal translation toggle (hidden by default to avoid revealing translation)
+  const [showLiteral, setShowLiteral] = useState<boolean>(false);
+
+  // Reset showLiteral when sentence changes
+  useEffect(() => {
+    setShowLiteral(false);
+  }, [currentSentence]);
 
   // Caret visual position
   const [caretPos, setCaretPos] = useState<CaretCoordinates>({
@@ -101,8 +107,8 @@ export const TranslationStage: React.FC = () => {
       : [];
   const targetEnglish = getTargetText(currentSentence);
 
-  // Speak target English sentence with speech synthesis
-  const speakEnglishSentence = useCallback(
+  // Speak full target English sentence
+  const speakFullSentence = useCallback(
     (slow = false) => {
       if (!targetEnglish) return;
       setIsSpeaking(true);
@@ -119,14 +125,36 @@ export const TranslationStage: React.FC = () => {
     [targetEnglish, speechRate, ttsVoiceURI, setIsSpeaking]
   );
 
-  // Focus on new sentence
+  // Mid-sentence replay from active word to the end
+  const speakRemainingSentence = useCallback(
+    (slow = false) => {
+      const remainingWords = words.slice(currentWordIndex).map((w) => w.word).join(" ");
+      const textToSpeak = remainingWords.trim() || targetEnglish;
+      if (!textToSpeak) return;
+
+      setIsSpeaking(true);
+      setTimeout(() => {
+        TTSController.speakWord(textToSpeak, {
+          rate: speechRate,
+          voiceURI: ttsVoiceURI,
+          slow,
+          onStart: () => setIsSpeaking(true),
+          onEnd: () => setIsSpeaking(false),
+        });
+      }, 50);
+    },
+    [words, currentWordIndex, targetEnglish, speechRate, ttsVoiceURI, setIsSpeaking]
+  );
+
+  // Speak full sentence once on mount / new sentence & ensure input focus
   useEffect(() => {
     if (currentSentence && !isSentenceComplete && !isSessionComplete) {
+      speakFullSentence(false);
       setTimeout(() => {
         inputRef.current?.focus();
       }, 50);
     }
-  }, [currentSentence, isSentenceComplete, isSessionComplete]);
+  }, [currentSentence, isSentenceComplete, isSessionComplete, speakFullSentence]);
 
   // Celebratory confetti on batch complete
   useEffect(() => {
@@ -202,10 +230,10 @@ export const TranslationStage: React.FC = () => {
       const key = e.key;
       setActiveKey(key);
 
-      // Replay Audio (Tab = normal, Shift+Tab = 0.72x slow)
+      // Replay Audio (Tab = normal from current word, Shift+Tab = 0.72x slow from current word)
       if (key === "Tab") {
         e.preventDefault();
-        speakEnglishSentence(e.shiftKey);
+        speakRemainingSentence(e.shiftKey);
         return;
       }
 
@@ -269,7 +297,7 @@ export const TranslationStage: React.FC = () => {
     },
     [
       setActiveKey,
-      speakEnglishSentence,
+      speakRemainingSentence,
       toggleVocabHint,
       isSentenceComplete,
       nextSentence,
@@ -416,23 +444,36 @@ export const TranslationStage: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-2">
-            {/* Audio Dictation Pill */}
+            {/* Audio Dictation Pill (Remaining Words) */}
             <button
-              onClick={() => speakEnglishSentence(false)}
+              type="button"
+              onClick={() => speakRemainingSentence(false)}
               className={`px-3 py-1.5 rounded-xl flex items-center gap-2 transition-all text-xs font-medium border ${
                 isSpeaking
                   ? "bg-main/25 text-main border-main/40 shadow-md shadow-main/20 animate-pulse"
                   : "bg-sub/15 text-sub hover:text-text border-sub/20 hover:border-sub/40"
               }`}
-              title="Hear English dictation: Tab for normal, Shift+Tab for slow motion (0.72x)"
+              title="Hear remaining words: Tab for normal, Shift+Tab for slow motion (0.72x)"
             >
               <Volume2 className="w-3.5 h-3.5" />
               <span>{isSpeaking ? "Speaking..." : "Dictation"}</span>
               <kbd className="hidden sm:inline px-1 py-0.5 bg-sub/20 text-[10px] rounded text-sub">Tab</kbd>
             </button>
 
+            {/* Full Audio Pill (Whole sentence from start) */}
+            <button
+              type="button"
+              onClick={() => speakFullSentence(false)}
+              className="px-2.5 py-1.5 rounded-xl flex items-center gap-1.5 transition-all text-xs font-medium border bg-sub/15 text-sub hover:text-text border-sub/20 hover:border-sub/40"
+              title="Full Audio: Replay entire sentence from the beginning"
+            >
+              <Headphones className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Full Audio</span>
+            </button>
+
             {/* Vocabulary Hints Toggle */}
             <button
+              type="button"
               onClick={toggleVocabHint}
               className={`px-3 py-1.5 rounded-xl flex items-center gap-2 transition-all text-xs font-medium border ${
                 showVocabHint
@@ -457,21 +498,30 @@ export const TranslationStage: React.FC = () => {
           {arabicText}
         </div>
 
-        {/* Literal Meaning Footer inside Cue Card */}
+        {/* Literal Meaning Footer inside Cue Card (Hidden by default to avoid spoilers) */}
         {literalMeaning && (
           <div className="mt-4 pt-3 border-t border-sub/15 flex items-center justify-between text-xs font-mono">
             <div className="flex items-center gap-2 text-sub/70">
               <span className="text-[10px] uppercase font-bold text-sub/50 tracking-wider">Literal meaning:</span>
-              <span className="italic text-sub hover:text-text transition-colors">
-                "{literalMeaning}"
-              </span>
+              {showLiteral ? (
+                <span className="italic text-sub hover:text-text transition-colors">
+                  "{literalMeaning}"
+                </span>
+              ) : (
+                <span className="italic text-sub/40 transition-colors select-none">
+                  (hidden · click eye to reveal)
+                </span>
+              )}
             </div>
 
             <button
+              type="button"
               onClick={() => setShowLiteral(!showLiteral)}
-              className="text-sub/50 hover:text-sub text-[11px] flex items-center gap-1 transition-colors"
+              className="text-sub/50 hover:text-sub text-[11px] flex items-center gap-1 transition-colors ml-2"
+              title={showLiteral ? "Hide literal meaning" : "Reveal literal meaning"}
             >
-              {showLiteral ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+              {showLiteral ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
+              <span className="text-[10px] hidden sm:inline">{showLiteral ? "Hide" : "Reveal"}</span>
             </button>
           </div>
         )}
@@ -542,7 +592,7 @@ export const TranslationStage: React.FC = () => {
           />
         )}
 
-        {/* Word Wrapped English Target Buffer */}
+        {/* Word Wrapped English Target Buffer with Word Masking */}
         <div className="flex flex-wrap items-center gap-x-3 gap-y-3 font-mono leading-relaxed select-none">
           {words.map((w, wIdx) => {
             const isActiveWord = wIdx === currentWordIndex;
@@ -553,24 +603,44 @@ export const TranslationStage: React.FC = () => {
                   isActiveWord ? "bg-sub/15 ring-1 ring-main/30" : ""
                 }`}
               >
-                {w.letters.map((l, lIdx) => (
-                  <span
-                    key={lIdx}
-                    ref={(el) => {
-                      if (el) letterRefs.current.set(`${wIdx}-${lIdx}`, el);
-                      else letterRefs.current.delete(`${wIdx}-${lIdx}`);
-                    }}
-                    className={`transition-colors duration-75 inline-block ${
-                      l.state === "correct"
-                        ? "text-main font-semibold"
-                        : l.state === "error"
-                        ? "text-error bg-error/20 rounded-sm font-semibold underline decoration-error"
-                        : "text-sub/40"
-                    }`}
-                  >
-                    {l.char}
-                  </span>
-                ))}
+                {w.letters.map((l, lIdx) => {
+                  const isCurrentCaret = isActiveWord && lIdx === currentLetterIndex;
+                  let displayChar: string;
+                  let letterClass: string;
+
+                  if (l.state === "correct") {
+                    displayChar = l.typedChar || l.char;
+                    letterClass = "text-text font-semibold";
+                  } else if (l.state === "error") {
+                    displayChar = l.typedChar || l.char;
+                    letterClass = "text-error font-bold bg-error/20 rounded px-0.5";
+                  } else {
+                    // state === "pending"
+                    if (l.char === " ") {
+                      displayChar = "\u00A0";
+                      letterClass = "text-sub/40";
+                    } else if (/[.,?!'"\-;:—–’“”«»]/.test(l.char)) {
+                      displayChar = l.char;
+                      letterClass = "text-sub/50";
+                    } else {
+                      displayChar = "_";
+                      letterClass = isCurrentCaret ? "text-main/60 font-semibold" : "text-sub/40";
+                    }
+                  }
+
+                  return (
+                    <span
+                      key={lIdx}
+                      ref={(el) => {
+                        if (el) letterRefs.current.set(`${wIdx}-${lIdx}`, el);
+                        else letterRefs.current.delete(`${wIdx}-${lIdx}`);
+                      }}
+                      className={`transition-colors duration-75 inline-block ${letterClass}`}
+                    >
+                      {displayChar}
+                    </span>
+                  );
+                })}
               </div>
             );
           })}
@@ -632,7 +702,8 @@ export const TranslationStage: React.FC = () => {
 
             <div className="flex items-center gap-2 w-full sm:w-auto">
               <button
-                onClick={() => speakEnglishSentence(false)}
+                type="button"
+                onClick={() => speakFullSentence(false)}
                 className="px-4 py-2.5 rounded-xl border border-sub/30 text-sub hover:text-text text-xs font-semibold flex items-center gap-2 transition-colors"
               >
                 <Volume2 className="w-3.5 h-3.5" />
