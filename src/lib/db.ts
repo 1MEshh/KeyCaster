@@ -38,6 +38,28 @@ export interface SessionHistoryRecord {
   duration: number; // in seconds
 }
 
+export interface SentenceHistoryRecord {
+  id?: number;
+  sentenceId: string;
+  type: "sentences" | "translation" | string;
+  category: string;
+  wpm: number;
+  accuracy: number;
+  errors: number;
+  elapsedMs: number;
+  timestamp: string;
+}
+
+export interface TranslationMasteryRecord {
+  id?: number;
+  sentenceId: string;
+  repetitions: number;
+  interval: number;
+  easeFactor: number;
+  dueDate: string;
+  mistakes: number;
+}
+
 export interface MetaRecord {
   key: string;
   value: unknown;
@@ -48,6 +70,8 @@ export class KeyCasterDB extends Dexie {
   customDecks!: Table<CustomDeckRecord, number>;
   sessionHistory!: Table<SessionHistoryRecord, number>;
   meta!: Table<MetaRecord, string>;
+  sentenceHistory!: Table<SentenceHistoryRecord, number>;
+  translationMastery!: Table<TranslationMasteryRecord, number>;
 
   constructor() {
     super("KeyCasterDB");
@@ -56,6 +80,14 @@ export class KeyCasterDB extends Dexie {
       customDecks: "++id, name, createdAt",
       sessionHistory: "++id, timestamp, category",
       meta: "key",
+    });
+    this.version(4).stores({
+      words: "++id, word, category, nextReviewDate, [category+nextReviewDate]",
+      customDecks: "++id, name, createdAt",
+      sessionHistory: "++id, timestamp, category",
+      meta: "key",
+      sentenceHistory: "++id, sentenceId, type, category, wpm, accuracy, errors, elapsedMs, timestamp",
+      translationMastery: "++id, sentenceId, repetitions, interval, easeFactor, dueDate, mistakes",
     });
   }
 }
