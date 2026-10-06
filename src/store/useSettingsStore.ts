@@ -9,6 +9,8 @@ export type Theme = "monochrome" | "nord" | "dracula" | "serika_dark" | "midnigh
 export type FontFamily = "Thmanyah Sans" | "JetBrains Mono" | "Roboto Mono" | "Fira Code";
 export type LiveStatsMode = "off" | "text" | "mini";
 export type KeyboardLayout = "qwerty" | "dvorak" | "colemak";
+export type AmbientBackdrop = "constellation" | "grid" | "particles" | "off";
+export type AppSection = "srs_words" | "sentences" | "arabic_dictation" | "arcade";
 
 export interface SettingsState {
   // Caret
@@ -27,6 +29,8 @@ export interface SettingsState {
   fontFamily: FontFamily;
   fontSize: number; // 1.0 to 3.0 rem
   liveStats: LiveStatsMode;
+  ambientBackdrop: AmbientBackdrop;
+  activeSection: AppSection;
 
   // Virtual Keyboard
   showKeyboard: boolean;
@@ -55,6 +59,8 @@ export interface SettingsState {
   setFontFamily: (font: FontFamily) => void;
   setFontSize: (size: number) => void;
   setLiveStats: (stats: LiveStatsMode) => void;
+  setAmbientBackdrop: (style: AmbientBackdrop) => void;
+  setActiveSection: (section: AppSection) => void;
   setShowKeyboard: (show: boolean) => void;
   setKeyboardLayout: (layout: KeyboardLayout) => void;
   setSoundVolume: (volume: number) => void;
@@ -154,6 +160,8 @@ const DEFAULT_SETTINGS = {
   ttsVoiceURI: "",
   sessionSize: 15,
   activeCategory: "daily",
+  ambientBackdrop: "constellation" as AmbientBackdrop,
+  activeSection: "srs_words" as AppSection,
 };
 
 export const useSettingsStore = create<SettingsState>()(
@@ -178,6 +186,8 @@ export const useSettingsStore = create<SettingsState>()(
       },
       setFontSize: (fontSize) => set({ fontSize }),
       setLiveStats: (liveStats) => set({ liveStats }),
+      setAmbientBackdrop: (ambientBackdrop) => set({ ambientBackdrop }),
+      setActiveSection: (activeSection) => set({ activeSection }),
       setShowKeyboard: (showKeyboard) => set({ showKeyboard }),
       setKeyboardLayout: (keyboardLayout) => set({ keyboardLayout }),
       setSoundVolume: (soundVolume) => set({ soundVolume }),
