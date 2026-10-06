@@ -33,7 +33,9 @@ export function calculateSentenceWpm(charCount: number, elapsedMs: number): numb
  */
 export function calculateSentenceAccuracy(correctChars: number, totalKeystrokes: number): number {
   if (totalKeystrokes <= 0) return 100;
-  return Math.round((correctChars / Math.max(1, totalKeystrokes)) * 100);
+  if (correctChars <= 0) return 0;
+  const raw = Math.round((correctChars / Math.max(1, totalKeystrokes)) * 100);
+  return Math.min(100, Math.max(0, raw));
 }
 
 /**
@@ -58,7 +60,7 @@ export function gradeSentence(input: SentenceGradingInput): SentenceGradingResul
   } = input;
 
   const validCharCount = Math.max(1, charCount);
-  const avgMsPerChar = Math.round(elapsedMs / validCharCount);
+  const avgMsPerChar = Math.round(Math.max(0, elapsedMs) / validCharCount);
   const wpm = calculateSentenceWpm(charCount, elapsedMs);
   const accuracy = calculateSentenceAccuracy(correctChars, totalKeystrokes);
 

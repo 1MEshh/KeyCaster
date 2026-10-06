@@ -80,6 +80,65 @@ test("sentenceStore: handleBackspace handles character deletion and boundary nav
   assert.equal(state.words[0].letters[0].state, "pending");
 });
 
+test("sentenceStore: clean deletion of error at index 0 and no orphaned states", async () => {
+  const store = useSentenceStore.getState();
+  await store.initSentenceSession("sentences", "conversation", "beginner");
+
+  const initialWord = useSentenceStore.getState().words[0];
+  const targetChar = initialWord.letters[0].char;
+  const wrongChar = targetChar.toLowerCase() === "q" ? "z" : "q";
+
+  // Type wrong letter at index 0 with stopOnError="letter"
+  await store.handleKeyStroke(wrongChar, "letter", "off");
+  let state = useSentenceStore.getState();
+  assert.equal(state.words[0].letters[0].state, "error");
+  assert.equal(state.currentLetterIndex, 0);
+  assert.equal(state.words[0].hasErrors, true);
+
+  // Press backspace to cleanly clear the error
+  store.handleBackspace("off");
+  state = useSentenceStore.getState();
+  assert.equal(state.words[0].letters[0].state, "pending");
+  assert.equal(state.words[0].letters[0].typedChar, undefined);
+  assert.equal(state.words[0].hasErrors, false);
+  assert.equal(state.currentLetterIndex, 0);
+});
+
+test("sentenceStore: stopOnError word blocks space advancement with errors", async () => {
+  const store = useSentenceStore.getState();
+  await store.initSentenceSession("sentences", "conversation", "beginner");
+
+  const word0 = useSentenceStore.getState().words[0];
+  const wrongChar = word0.letters[0].char === "z" ? "x" : "z";
+
+  // In stopOnError="word", type wrong letter, which advances to next index
+  await store.handleKeyStroke(wrongChar, "word", "off");
+  let state = useSentenceStore.getState();
+  assert.equal(state.words[0].letters[0].state, "error");
+  assert.equal(state.words[0].hasErrors, true);
+
+  // Attempting to space should NOT advance word
+  await store.handleSpace("word");
+  state = useSentenceStore.getState();
+  assert.equal(state.currentWordIndex, 0);
+});
+
+test("sentenceStore: confidenceMode max disables backspace completely", async () => {
+  const store = useSentenceStore.getState();
+  await store.initSentenceSession("sentences", "conversation", "beginner");
+
+  const word0 = useSentenceStore.getState().words[0];
+  await store.handleKeyStroke(word0.letters[0].char, "off", "max");
+  let state = useSentenceStore.getState();
+  assert.equal(state.currentLetterIndex, 1);
+
+  // Backspace in confidence "max" should be ignored
+  store.handleBackspace("max");
+  state = useSentenceStore.getState();
+  assert.equal(state.currentLetterIndex, 1);
+  assert.equal(state.words[0].letters[0].state, "correct");
+});
+
 test("sentenceStore: toggleVocabHint toggles hint visibility", () => {
   const store = useSentenceStore.getState();
   const initial = store.showVocabHint;

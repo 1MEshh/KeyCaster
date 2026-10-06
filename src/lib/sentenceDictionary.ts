@@ -212,9 +212,76 @@ export function normalizeSentence(
 }
 
 /**
+ * Map of common English contractions to their expanded equivalents.
+ */
+export const CONTRACTIONS_MAP: Record<string, string> = {
+  "don't": "do not",
+  "doesn't": "does not",
+  "didn't": "did not",
+  "won't": "will not",
+  "can't": "can not",
+  "cannot": "can not",
+  "couldn't": "could not",
+  "shouldn't": "should not",
+  "wouldn't": "would not",
+  "isn't": "is not",
+  "aren't": "are not",
+  "wasn't": "was not",
+  "weren't": "were not",
+  "haven't": "have not",
+  "hasn't": "has not",
+  "hadn't": "had not",
+  "i'm": "i am",
+  "you're": "you are",
+  "he's": "he is",
+  "she's": "she is",
+  "it's": "it is",
+  "we're": "we are",
+  "they're": "they are",
+  "i'll": "i will",
+  "you'll": "you will",
+  "he'll": "he will",
+  "she'll": "she will",
+  "we'll": "we will",
+  "they'll": "they will",
+  "i've": "i have",
+  "you've": "you have",
+  "we've": "we have",
+  "they've": "they have",
+  "i'd": "i would",
+  "you'd": "you would",
+  "he'd": "he would",
+  "she'd": "she would",
+  "we'd": "we would",
+  "they'd": "they would",
+  "let's": "let us",
+  "that's": "that is",
+  "what's": "what is",
+  "where's": "where is",
+  "who's": "who is",
+  "there's": "there is",
+  "how's": "how is",
+  "how're": "how are",
+};
+
+/**
+ * Expands common English contractions in a string into their full forms.
+ * Handles typographical apostrophes.
+ */
+export function expandContractions(text: string): string {
+  if (!text) return "";
+  let res = text.replace(/[\u2018\u2019\u201B\u02BC\u02BB']/g, "'");
+  for (const [contraction, expanded] of Object.entries(CONTRACTIONS_MAP)) {
+    const regex = new RegExp(`\\b${contraction}\\b`, "gi");
+    res = res.replace(regex, expanded);
+  }
+  return res;
+}
+
+/**
  * Checks whether user typed input matches the target bilingual sentence.
  * Evaluates against both the canonical English sentence and accepted alternatives.
- * Handles case-insensitivity, typographical apostrophe variations, and optional punctuation tolerance.
+ * Handles case-insensitivity, typographical apostrophe variations, contractions, and optional punctuation tolerance.
  */
 export function checkSentenceMatch(
   typedText: string,
@@ -307,6 +374,74 @@ export function checkSentenceMatch(
     }
   }
 
+  // 4. Fallback: Check with contraction expansion (e.g. don't <-> do not, I'm <-> I am)
+  const typedExpanded = expandContractions(normalizedTyped);
+  const canonicalExpanded = expandContractions(normalizedCanonical);
+  if (typedExpanded === canonicalExpanded) {
+    return {
+      isMatch: true,
+      isCanonical: true,
+      matchedText: targetSentence.english,
+      normalizedTyped,
+    };
+  }
+
+  for (const alt of targetSentence.acceptedAlternatives) {
+    const normalizedAlt = normalizeSentence(alt, {
+      caseSensitive,
+      ignorePunctuation,
+    });
+    const altExpanded = expandContractions(normalizedAlt);
+    if (typedExpanded === altExpanded) {
+      return {
+        isMatch: true,
+        isCanonical: false,
+        matchedText: alt,
+        normalizedTyped,
+      };
+    }
+  }
+
+  // 5. Fallback: Check contraction expansion without trailing punctuation
+  if (allowMissingTrailingPunctuation && !ignorePunctuation) {
+    const typedNoTrailing = normalizeSentence(typedText, {
+      caseSensitive,
+      stripTrailingPunctuationOnly: true,
+    });
+    const typedNoTrailingExp = expandContractions(typedNoTrailing);
+
+    const canonicalNoTrailing = normalizeSentence(targetSentence.english, {
+      caseSensitive,
+      stripTrailingPunctuationOnly: true,
+    });
+    const canonicalNoTrailingExp = expandContractions(canonicalNoTrailing);
+
+    if (typedNoTrailingExp === canonicalNoTrailingExp) {
+      return {
+        isMatch: true,
+        isCanonical: true,
+        matchedText: targetSentence.english,
+        normalizedTyped,
+      };
+    }
+
+    for (const alt of targetSentence.acceptedAlternatives) {
+      const altNoTrailing = normalizeSentence(alt, {
+        caseSensitive,
+        stripTrailingPunctuationOnly: true,
+      });
+      const altNoTrailingExp = expandContractions(altNoTrailing);
+      if (typedNoTrailingExp === altNoTrailingExp) {
+        return {
+          isMatch: true,
+          isCanonical: false,
+          matchedText: alt,
+          normalizedTyped,
+        };
+      }
+    }
+  }
+
   return {
     isMatch: false,
     isCanonical: false,
@@ -352,6 +487,10 @@ export function isEnglishSentenceCorrect(
     return true;
   }
 
+  if (expandContractions(normalizedTyped) === expandContractions(normalizedTarget)) {
+    return true;
+  }
+
   if (allowMissingTrailingPunctuation && !ignorePunctuation) {
     const typedNoTrailing = normalizeSentence(typedText, {
       caseSensitive,
@@ -361,7 +500,12 @@ export function isEnglishSentenceCorrect(
       caseSensitive,
       stripTrailingPunctuationOnly: true,
     });
-    return typedNoTrailing === targetNoTrailing;
+    if (typedNoTrailing === targetNoTrailing) {
+      return true;
+    }
+    if (expandContractions(typedNoTrailing) === expandContractions(targetNoTrailing)) {
+      return true;
+    }
   }
 
   return false;

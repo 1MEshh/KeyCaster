@@ -488,6 +488,14 @@ export const useSentenceStore = create<SentenceState>((set, get) => ({
 
     // If user has reached or exceeded word length
     if (currentLetterIndex >= currentWord.letters.length) {
+      if (
+        stopOnError === "word" &&
+        (currentWord.hasErrors || currentWord.letters.some((l) => l.state === "error"))
+      ) {
+        // Cannot advance past word with unresolved errors in stopOnError: "word"
+        return;
+      }
+
       const newWords = words.map((w, idx) =>
         idx === currentWordIndex ? { ...w, isCompleted: true } : w
       );
@@ -527,13 +535,20 @@ export const useSentenceStore = create<SentenceState>((set, get) => ({
 
     totalKeystrokesCount += addedErrors;
 
+    const curElapsed = Math.max(1, Date.now() - (sentenceStartTime || Date.now()));
+    const curAcc = calculateSentenceAccuracy(correctKeystrokesCount, totalKeystrokesCount);
+    const targetText = getTargetText(get().currentSentence);
+    const curWpm = calculateSentenceWpm(targetText.length, curElapsed);
+
     set((state) => ({
       words: newWords,
       currentWordIndex: currentWordIndex + 1,
       currentLetterIndex: 0,
       stats: {
-        ...state.stats,
+        wpm: curWpm,
+        accuracy: curAcc,
         errors: state.stats.errors + addedErrors,
+        elapsedMs: curElapsed,
       },
     }));
   },
@@ -570,7 +585,22 @@ export const useSentenceStore = create<SentenceState>((set, get) => ({
     const activeWord = newWords[currentWordIndex];
     if (!activeWord) return;
 
-    // 1. If currently inside the active word
+    // 1. If current letter at caret is in error (e.g. from stopOnError: "letter"),
+    // clear error state without moving caret backwards.
+    if (
+      currentLetterIndex < activeWord.letters.length &&
+      activeWord.letters[currentLetterIndex].state === "error"
+    ) {
+      activeWord.letters[currentLetterIndex] = {
+        char: activeWord.letters[currentLetterIndex].char,
+        state: "pending",
+      };
+      activeWord.hasErrors = activeWord.letters.some((l) => l.state === "error");
+      set({ words: newWords });
+      return;
+    }
+
+    // 2. If currently inside the active word
     if (currentLetterIndex > 0) {
       // In confidence "on", cannot backspace past confirmed letters
       if (confidenceMode === "on") {
@@ -578,20 +608,6 @@ export const useSentenceStore = create<SentenceState>((set, get) => ({
         if (targetLetter && targetLetter.state === "correct") {
           return;
         }
-      }
-
-      // Check if current letter at caret is in error
-      if (
-        currentLetterIndex < activeWord.letters.length &&
-        activeWord.letters[currentLetterIndex].state === "error"
-      ) {
-        activeWord.letters[currentLetterIndex] = {
-          char: activeWord.letters[currentLetterIndex].char,
-          state: "pending",
-        };
-        activeWord.hasErrors = activeWord.letters.some((l) => l.state === "error");
-        set({ words: newWords });
-        return;
       }
 
       // Move back 1 letter
@@ -617,7 +633,7 @@ export const useSentenceStore = create<SentenceState>((set, get) => ({
       return;
     }
 
-    // 2. At word boundary (currentLetterIndex === 0): backspace across word boundary
+    // 3. At word boundary (currentLetterIndex === 0): backspace across word boundary
     if (currentLetterIndex === 0 && currentWordIndex > 0) {
       if (confidenceMode === "on") {
         // Cannot backspace across word boundary if confidence mode is on
