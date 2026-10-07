@@ -23,6 +23,7 @@ import { useKeyStore } from "@/store/useKeyStore";
 import { playMechanicalClick, playErrorThud, TTSController } from "@/lib/audio";
 import { getTargetText } from "@/store/useSentenceStore";
 import { gradeSentence, calculateSentenceXP } from "@/lib/sentenceGrader";
+import { AcousticVisualizer } from "@/components/HUD/AcousticVisualizer";
 import type { BilingualSentence } from "@/lib/sentenceDictionary";
 
 interface CaretCoordinates {
@@ -450,12 +451,16 @@ export const TranslationStage: React.FC = () => {
               onClick={() => speakRemainingSentence(false)}
               className={`px-3 py-1.5 rounded-xl flex items-center gap-2 transition-all text-xs font-medium border ${
                 isSpeaking
-                  ? "bg-main/25 text-main border-main/40 shadow-md shadow-main/20 animate-pulse"
+                  ? "bg-main/25 text-main border-main/40 shadow-md shadow-main/20"
                   : "bg-sub/15 text-sub hover:text-text border-sub/20 hover:border-sub/40"
               }`}
               title="Hear remaining words: Tab for normal, Shift+Tab for slow motion (0.72x)"
             >
-              <Volume2 className="w-3.5 h-3.5" />
+              {isSpeaking ? (
+                <AcousticVisualizer isPlaying={true} size="sm" />
+              ) : (
+                <Volume2 className="w-3.5 h-3.5" />
+              )}
               <span>{isSpeaking ? "Speaking..." : "Dictation"}</span>
               <kbd className="hidden sm:inline px-1 py-0.5 bg-sub/20 text-[10px] rounded text-sub">Tab</kbd>
             </button>
