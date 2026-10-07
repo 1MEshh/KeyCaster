@@ -31,6 +31,7 @@ export interface SettingsState {
   liveStats: LiveStatsMode;
   ambientBackdrop: AmbientBackdrop;
   activeSection: AppSection;
+  customCursor: boolean;
 
   // Virtual Keyboard
   showKeyboard: boolean;
@@ -61,6 +62,7 @@ export interface SettingsState {
   setLiveStats: (stats: LiveStatsMode) => void;
   setAmbientBackdrop: (style: AmbientBackdrop) => void;
   setActiveSection: (section: AppSection) => void;
+  setCustomCursor: (enabled: boolean) => void;
   setShowKeyboard: (show: boolean) => void;
   setKeyboardLayout: (layout: KeyboardLayout) => void;
   setSoundVolume: (volume: number) => void;
@@ -162,6 +164,7 @@ const DEFAULT_SETTINGS = {
   activeCategory: "daily",
   ambientBackdrop: "constellation" as AmbientBackdrop,
   activeSection: "srs_words" as AppSection,
+  customCursor: true,
 };
 
 export const useSettingsStore = create<SettingsState>()(
@@ -188,6 +191,7 @@ export const useSettingsStore = create<SettingsState>()(
       setLiveStats: (liveStats) => set({ liveStats }),
       setAmbientBackdrop: (ambientBackdrop) => set({ ambientBackdrop }),
       setActiveSection: (activeSection) => set({ activeSection }),
+      setCustomCursor: (customCursor) => set({ customCursor }),
       setShowKeyboard: (showKeyboard) => set({ showKeyboard }),
       setKeyboardLayout: (keyboardLayout) => set({ keyboardLayout }),
       setSoundVolume: (soundVolume) => set({ soundVolume }),

@@ -64,6 +64,19 @@ body {
   user-select: none;
 }
 
+/* Custom Cyber Cursor Active State */
+@media (pointer: fine) {
+  html.custom-cursor-active,
+  html.custom-cursor-active body,
+  html.custom-cursor-active button,
+  html.custom-cursor-active a,
+  html.custom-cursor-active kbd,
+  html.custom-cursor-active input,
+  html.custom-cursor-active [role="button"] {
+    cursor: none !important;
+  }
+}
+
 @keyframes fadeIn {
   from {
     opacity: 0;
