@@ -20,6 +20,7 @@ import { useKeyStore } from "@/store/useKeyStore";
 import { playMechanicalClick, playErrorThud, TTSController } from "@/lib/audio";
 import { getTargetText } from "@/store/useSentenceStore";
 import { gradeSentence, calculateSentenceXP } from "@/lib/sentenceGrader";
+import { AcousticVisualizer } from "@/components/HUD/AcousticVisualizer";
 
 interface CaretCoordinates {
   left: number;
@@ -440,12 +441,16 @@ export const SentenceStage: React.FC = () => {
             onClick={() => speakRemainingSentence(false)}
             className={`px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all text-xs font-medium border ${
               isSpeaking
-                ? "bg-main/20 text-main border-main/40 shadow-sm shadow-main/20 animate-pulse"
+                ? "bg-main/20 text-main border-main/40 shadow-sm shadow-main/20"
                 : "bg-sub/10 text-sub hover:text-text border-sub/20 hover:border-sub/40"
             }`}
             title="Press Tab to listen remaining words, Shift+Tab for slow motion (0.72x)"
           >
-            <Volume2 className="w-3.5 h-3.5" />
+            {isSpeaking ? (
+              <AcousticVisualizer isPlaying={true} size="sm" />
+            ) : (
+              <Volume2 className="w-3.5 h-3.5" />
+            )}
             <span>{isSpeaking ? "Speaking..." : "Listen"}</span>
             <kbd className="hidden sm:inline px-1 py-0.5 bg-sub/20 text-[10px] rounded text-sub">Tab</kbd>
           </button>
