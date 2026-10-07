@@ -13,6 +13,7 @@ import {
   Orbit,
   Grid,
   CircleOff,
+  MousePointer,
 } from "lucide-react";
 import {
   useSettingsStore,
@@ -82,6 +83,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
     setSessionSize,
     ambientBackdrop,
     setAmbientBackdrop,
+    customCursor,
+    setCustomCursor,
     resetToDefaults,
   } = useSettingsStore();
 
@@ -538,6 +541,32 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                     );
                   })}
                 </div>
+              </div>
+
+              {/* Cyber Precision Cursor */}
+              <div className="flex items-center justify-between p-3.5 rounded-xl border border-sub/20 bg-sub/5">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-main/15 text-main flex items-center justify-center">
+                    <MousePointer className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold text-text">Cyber Precision Cursor</div>
+                    <div className="text-[10px] text-sub">
+                      Minimalist precision dot & magnetic trailing ring (auto-hides when typing)
+                    </div>
+                  </div>
+                </div>
+
+                <button
+                  type="button"
+                  onClick={() => setCustomCursor(!customCursor)}
+                  className={`w-11 h-6 flex items-center rounded-full p-1 transition-colors ${
+                    customCursor ? "bg-main justify-end" : "bg-sub/30 justify-start"
+                  }`}
+                  title="Toggle Custom Cursor"
+                >
+                  <span className="bg-bg w-4 h-4 rounded-full shadow-md" />
+                </button>
               </div>
 
               {/* Font Family */}

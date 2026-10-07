@@ -7,6 +7,7 @@ import { SentenceStage } from "@/components/TypingEngine/SentenceStage";
 import { TranslationStage } from "@/components/TypingEngine/TranslationStage";
 import { GameModeStage } from "@/components/TypingEngine/GameModeStage";
 import { AmbientCanvas } from "@/components/Backdrop/AmbientCanvas";
+import { CustomCursor } from "@/components/Cursor/CustomCursor";
 import { SettingsModal } from "@/components/Modals/SettingsModal";
 import { CustomDeckModal } from "@/components/Modals/CustomDeckModal";
 import { ProgressDashboard } from "@/components/Dashboard/ProgressDashboard";
@@ -234,6 +235,9 @@ export default function Home() {
     >
       {/* HTML5 Ambient Reactive Canvas Backdrop */}
       <AmbientCanvas />
+
+      {/* Cyber Precision Dot & Magnetic Ring Cursor */}
+      <CustomCursor />
 
       {/* Content Foreground Layer */}
       <div className="relative z-10 flex flex-col min-h-screen">
