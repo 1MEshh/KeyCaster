@@ -5,7 +5,7 @@ export type CaretStyle = "default" | "block" | "underline" | "outline";
 export type SmoothCaretSpeed = "off" | "fast" | "medium" | "slow";
 export type ConfidenceMode = "off" | "on" | "max";
 export type StopOnError = "off" | "letter" | "word";
-export type Theme = "monochrome" | "nord" | "dracula" | "serika_dark" | "midnight";
+export type Theme = "monochrome" | "nord" | "dracula" | "serika_dark" | "midnight" | "cyberpunk";
 export type FontFamily = "Thmanyah Sans" | "JetBrains Mono" | "Roboto Mono" | "Fira Code";
 export type LiveStatsMode = "off" | "text" | "mini";
 export type KeyboardLayout = "qwerty" | "dvorak" | "colemak";
@@ -87,6 +87,15 @@ export const THEME_VARIABLES: Record<
     errorExtra: string;
   }
 > = {
+  cyberpunk: {
+    bg: "#05050a",
+    main: "#00f0ff",
+    caret: "#ffe600",
+    sub: "#64748b",
+    text: "#f8fafc",
+    error: "#ff0055",
+    errorExtra: "#990033",
+  },
   monochrome: {
     bg: "#09090b",
     main: "#ffffff",

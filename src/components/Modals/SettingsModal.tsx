@@ -482,7 +482,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                   Theme Preset
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {(["monochrome", "midnight", "nord", "dracula", "serika_dark"] as Theme[]).map((thm) => {
+                  {(["cyberpunk", "midnight", "monochrome", "nord", "dracula", "serika_dark"] as Theme[]).map((thm) => {
                     const colors = THEME_VARIABLES[thm];
                     const isCur = theme === thm;
                     return (
@@ -497,7 +497,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                       >
                         <div>
                           <div className="text-xs font-bold capitalize text-text">
-                            {thm === "monochrome" ? "Monochrome (B&W)" : thm.replace("_", " ")}
+                            {thm === "cyberpunk"
+                              ? "Cyberpunk (Neon)"
+                              : thm === "monochrome"
+                              ? "Monochrome (B&W)"
+                              : thm.replace("_", " ")}
                           </div>
                           <div className="text-[10px] text-sub">Preset</div>
                         </div>
