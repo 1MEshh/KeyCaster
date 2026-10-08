@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef } from "react";
-import { useSettingsStore, type AmbientBackdrop } from "@/store/useSettingsStore";
+import { useSettingsStore } from "@/store/useSettingsStore";
 
 interface RGB {
   r: number;
@@ -16,6 +16,7 @@ interface ConstellationNode {
   vy: number;
   baseRadius: number;
   energy: number;
+  isCaretColor: boolean;
 }
 
 interface ParticleNode {
@@ -26,6 +27,7 @@ interface ParticleNode {
   radius: number;
   baseAlpha: number;
   energy: number;
+  colorType: "main" | "caret";
 }
 
 interface Ripple {
@@ -112,13 +114,16 @@ export const AmbientCanvas: React.FC = () => {
 
     resize();
 
-    // Cache computed CSS variables (--main and --bg)
-    let mainColor: RGB = { r: 56, g: 189, b: 248 };
+    // Cache computed CSS variables (--main, --caret, --bg)
+    let mainColor: RGB = { r: 0, g: 240, b: 255 };
+    let caretColor: RGB = { r: 255, g: 230, b: 0 };
     const updateColors = () => {
       if (typeof window === "undefined") return;
       const computed = getComputedStyle(document.documentElement);
       const mainCss = computed.getPropertyValue("--main");
-      mainColor = parseCssColor(mainCss, { r: 56, g: 189, b: 248 });
+      const caretCss = computed.getPropertyValue("--caret");
+      mainColor = parseCssColor(mainCss, { r: 0, g: 240, b: 255 });
+      caretColor = parseCssColor(caretCss, { r: 255, g: 230, b: 0 });
     };
     updateColors();
 
@@ -139,17 +144,17 @@ export const AmbientCanvas: React.FC = () => {
         return;
       }
 
-      pulseEnergy = Math.min(1.5, pulseEnergy + 0.4);
+      pulseEnergy = Math.min(2.0, pulseEnergy + 0.5);
 
-      // Add a subtle micro-ripple
-      if (ripples.length < 5) {
+      // Add a responsive shockwave ripple
+      if (ripples.length < 6) {
         ripples.push({
           x: lastKeyPos.x || width / 2,
           y: lastKeyPos.y || height / 2,
-          radius: 10,
-          maxRadius: Math.min(width, height) * 0.45,
-          alpha: 0.28,
-          speed: 4.5,
+          radius: 8,
+          maxRadius: Math.min(width, height) * 0.55,
+          alpha: 0.35,
+          speed: 5.5,
         });
       }
     };
@@ -160,31 +165,33 @@ export const AmbientCanvas: React.FC = () => {
 
     // Initial entities setup based on mode
     const isMobile = width < 768;
-    const constellationCount = isMobile ? 32 : 64;
+    const constellationCount = isMobile ? 36 : 72;
     const constellationNodes: ConstellationNode[] = [];
 
     for (let i = 0; i < constellationCount; i++) {
       constellationNodes.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.4,
-        vy: (Math.random() - 0.5) * 0.4,
-        baseRadius: 1.2 + Math.random() * 0.8,
+        vx: (Math.random() - 0.5) * 0.45,
+        vy: (Math.random() - 0.5) * 0.45,
+        baseRadius: 1.2 + Math.random() * 1.0,
         energy: 0,
+        isCaretColor: i % 4 === 0,
       });
     }
 
-    const particleCount = isMobile ? 40 : 80;
+    const particleCount = isMobile ? 45 : 90;
     const particles: ParticleNode[] = [];
     for (let i = 0; i < particleCount; i++) {
       particles.push({
         x: Math.random() * width,
         y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.25,
-        vy: -0.15 - Math.random() * 0.35,
-        radius: 0.8 + Math.random() * 1.4,
-        baseAlpha: 0.08 + Math.random() * 0.16,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: -0.2 - Math.random() * 0.4,
+        radius: 0.8 + Math.random() * 1.5,
+        baseAlpha: 0.08 + Math.random() * 0.18,
         energy: 0,
+        colorType: i % 3 === 0 ? "caret" : "main",
       });
     }
 
@@ -201,7 +208,7 @@ export const AmbientCanvas: React.FC = () => {
     document.addEventListener("visibilitychange", handleVisibility);
 
     let lastTime = performance.now();
-    let gridTime = 0;
+    let simTime = 0;
 
     const render = (currentTime: number) => {
       if (isPaused) {
@@ -211,40 +218,126 @@ export const AmbientCanvas: React.FC = () => {
 
       const dt = Math.min((currentTime - lastTime) / 1000, 0.1);
       lastTime = currentTime;
-      gridTime += dt;
+      simTime += dt;
 
       // Dampen global pulse energy
-      pulseEnergy *= 0.94;
+      pulseEnergy *= 0.93;
       if (pulseEnergy < 0.001) pulseEnergy = 0;
 
       // Clear canvas
       ctx.clearRect(0, 0, width, height);
 
-      const { r, g, b } = mainColor;
+      const m = mainColor;
+      const c = caretColor;
 
-      // Render mode specific visual elements
-      if (ambientBackdrop === "constellation") {
-        const maxDist = isMobile ? 95 : 130;
+      // MODE 1: CYBER HORIZON & SYNTH CIRCUIT MESH
+      if (ambientBackdrop === "cyber_grid") {
+        const horizonY = height * 0.44;
+        const groundHeight = height - horizonY;
+        const vanishX = width / 2;
+
+        // Subtle upper atmosphere cyber haze
+        const skyGrad = ctx.createLinearGradient(0, 0, 0, horizonY);
+        skyGrad.addColorStop(0, `rgba(${m.r}, ${m.g}, ${m.b}, 0)`);
+        skyGrad.addColorStop(1, `rgba(${m.r}, ${m.g}, ${m.b}, ${0.04 + pulseEnergy * 0.04})`);
+        ctx.fillStyle = skyGrad;
+        ctx.fillRect(0, 0, width, horizonY);
+
+        // Ground perspective neon glow
+        const groundGrad = ctx.createLinearGradient(0, horizonY, 0, height);
+        groundGrad.addColorStop(0, `rgba(${m.r}, ${m.g}, ${m.b}, ${0.06 + pulseEnergy * 0.08})`);
+        groundGrad.addColorStop(0.5, `rgba(${c.r}, ${c.g}, ${c.b}, 0.02)`);
+        groundGrad.addColorStop(1, `rgba(${m.r}, ${m.g}, ${m.b}, 0)`);
+        ctx.fillStyle = groundGrad;
+        ctx.fillRect(0, horizonY, width, groundHeight);
+
+        // Horizon bright laser line
+        ctx.beginPath();
+        ctx.strokeStyle = `rgba(${m.r}, ${m.g}, ${m.b}, ${0.28 + pulseEnergy * 0.35})`;
+        ctx.lineWidth = 1.2;
+        ctx.moveTo(0, horizonY);
+        ctx.lineTo(width, horizonY);
+        ctx.stroke();
+
+        // 1. Perspective Grid Rays (converging towards vanishing point)
+        const rayCount = isMobile ? 18 : 34;
+        const raySpread = width * 1.8;
+        ctx.beginPath();
+        for (let i = 0; i <= rayCount; i++) {
+          const bottomX = (width / 2) - (raySpread / 2) + (i / rayCount) * raySpread;
+          const isCenter = Math.abs(i - rayCount / 2) <= 1;
+          const rayAlpha = isCenter ? 0.22 + pulseEnergy * 0.25 : 0.08 + pulseEnergy * 0.08;
+
+          ctx.strokeStyle = isCenter
+            ? `rgba(${c.r}, ${c.g}, ${c.b}, ${rayAlpha})`
+            : `rgba(${m.r}, ${m.g}, ${m.b}, ${rayAlpha})`;
+          ctx.lineWidth = isCenter ? 1.0 : 0.7;
+
+          ctx.moveTo(vanishX, horizonY);
+          ctx.lineTo(bottomX, height);
+        }
+        ctx.stroke();
+
+        // 2. Moving Horizontal Perspective Lines (flowing forward in 3D)
+        const lineCount = 14;
+        const speed = 0.25;
+        const lineOffset = (simTime * speed) % (1 / lineCount);
+
+        for (let i = 1; i <= lineCount; i++) {
+          const norm = (i / lineCount + lineOffset) % 1;
+          // Exponential curve gives realistic depth compression
+          const depth = Math.pow(norm, 2.4);
+          const y = horizonY + groundHeight * depth;
+          const lineAlpha = depth * (0.16 + pulseEnergy * 0.28);
+
+          ctx.beginPath();
+          ctx.strokeStyle = i % 3 === 0
+            ? `rgba(${c.r}, ${c.g}, ${c.b}, ${lineAlpha * 0.8})`
+            : `rgba(${m.r}, ${m.g}, ${m.b}, ${lineAlpha})`;
+          ctx.lineWidth = 0.8 + depth * 0.6;
+          ctx.moveTo(0, y);
+          ctx.lineTo(width, y);
+          ctx.stroke();
+        }
+
+        // 3. Ambient Synth Star Dust in upper half
+        for (let i = 0; i < (isMobile ? 18 : 36); i++) {
+          const sx = (Math.sin(i * 123.4 + simTime * 0.1) * 0.5 + 0.5) * width;
+          const sy = (Math.cos(i * 567.8 + simTime * 0.08) * 0.5 + 0.5) * (horizonY - 20);
+          const sAlpha = 0.15 + (Math.sin(simTime * 2 + i) * 0.5 + 0.5) * 0.25 + pulseEnergy * 0.2;
+          const sColor = i % 3 === 0 ? c : m;
+
+          ctx.beginPath();
+          ctx.arc(sx, sy, 1.0, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${sColor.r}, ${sColor.g}, ${sColor.b}, ${sAlpha})`;
+          ctx.fill();
+        }
+      }
+
+      // MODE 2: DUAL-GLOW CONSTELLATION
+      else if (ambientBackdrop === "constellation") {
+        const maxDist = isMobile ? 100 : 140;
         const maxDistSq = maxDist * maxDist;
 
         // Update & draw nodes
         for (let i = 0; i < constellationNodes.length; i++) {
           const n = constellationNodes[i];
 
-          // React to pulse energy
           if (pulseEnergy > 0.05) {
-            n.energy = Math.max(n.energy, pulseEnergy * 0.8);
+            n.energy = Math.max(n.energy, pulseEnergy * 0.85);
           }
           n.energy *= 0.92;
 
           n.x += n.vx * (1 + n.energy * 0.8);
           n.y += n.vy * (1 + n.energy * 0.8);
 
-          // Wrap around edges with slight padding
+          // Wrap around edges
           if (n.x < -10) n.x = width + 10;
           else if (n.x > width + 10) n.x = -10;
           if (n.y < -10) n.y = height + 10;
           else if (n.y > height + 10) n.y = -10;
+
+          const nodeColor = n.isCaretColor ? c : m;
 
           // Connecting lines
           for (let j = i + 1; j < constellationNodes.length; j++) {
@@ -255,10 +348,12 @@ export const AmbientCanvas: React.FC = () => {
 
             if (distSq < maxDistSq) {
               const distRatio = 1 - Math.sqrt(distSq) / maxDist;
-              const lineAlpha = distRatio * (0.12 + (n.energy + n2.energy) * 0.15);
+              const lineAlpha = distRatio * (0.13 + (n.energy + n2.energy) * 0.18);
 
               ctx.beginPath();
-              ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${lineAlpha})`;
+              ctx.strokeStyle = n.isCaretColor || n2.isCaretColor
+                ? `rgba(${c.r}, ${c.g}, ${c.b}, ${lineAlpha * 0.75})`
+                : `rgba(${m.r}, ${m.g}, ${m.b}, ${lineAlpha})`;
               ctx.lineWidth = 0.8;
               ctx.moveTo(n.x, n.y);
               ctx.lineTo(n2.x, n2.y);
@@ -267,26 +362,28 @@ export const AmbientCanvas: React.FC = () => {
           }
 
           // Node drawing
-          const radius = n.baseRadius + n.energy * 1.2;
-          const nodeAlpha = 0.25 + n.energy * 0.55;
+          const radius = n.baseRadius + n.energy * 1.4;
+          const nodeAlpha = 0.30 + n.energy * 0.6;
 
           ctx.beginPath();
           ctx.arc(n.x, n.y, radius, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${nodeAlpha})`;
+          ctx.fillStyle = `rgba(${nodeColor.r}, ${nodeColor.g}, ${nodeColor.b}, ${nodeAlpha})`;
           ctx.fill();
         }
-      } else if (ambientBackdrop === "grid") {
-        // High-density Linear-style dot mesh
+      }
+
+      // MODE 3: HIGH-DENSITY GRID
+      else if (ambientBackdrop === "grid") {
         const spacing = isMobile ? 36 : 40;
         const cols = Math.ceil(width / spacing);
         const rows = Math.ceil(height / spacing);
 
         const activeRipple = ripples[0];
 
-        for (let c = 0; c <= cols; c++) {
-          const gx = c * spacing;
-          for (let rIdx = 0; rIdx <= rows; rIdx++) {
-            const gy = rIdx * spacing;
+        for (let col = 0; col <= cols; col++) {
+          const gx = col * spacing;
+          for (let row = 0; row <= rows; row++) {
+            const gy = row * spacing;
 
             let dotAlpha = 0.08;
             let dotRadius = 1.0;
@@ -300,8 +397,8 @@ export const AmbientCanvas: React.FC = () => {
 
               if (waveDist < 60) {
                 const waveStrength = (1 - waveDist / 60) * activeRipple.alpha;
-                dotAlpha = Math.min(0.45, dotAlpha + waveStrength * 0.85);
-                dotRadius += waveStrength * 1.2;
+                dotAlpha = Math.min(0.5, dotAlpha + waveStrength * 0.9);
+                dotRadius += waveStrength * 1.4;
               }
             } else if (pulseEnergy > 0.02) {
               dotAlpha += pulseEnergy * 0.08;
@@ -309,12 +406,16 @@ export const AmbientCanvas: React.FC = () => {
 
             ctx.beginPath();
             ctx.arc(gx, gy, dotRadius, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${dotAlpha})`;
+            ctx.fillStyle = (col + row) % 5 === 0
+              ? `rgba(${c.r}, ${c.g}, ${c.b}, ${dotAlpha})`
+              : `rgba(${m.r}, ${m.g}, ${m.b}, ${dotAlpha})`;
             ctx.fill();
           }
         }
-      } else if (ambientBackdrop === "particles") {
-        // Floating organic dust motes
+      }
+
+      // MODE 4: DUAL-GLOW PARTICLES
+      else if (ambientBackdrop === "particles") {
         for (let i = 0; i < particles.length; i++) {
           const p = particles[i];
 
@@ -334,26 +435,27 @@ export const AmbientCanvas: React.FC = () => {
           if (p.x < -10) p.x = width + 10;
           else if (p.x > width + 10) p.x = -10;
 
-          const currentRadius = p.radius + p.energy * 1.0;
-          const currentAlpha = Math.min(0.65, p.baseAlpha + p.energy * 0.4);
+          const currentRadius = p.radius + p.energy * 1.2;
+          const currentAlpha = Math.min(0.70, p.baseAlpha + p.energy * 0.45);
+          const pColor = p.colorType === "caret" ? c : m;
 
           ctx.beginPath();
           ctx.arc(p.x, p.y, currentRadius, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${currentAlpha})`;
+          ctx.fillStyle = `rgba(${pColor.r}, ${pColor.g}, ${pColor.b}, ${currentAlpha})`;
           ctx.fill();
         }
       }
 
-      // Render expanding micro-ripples
+      // Render expanding micro-ripples across all modes
       for (let i = ripples.length - 1; i >= 0; i--) {
         const rip = ripples[i];
         rip.radius += rip.speed;
-        rip.alpha *= 0.96;
+        rip.alpha *= 0.95;
 
         ctx.beginPath();
         ctx.arc(rip.x, rip.y, rip.radius, 0, Math.PI * 2);
-        ctx.strokeStyle = `rgba(${r}, ${g}, ${b}, ${rip.alpha * 0.5})`;
-        ctx.lineWidth = 1;
+        ctx.strokeStyle = `rgba(${m.r}, ${m.g}, ${m.b}, ${rip.alpha * 0.55})`;
+        ctx.lineWidth = 1.2;
         ctx.stroke();
 
         if (rip.radius >= rip.maxRadius || rip.alpha < 0.01) {

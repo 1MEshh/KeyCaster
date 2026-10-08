@@ -9,7 +9,7 @@ export type Theme = "monochrome" | "nord" | "dracula" | "serika_dark" | "midnigh
 export type FontFamily = "Thmanyah Sans" | "JetBrains Mono" | "Roboto Mono" | "Fira Code";
 export type LiveStatsMode = "off" | "text" | "mini";
 export type KeyboardLayout = "qwerty" | "dvorak" | "colemak";
-export type AmbientBackdrop = "constellation" | "grid" | "particles" | "off";
+export type AmbientBackdrop = "cyber_grid" | "constellation" | "grid" | "particles" | "off";
 export type AppSection = "srs_words" | "sentences" | "arabic_dictation" | "arcade";
 
 export interface SettingsState {
