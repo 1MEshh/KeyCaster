@@ -440,7 +440,7 @@ export const TopNav: React.FC<TopNavProps> = ({
 
             {isThemeMenuOpen && (
               <div className="absolute right-0 top-full mt-2 w-44 rounded-xl border border-sub/30 bg-bg shadow-2xl py-1.5 z-40 animate-fadeIn text-xs">
-                {(["midnight", "monochrome", "serika_dark", "nord", "dracula"] as Theme[]).map((thm) => (
+                {(["cyberpunk", "midnight", "monochrome", "serika_dark", "nord", "dracula"] as Theme[]).map((thm) => (
                   <button
                     key={thm}
                     onClick={() => {
