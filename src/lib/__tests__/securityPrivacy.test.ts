@@ -62,9 +62,13 @@ test("Security Guard: Security headers are configured in next.config.mjs", () =>
   assert.ok(fs.existsSync(nextConfigPath), "next.config.mjs must exist");
 
   const content = fs.readFileSync(nextConfigPath, "utf-8");
+  assert.ok(content.includes("Content-Security-Policy"), "Must include Content-Security-Policy header");
+  assert.ok(content.includes("Strict-Transport-Security"), "Must include Strict-Transport-Security header");
   assert.ok(content.includes("X-Frame-Options"), "Must include X-Frame-Options header");
   assert.ok(content.includes("X-Content-Type-Options"), "Must include X-Content-Type-Options header");
   assert.ok(content.includes("Permissions-Policy"), "Must include Permissions-Policy header");
+  assert.ok(content.includes("Cross-Origin-Opener-Policy"), "Must include Cross-Origin-Opener-Policy header");
+  assert.ok(content.includes("Cross-Origin-Resource-Policy"), "Must include Cross-Origin-Resource-Policy header");
 });
 
 test("Security Guard: .gitignore excludes sensitive credentials and environment files", () => {
