@@ -44,15 +44,29 @@ export const CustomCursor: React.FC = () => {
     };
   }, [customCursor, isTouchDevice]);
 
-  // Smooth lerp loop for the trailing magnetic ring
+  // Adaptive magnetic follow loop for trailing fluid ring
   const updateLoop = useCallback(() => {
-    // Lerp factor (higher = crisper tracking, lower = softer trailing)
-    const lerp = 0.22;
-    ringPos.current.x += (mousePos.current.x - ringPos.current.x) * lerp;
-    ringPos.current.y += (mousePos.current.y - ringPos.current.y) * lerp;
+    const targetX = mousePos.current.x;
+    const targetY = mousePos.current.y;
 
-    if (dotRef.current) {
-      dotRef.current.style.transform = `translate3d(${mousePos.current.x}px, ${mousePos.current.y}px, 0)`;
+    const dx = targetX - ringPos.current.x;
+    const dy = targetY - ringPos.current.y;
+    const dist = Math.hypot(dx, dy);
+
+    // Adaptive follow factor: speeds up on fast flicks to prevent dragging desync
+    // Small movement: silky 0.30; fast movement: snappier up to 0.70
+    const adaptiveLerp = Math.min(0.70, 0.30 + (dist / 120) * 0.40);
+
+    ringPos.current.x += dx * adaptiveLerp;
+    ringPos.current.y += dy * adaptiveLerp;
+
+    // Hard distance clamp: Ring can NEVER lag further than 24px from dot
+    const maxLag = isHovered ? 12 : 24;
+    const currentDist = Math.hypot(targetX - ringPos.current.x, targetY - ringPos.current.y);
+    if (currentDist > maxLag && currentDist > 0) {
+      const angle = Math.atan2(ringPos.current.y - targetY, ringPos.current.x - targetX);
+      ringPos.current.x = targetX + Math.cos(angle) * maxLag;
+      ringPos.current.y = targetY + Math.sin(angle) * maxLag;
     }
 
     if (ringRef.current) {
@@ -60,7 +74,7 @@ export const CustomCursor: React.FC = () => {
     }
 
     animFrameId.current = requestAnimationFrame(updateLoop);
-  }, []);
+  }, [isHovered]);
 
   useEffect(() => {
     if (!customCursor || isTouchDevice) return;
@@ -76,8 +90,22 @@ export const CustomCursor: React.FC = () => {
     if (!customCursor || isTouchDevice) return;
 
     const handleMouseMove = (e: MouseEvent) => {
-      mousePos.current.x = e.clientX;
-      mousePos.current.y = e.clientY;
+      const clientX = e.clientX;
+      const clientY = e.clientY;
+
+      // First time entering screen: snap ring directly to avoid edge sweeping
+      if (!isVisible || (mousePos.current.x === -100 && mousePos.current.y === -100)) {
+        ringPos.current.x = clientX;
+        ringPos.current.y = clientY;
+      }
+
+      mousePos.current.x = clientX;
+      mousePos.current.y = clientY;
+
+      // Update dot instantaneously for true 0ms hardware-like responsiveness
+      if (dotRef.current) {
+        dotRef.current.style.transform = `translate3d(${clientX}px, ${clientY}px, 0)`;
+      }
 
       if (!isVisible) setIsVisible(true);
       if (isTyping) setIsTyping(false);
@@ -102,7 +130,14 @@ export const CustomCursor: React.FC = () => {
       setIsVisible(false);
     };
 
-    const handleMouseEnter = () => {
+    const handleMouseEnter = (e: MouseEvent) => {
+      mousePos.current.x = e.clientX;
+      mousePos.current.y = e.clientY;
+      ringPos.current.x = e.clientX;
+      ringPos.current.y = e.clientY;
+      if (dotRef.current) {
+        dotRef.current.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+      }
       setIsVisible(true);
     };
 
@@ -141,23 +176,23 @@ export const CustomCursor: React.FC = () => {
         shouldHide ? "opacity-0" : "opacity-100"
       }`}
     >
-      {/* Precision Core Dot (Zero lag) */}
+      {/* Precision Core Dot (Zero lag, no CSS transform transitions) */}
       <div
         ref={dotRef}
-        className={`absolute top-0 left-0 -ml-[3.5px] -mt-[3.5px] w-[7px] h-[7px] rounded-full bg-main shadow-[0_0_8px_var(--main)] transition-[transform,opacity,scale] duration-75 will-change-transform ${
-          isClicking ? "scale-75" : isHovered ? "scale-125" : "scale-100"
+        className={`absolute top-0 left-0 -ml-[3.5px] -mt-[3.5px] w-[7px] h-[7px] rounded-full bg-main shadow-[0_0_10px_var(--main)] transition-[opacity,scale] duration-100 ease-out ${
+          isClicking ? "scale-75" : isHovered ? "scale-125 bg-caret shadow-[0_0_14px_var(--caret)]" : "scale-100"
         }`}
       />
 
-      {/* Trailing Magnetic Fluid Ring (Lerp physics) */}
+      {/* Adaptive Magnetic Follow Ring (Clamped velocity spring, no CSS transform transition) */}
       <div
         ref={ringRef}
-        className={`absolute top-0 left-0 rounded-full border will-change-transform transition-[width,height,margin,background-color,border-color,transform] duration-150 ease-out ${
+        className={`absolute top-0 left-0 rounded-full border transition-[width,height,margin,background-color,border-color,box-shadow] duration-150 ease-out ${
           isHovered
-            ? "-ml-[22px] -mt-[22px] w-[44px] h-[44px] border-main bg-main/15 shadow-[0_0_12px_var(--main)]"
+            ? "-ml-[20px] -mt-[20px] w-[40px] h-[40px] border-main bg-main/15 shadow-[0_0_16px_var(--main)]"
             : isClicking
-            ? "-ml-[11px] -mt-[11px] w-[22px] h-[22px] border-main/80 bg-main/25"
-            : "-ml-[14px] -mt-[14px] w-[28px] h-[28px] border-main/50 bg-transparent"
+            ? "-ml-[10px] -mt-[10px] w-[20px] h-[20px] border-main/90 bg-main/30 shadow-[0_0_8px_var(--main)]"
+            : "-ml-[13px] -mt-[13px] w-[26px] h-[26px] border-main/60 bg-main/5 shadow-[0_0_6px_var(--main)/25]"
         }`}
       />
     </div>
