@@ -30,6 +30,7 @@ import {
 } from "@/store/useSettingsStore";
 import { playMechanicalClick, TTSController } from "@/lib/audio";
 import { db } from "@/lib/db";
+import { validateBackupPayload, MAX_BACKUP_FILE_BYTES } from "@/lib/sanitize";
 
 interface SettingsModalProps {
   isOpen: boolean;
@@ -119,17 +120,22 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
 
   const handleExportData = async () => {
     try {
-      const [words, customDecks, sessionHistory] = await Promise.all([
-        db.words.toArray(),
-        db.customDecks.toArray(),
-        db.sessionHistory.toArray(),
-      ]);
+      const [words, customDecks, sessionHistory, sentenceHistory, translationMastery] =
+        await Promise.all([
+          db.words.toArray(),
+          db.customDecks.toArray(),
+          db.sessionHistory.toArray(),
+          db.sentenceHistory.toArray(),
+          db.translationMastery.toArray(),
+        ]);
       const exportData = {
         exportedAt: new Date().toISOString(),
-        version: 1,
+        version: 4,
         words,
         customDecks,
         sessionHistory,
+        sentenceHistory,
+        translationMastery,
       };
       const blob = new Blob([JSON.stringify(exportData, null, 2)], {
         type: "application/json",
@@ -152,26 +158,35 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
     input.onchange = async (e) => {
       const file = (e.target as HTMLInputElement).files?.[0];
       if (!file) return;
+
+      // 1. File size defense (max 5MB)
+      if (file.size > MAX_BACKUP_FILE_BYTES) {
+        alert("Backup file exceeds maximum allowed size (5 MB). Import aborted.");
+        return;
+      }
+
       try {
         const text = await file.text();
-        const data = JSON.parse(text);
-        if (!data.words || !data.version) {
-          alert("Invalid backup file. Please use a KeyCaster export.");
+        const rawJson = JSON.parse(text);
+
+        // 2. Defensive schema validation & prototype pollution defense
+        const payload = validateBackupPayload(rawJson);
+
+        const summary = [
+          `${payload.words.length} words`,
+          `${payload.sessionHistory.length} sessions`,
+          `${payload.customDecks.length} custom decks`,
+          `${payload.sentenceHistory.length} sentence records`,
+          `${payload.translationMastery.length} translation mastery cards`,
+        ].join(", ");
+
+        if (!confirm(`Restore and merge the following verified data: ${summary}?`)) {
           return;
         }
-        if (
-          !confirm(
-            `This will merge ${data.words.length} word records and ${data.sessionHistory?.length ?? 0} sessions. Continue?`
-          )
-        )
-          return;
 
-        // Import words (upsert by word string to avoid duplicates)
-        for (const word of data.words) {
-          const existing = await db.words
-            .where("word")
-            .equals(word.word)
-            .first();
+        // Import words (upsert by word string)
+        for (const word of payload.words) {
+          const existing = await db.words.where("word").equals(word.word).first();
           if (existing?.id) {
             await db.words.update(existing.id, {
               easeFactor: word.easeFactor,
@@ -181,21 +196,52 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
               totalMistakes: word.totalMistakes,
               totalReviews: word.totalReviews,
             });
+          } else {
+            await db.words.add(word);
+          }
+        }
+
+        // Import custom decks (prevent duplicating identical deck names)
+        for (const deck of payload.customDecks) {
+          const existing = await db.customDecks.where("name").equals(deck.name).first();
+          if (!existing) {
+            await db.customDecks.add(deck);
           }
         }
 
         // Import session history
-        if (Array.isArray(data.sessionHistory)) {
-          for (const session of data.sessionHistory) {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const { id: _id, ...sessionData } = session;
-            await db.sessionHistory.add(sessionData);
+        for (const session of payload.sessionHistory) {
+          await db.sessionHistory.add(session);
+        }
+
+        // Import sentence history
+        for (const sentence of payload.sentenceHistory) {
+          await db.sentenceHistory.add(sentence);
+        }
+
+        // Import translation mastery (upsert by sentenceId)
+        for (const mastery of payload.translationMastery) {
+          const existing = await db.translationMastery
+            .where("sentenceId")
+            .equals(mastery.sentenceId)
+            .first();
+          if (existing?.id) {
+            await db.translationMastery.update(existing.id, {
+              repetitions: mastery.repetitions,
+              interval: mastery.interval,
+              easeFactor: mastery.easeFactor,
+              dueDate: mastery.dueDate,
+              mistakes: mastery.mistakes,
+            });
+          } else {
+            await db.translationMastery.add(mastery);
           }
         }
 
-        alert("Import complete! Your data has been restored.");
-      } catch {
-        alert("Import failed. The file may be corrupted.");
+        alert("Import complete! All valid progress and cards have been restored.");
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : "The file may be corrupted or malformed.";
+        alert(`Import rejected: ${message}`);
       }
     };
     input.click();

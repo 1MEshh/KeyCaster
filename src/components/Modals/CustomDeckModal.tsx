@@ -5,6 +5,7 @@ import { X, Plus, AlertCircle, Check } from "lucide-react";
 import { db, type WordRecord } from "@/lib/db";
 import { useSettingsStore } from "@/store/useSettingsStore";
 import { useSessionStore } from "@/store/useSessionStore";
+import { sanitizeCustomDeck, MAX_DECK_NAME_LENGTH, MAX_WORDS_PER_DECK } from "@/lib/sanitize";
 
 interface CustomDeckModalProps {
   isOpen: boolean;
@@ -28,38 +29,30 @@ export const CustomDeckModal: React.FC<CustomDeckModalProps> = ({ isOpen, onClos
       rawWords
         .split(/[\n,]+/)
         .map((w) => w.trim().toLowerCase().replace(/\s+/g, " "))
-        .filter((w) => /^[a-z]+(\s[a-z]+)*$/i.test(w))
+        .filter((w) => /^[a-z]+([ -][a-z]+)*$/i.test(w))
     )
-  );
+  ).slice(0, MAX_WORDS_PER_DECK);
 
   const handleSaveDeck = async () => {
-    if (!deckName.trim()) {
-      setErrorMsg("Please provide a name for this custom deck.");
-      return;
-    }
-
-    if (parsedWords.length === 0) {
-      setErrorMsg("Please enter at least 1 valid alphabetic word.");
-      return;
-    }
-
-    setIsSaving(true);
-    setErrorMsg("");
-
     try {
+      const sanitized = sanitizeCustomDeck(deckName, rawWords);
+
+      setIsSaving(true);
+      setErrorMsg("");
+
       const categoryId = `custom_${Date.now()}`;
       const today = new Date().toISOString().split("T")[0];
 
       // Save custom deck meta
       await db.customDecks.add({
-        name: deckName.trim(),
+        name: sanitized.name,
         description: `Custom deck created on ${today}`,
-        words: parsedWords,
+        words: sanitized.words,
         createdAt: today,
       });
 
       // Insert words into words table
-      const wordRecords: WordRecord[] = parsedWords.map((word) => ({
+      const wordRecords: WordRecord[] = sanitized.words.map((word) => ({
         word,
         category: categoryId,
         easeFactor: 2.5,
@@ -80,10 +73,10 @@ export const CustomDeckModal: React.FC<CustomDeckModalProps> = ({ isOpen, onClos
       setRawWords("");
       setIsSaving(false);
       onClose();
-    } catch (err) {
-      console.error(err);
-      setErrorMsg("Failed to save custom deck to database.");
+    } catch (err: unknown) {
       setIsSaving(false);
+      const msg = err instanceof Error ? err.message : "Failed to save custom deck to database.";
+      setErrorMsg(msg);
     }
   };
 
@@ -111,11 +104,17 @@ export const CustomDeckModal: React.FC<CustomDeckModalProps> = ({ isOpen, onClos
         )}
 
         <div>
-          <label className="text-xs uppercase text-sub font-semibold block mb-1.5">
-            Deck Name
-          </label>
+          <div className="flex justify-between items-center mb-1.5">
+            <label className="text-xs uppercase text-sub font-semibold">
+              Deck Name
+            </label>
+            <span className="text-[10px] text-sub">
+              {deckName.length}/{MAX_DECK_NAME_LENGTH}
+            </span>
+          </div>
           <input
             type="text"
+            maxLength={MAX_DECK_NAME_LENGTH}
             placeholder="e.g. GRE Vocabulary, Biology Terms..."
             value={deckName}
             onChange={(e) => setDeckName(e.target.value)}
@@ -129,7 +128,7 @@ export const CustomDeckModal: React.FC<CustomDeckModalProps> = ({ isOpen, onClos
               Words (Comma or Newline separated)
             </label>
             <span className="text-xs text-main font-semibold">
-              {parsedWords.length} unique words
+              {parsedWords.length}/{MAX_WORDS_PER_DECK} words
             </span>
           </div>
           <textarea
