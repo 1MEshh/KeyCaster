@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useSettingsStore } from "@/store/useSettingsStore";
+import { WpmTachometer } from "./WpmTachometer";
 
 interface LiveStatsProps {
   wpm: number;
@@ -31,6 +32,20 @@ export const LiveStats: React.FC<LiveStatsProps> = ({
   const completedCount = isComplete ? totalWords : currentWordIndex;
   const progressPercent =
     totalWords > 0 ? Math.min(100, Math.round((completedCount / totalWords) * 100)) : 0;
+
+  if (liveStats === "tachometer") {
+    return (
+      <div className="flex flex-col items-center gap-1 select-none transition-all">
+        <WpmTachometer wpm={wpm} accuracy={accuracy} streak={streak} />
+        <div className="w-40 bg-sub/20 h-1 rounded-full overflow-hidden mt-0.5">
+          <div
+            className="h-full bg-main transition-all duration-300 ease-out rounded-full shadow-[0_0_6px_var(--main)]"
+            style={{ width: `${progressPercent}%` }}
+          />
+        </div>
+      </div>
+    );
+  }
 
   if (liveStats === "mini") {
     return (
