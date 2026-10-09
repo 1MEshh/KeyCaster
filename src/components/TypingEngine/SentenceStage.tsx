@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Volume2,
@@ -16,6 +16,7 @@ import {
 import confetti from "canvas-confetti";
 import { useSentenceStore } from "@/store/useSentenceStore";
 import { useSettingsStore, SMOOTH_CARET_DURATIONS } from "@/store/useSettingsStore";
+import { useProfileStore } from "@/store/useProfileStore";
 import { useKeyStore } from "@/store/useKeyStore";
 import {
   playMechanicalClick,
@@ -72,6 +73,7 @@ export const SentenceStage: React.FC = () => {
     soundOnClick,
     soundOnError,
     switchSound,
+    paceCarMode,
     speechRate,
     ttsVoiceURI,
   } = useSettingsStore();
@@ -91,6 +93,39 @@ export const SentenceStage: React.FC = () => {
     height: 24,
   });
   const [isFocused, setIsFocused] = useState<boolean>(true);
+
+  // Pace Car / Shadow Typist Calculation
+  const pbWpm = useProfileStore((s) => s.personalBestWpm) || 70;
+  const targetWpm = useMemo(() => {
+    if (paceCarMode === "pb") return pbWpm;
+    if (paceCarMode === "target_60") return 60;
+    if (paceCarMode === "target_80") return 80;
+    if (paceCarMode === "target_100") return 100;
+    if (paceCarMode === "target_120") return 120;
+    return 0;
+  }, [paceCarMode, pbWpm]);
+
+  const targetSentenceText = currentSentence ? getTargetText(currentSentence) : "";
+  const sentencePaceDelta = useMemo(() => {
+    if (paceCarMode === "off" || !stats.elapsedMs || stats.elapsedMs <= 0) return 0;
+    const charPace = (targetWpm * 5) / 60;
+    const expectedChars = Math.min(
+      targetSentenceText.length,
+      Math.floor((stats.elapsedMs / 1000) * charPace)
+    );
+    const typedChars =
+      words.slice(0, currentWordIndex).reduce((acc, w) => acc + w.word.length + 1, 0) +
+      currentLetterIndex;
+    return typedChars - expectedChars;
+  }, [
+    paceCarMode,
+    stats.elapsedMs,
+    targetWpm,
+    targetSentenceText.length,
+    words,
+    currentWordIndex,
+    currentLetterIndex,
+  ]);
 
   // Audio synthesis: speak full target sentence
   const speakFullSentence = useCallback(
@@ -632,6 +667,25 @@ export const SentenceStage: React.FC = () => {
               {stats.errors}
             </span>
           </div>
+
+          {/* Pace Car Race Delta Indicator */}
+          {paceCarMode !== "off" && stats.elapsedMs > 500 && (
+            <div
+              className={`px-2.5 py-0.5 rounded-full border flex items-center gap-1.5 text-[11px] transition-all ${
+                sentencePaceDelta >= 0
+                  ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
+                  : "bg-amber-500/10 text-amber-400 border-amber-500/30"
+              }`}
+            >
+              <span>🏎️</span>
+              <span className="font-semibold">
+                {sentencePaceDelta >= 0 ? `+${sentencePaceDelta} chars ahead` : `${sentencePaceDelta} chars behind`}
+              </span>
+              <span className="text-[9px] opacity-70">
+                ({targetWpm} WPM {paceCarMode === "pb" ? "PB" : "Target"})
+              </span>
+            </div>
+          )}
         </div>
 
         <div className="text-[11px] text-sub/50 hidden sm:block">

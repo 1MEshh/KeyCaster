@@ -10,6 +10,7 @@ export type StopOnError = "off" | "letter" | "word";
 export type Theme = "monochrome" | "nord" | "dracula" | "serika_dark" | "midnight" | "cyberpunk";
 export type FontFamily = "Thmanyah Sans" | "JetBrains Mono" | "Roboto Mono" | "Fira Code";
 export type LiveStatsMode = "off" | "text" | "mini" | "tachometer";
+export type PaceCarMode = "off" | "pb" | "target_60" | "target_80" | "target_100" | "target_120";
 export type KeyboardLayout = "qwerty" | "dvorak" | "colemak";
 export type AmbientBackdrop = "cyber_grid" | "constellation" | "grid" | "particles" | "off";
 export type AppSection = "srs_words" | "sentences" | "arabic_dictation" | "arcade";
@@ -25,6 +26,7 @@ export interface SettingsState {
   blindModePro: boolean;
   phraseMode: boolean;
   stopOnError: StopOnError;
+  paceCarMode: PaceCarMode;
 
   // Visual & UI
   theme: Theme;
@@ -59,6 +61,7 @@ export interface SettingsState {
   setBlindModePro: (pro: boolean) => void;
   setPhraseMode: (phraseMode: boolean) => void;
   setStopOnError: (stop: StopOnError) => void;
+  setPaceCarMode: (paceCarMode: PaceCarMode) => void;
   setTheme: (theme: Theme) => void;
   setFontFamily: (font: FontFamily) => void;
   setFontSize: (size: number) => void;
@@ -162,6 +165,7 @@ const DEFAULT_SETTINGS = {
   blindModePro: false,
   phraseMode: false,
   stopOnError: "letter" as StopOnError,
+  paceCarMode: "off" as PaceCarMode,
   theme: "midnight" as Theme,
   fontFamily: "Thmanyah Sans" as FontFamily,
   fontSize: 1.75,
@@ -193,6 +197,7 @@ export const useSettingsStore = create<SettingsState>()(
       setBlindModePro: (blindModePro) => set({ blindModePro }),
       setPhraseMode: (phraseMode) => set({ phraseMode }),
       setStopOnError: (stopOnError) => set({ stopOnError }),
+      setPaceCarMode: (paceCarMode) => set({ paceCarMode }),
       setTheme: (theme) => {
         set({ theme });
         applyThemeCSS(theme);

@@ -16,6 +16,7 @@ interface ProfileState {
   totalWordsTyped: number;
   totalSessions: number;
   lifetimeAvgWpm: number;
+  personalBestWpm: number;
 
   // Actions
   recordSessionCompletion: (stats: {
@@ -67,6 +68,7 @@ export const useProfileStore = create<ProfileState>()(
       totalWordsTyped: 0,
       totalSessions: 0,
       lifetimeAvgWpm: 0,
+      personalBestWpm: 0,
 
       checkStreak: () => {
         const today = new Date().toISOString().split("T")[0];
@@ -154,6 +156,7 @@ export const useProfileStore = create<ProfileState>()(
           totalWordsTyped: nextTotalWords,
           totalSessions: nextTotalSessions,
           lifetimeAvgWpm: nextAvgWpm,
+          personalBestWpm: Math.max(state.personalBestWpm || 0, wpm),
         });
       },
 
