@@ -2,7 +2,7 @@
 
 import React, { useEffect } from "react";
 import confetti from "canvas-confetti";
-import { Trophy, RotateCcw, ArrowRight, CheckCircle2, AlertCircle } from "lucide-react";
+import { Trophy, RotateCcw, ArrowRight, CheckCircle2, AlertCircle, Activity } from "lucide-react";
 import { useSessionStore } from "@/store/useSessionStore";
 import { useSettingsStore } from "@/store/useSettingsStore";
 
@@ -45,6 +45,12 @@ export const SessionSummaryModal: React.FC<SessionSummaryModalProps> = ({
   const avgAccuracy = Math.round(
     completedWords.reduce((acc, c) => acc + c.accuracy, 0) / Math.max(1, totalWords)
   );
+  const avgConsistency = Math.round(
+    completedWords.reduce((acc, c) => acc + (c.consistency ?? 100), 0) / Math.max(1, totalWords)
+  );
+  const avgRawWpm = Math.round(
+    completedWords.reduce((acc, c) => acc + (c.rawWpm ?? c.wpm), 0) / Math.max(1, totalWords)
+  );
   const durationSec = Math.round(((endTime || Date.now()) - (startTime || Date.now())) / 1000);
 
   const masteredWords = completedWords.filter((c) => c.grade >= 3);
@@ -65,18 +71,54 @@ export const SessionSummaryModal: React.FC<SessionSummaryModalProps> = ({
         </div>
 
         {/* Big Key Stats */}
-        <div className="grid grid-cols-3 gap-3 p-4 rounded-xl bg-sub/5 border border-sub/20 text-center">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 p-4 rounded-xl bg-sub/5 border border-sub/20 text-center">
           <div>
-            <div className="text-[10px] uppercase text-sub font-semibold tracking-wider">WPM</div>
-            <div className="text-2xl sm:text-3xl font-extrabold text-main mt-0.5">{avgWpm}</div>
+            <div className="text-[10px] uppercase text-sub font-semibold tracking-wider">WPM (Net/Raw)</div>
+            <div className="text-2xl sm:text-3xl font-extrabold text-main mt-0.5">
+              {avgWpm}
+              <span className="text-xs font-normal text-sub ml-1">/{avgRawWpm}</span>
+            </div>
           </div>
           <div>
             <div className="text-[10px] uppercase text-sub font-semibold tracking-wider">Accuracy</div>
             <div className="text-2xl sm:text-3xl font-extrabold text-text mt-0.5">{avgAccuracy}%</div>
           </div>
           <div>
+            <div className="text-[10px] uppercase text-sub font-semibold tracking-wider flex items-center justify-center gap-1">
+              <Activity className="w-3 h-3 text-cyan-400" />
+              <span>Consistency</span>
+            </div>
+            <div className="text-2xl sm:text-3xl font-extrabold text-cyan-400 mt-0.5">{avgConsistency}%</div>
+          </div>
+          <div>
             <div className="text-[10px] uppercase text-sub font-semibold tracking-wider">Duration</div>
             <div className="text-2xl sm:text-3xl font-extrabold text-sub mt-0.5">{durationSec}s</div>
+          </div>
+        </div>
+
+        {/* Rhythm & Cadence Diagnostics */}
+        <div className="p-3.5 rounded-xl border border-cyan-500/20 bg-cyan-500/5 flex items-center justify-between text-xs">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-cyan-500/15 text-cyan-400 flex items-center justify-center">
+              <Activity className="w-4 h-4" />
+            </div>
+            <div>
+              <div className="font-bold text-text">
+                {avgConsistency >= 90
+                  ? "Metronomic Cadence (Elite Steady)"
+                  : avgConsistency >= 80
+                  ? "Rhythmic Flow (Consistent)"
+                  : avgConsistency >= 65
+                  ? "Moderate Cadence Variance"
+                  : "Variable Burst Rhythm"}
+              </div>
+              <div className="text-[10px] text-sub">
+                Keystroke standard deviation variance ratio: {avgConsistency}%
+              </div>
+            </div>
+          </div>
+          <div className="hidden sm:flex items-center gap-1 font-mono text-[10px] text-cyan-400/80 bg-cyan-500/10 px-2.5 py-1 rounded-md">
+            <span>Rhythm Score</span>
           </div>
         </div>
 
@@ -120,8 +162,11 @@ export const SessionSummaryModal: React.FC<SessionSummaryModalProps> = ({
                   )}
                 </div>
 
-                <div className="flex items-center gap-4 text-sub text-[11px]">
+                <div className="flex items-center gap-3 text-sub text-[11px]">
                   <span>{item.wpm} wpm</span>
+                  {item.consistency !== undefined && (
+                    <span className="text-cyan-400">{item.consistency}%</span>
+                  )}
                   <span>{item.accuracy}% acc</span>
                   <span className="font-semibold text-text">{item.label}</span>
                 </div>

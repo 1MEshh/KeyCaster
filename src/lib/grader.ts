@@ -4,6 +4,8 @@ export interface GradingInput {
   backspaces: number;
   elapsedMs: number;
   wasRetry: boolean;
+  keystrokeIntervals?: number[];
+  totalKeystrokes?: number;
 }
 
 export interface GradingResult {
@@ -12,6 +14,44 @@ export interface GradingResult {
   avgMsPerChar: number;
   wpm: number;
   accuracy: number;
+  consistency?: number;
+  rawWpm?: number;
+}
+
+/**
+ * Calculates typing rhythm consistency percentage from an array of keystroke delta intervals (in milliseconds).
+ * Formula: Math.max(0, Math.min(100, Math.round(100 - (stdDev / meanDelta) * 100)))
+ * If fewer than 2 intervals are present or mean <= 0, returns 100%.
+ */
+export function calculateConsistency(intervals: number[]): number {
+  if (!intervals || intervals.length < 2) return 100;
+  const valid = intervals.filter((n) => typeof n === "number" && n > 0);
+  if (valid.length < 2) return 100;
+
+  const meanDelta = valid.reduce((acc, v) => acc + v, 0) / valid.length;
+  if (meanDelta <= 0) return 100;
+
+  const variance =
+    valid.reduce((acc, v) => acc + Math.pow(v - meanDelta, 2), 0) / valid.length;
+  const stdDev = Math.sqrt(variance);
+
+  const consistency = Math.max(0, Math.min(100, Math.round(100 - (stdDev / meanDelta) * 100)));
+  return consistency;
+}
+
+/**
+ * Calculates raw WPM (all keystrokes / 5 / elapsed minutes) vs net WPM (correct chars / 5 / elapsed minutes).
+ */
+export function calculateRawAndNetWpm(
+  totalKeystrokes: number,
+  correctChars: number,
+  elapsedMs: number
+): { rawWpm: number; netWpm: number } {
+  if (elapsedMs <= 0) return { rawWpm: 0, netWpm: 0 };
+  const minutes = Math.max(0.001, elapsedMs / 60000);
+  const rawWpm = Math.round((totalKeystrokes / 5) / minutes);
+  const netWpm = Math.max(0, Math.round((correctChars / 5) / minutes));
+  return { rawWpm, netWpm };
 }
 
 /**
@@ -24,17 +64,22 @@ export interface GradingResult {
  * Grade 0: Skipped / gave up
  */
 export function gradeWord(input: GradingInput): GradingResult {
-  const { word, errors, backspaces, elapsedMs, wasRetry } = input;
+  const { word, errors, backspaces, elapsedMs, wasRetry, keystrokeIntervals } = input;
   const wordLen = Math.max(1, word.length);
   const avgMsPerChar = Math.round(elapsedMs / wordLen);
 
-  // WPM calculation: (chars / 5) / (minutes)
-  const minutes = Math.max(0.001, elapsedMs / 60000);
-  const wpm = Math.round((wordLen / 5) / minutes);
+  // Keystrokes & WPM calculation
+  const totalKeystrokes = input.totalKeystrokes ?? (wordLen + errors + backspaces);
+  const { rawWpm, netWpm } = calculateRawAndNetWpm(totalKeystrokes, wordLen, elapsedMs);
 
   // Accuracy calculation
-  const totalKeystrokes = wordLen + errors + backspaces;
   const accuracy = Math.round((wordLen / Math.max(wordLen, totalKeystrokes)) * 100);
+
+  // Consistency calculation from interval variance
+  const consistency =
+    keystrokeIntervals && keystrokeIntervals.length >= 2
+      ? calculateConsistency(keystrokeIntervals)
+      : 100;
 
   let rawGrade = 1;
 
@@ -63,7 +108,9 @@ export function gradeWord(input: GradingInput): GradingResult {
     grade: finalGrade,
     label,
     avgMsPerChar,
-    wpm,
+    wpm: netWpm,
     accuracy,
+    consistency,
+    rawWpm,
   };
 }

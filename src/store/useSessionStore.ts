@@ -16,6 +16,8 @@ export interface CompletedWordItem {
   accuracy: number;
   wasRetry: boolean;
   wasSkipped?: boolean;
+  consistency?: number;
+  rawWpm?: number;
 }
 
 export interface SessionState {
@@ -38,6 +40,8 @@ export interface SessionState {
     backspaces: number;
     elapsedMs: number;
     wasSkipped?: boolean;
+    keystrokeIntervals?: number[];
+    totalKeystrokes?: number;
   }) => Promise<{ gradeResult: GradingResult; isNextAvailable: boolean }>;
   skipCurrentWord: () => Promise<void>;
   startRetryMistakes: () => void;
@@ -83,25 +87,34 @@ export const useSessionStore = create<SessionState>((set, get) => ({
     }
   },
 
-  completeCurrentWord: async ({ errors, backspaces, elapsedMs, wasSkipped = false }) => {
+  completeCurrentWord: async ({
+    errors,
+    backspaces,
+    elapsedMs,
+    wasSkipped = false,
+    keystrokeIntervals,
+    totalKeystrokes,
+  }) => {
     const { currentWord, isRetryAttempt, mainQueue, retryQueue, currentIndex, completedWords } = get();
 
     if (!currentWord) {
       return {
-        gradeResult: { grade: 0, label: "", avgMsPerChar: 0, wpm: 0, accuracy: 0 },
+        gradeResult: { grade: 0, label: "", avgMsPerChar: 0, wpm: 0, accuracy: 0, consistency: 100, rawWpm: 0 },
         isNextAvailable: false,
       };
     }
 
     // 1. Grade performance
     const gradeResult = wasSkipped
-      ? { grade: 1, label: "Skipped", avgMsPerChar: 0, wpm: 0, accuracy: 0 }
+      ? { grade: 1, label: "Skipped", avgMsPerChar: 0, wpm: 0, accuracy: 0, consistency: 100, rawWpm: 0 }
       : gradeWord({
           word: currentWord.word,
           errors,
           backspaces,
           elapsedMs,
           wasRetry: isRetryAttempt,
+          keystrokeIntervals,
+          totalKeystrokes,
         });
 
     // 2. SM-2 Calculation with adaptive difficulty
@@ -156,6 +169,8 @@ export const useSessionStore = create<SessionState>((set, get) => ({
         accuracy: gradeResult.accuracy,
         wasRetry: isRetryAttempt,
         wasSkipped,
+        consistency: gradeResult.consistency,
+        rawWpm: gradeResult.rawWpm,
       },
     ];
 
@@ -196,12 +211,20 @@ export const useSessionStore = create<SessionState>((set, get) => ({
       const avgAcc = Math.round(
         newCompletedWords.reduce((acc, c) => acc + c.accuracy, 0) / Math.max(1, totalWords)
       );
+      const avgConsistency = Math.round(
+        newCompletedWords.reduce((acc, c) => acc + (c.consistency ?? 100), 0) / Math.max(1, totalWords)
+      );
+      const avgRawWpm = Math.round(
+        newCompletedWords.reduce((acc, c) => acc + (c.rawWpm ?? c.wpm), 0) / Math.max(1, totalWords)
+      );
       const duration = Math.round((Date.now() - (get().startTime || Date.now())) / 1000);
 
       await db.sessionHistory.add({
         timestamp: new Date().toISOString(),
         wpm: avgWpm,
+        rawWpm: avgRawWpm,
         accuracy: avgAcc,
+        consistency: avgConsistency,
         totalWords,
         errors: totalErrors,
         category: currentWord.category,

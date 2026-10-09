@@ -776,7 +776,7 @@ export const TranslationStage: React.FC = () => {
                   </span>
                 </div>
                 <p className="text-xs text-sub mt-0.5">
-                  {stats.wpm} WPM · {stats.accuracy}% Accuracy · {stats.errors} error{stats.errors === 1 ? "" : "s"}
+                  {stats.wpm} WPM {sentenceGrade.rawWpm ? `(${sentenceGrade.rawWpm} Raw)` : ""} · {stats.accuracy}% Accuracy · {sentenceGrade.consistency ?? 100}% Consistency · {stats.errors} error{stats.errors === 1 ? "" : "s"}
                 </p>
               </div>
             </div>

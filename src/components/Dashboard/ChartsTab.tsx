@@ -2,14 +2,14 @@
 
 import React, { useMemo, useState } from "react";
 import { type SessionHistoryRecord } from "@/lib/db";
-import { Zap, Target, Flame, Clock } from "lucide-react";
+import { Zap, Target, Flame, Clock, Activity } from "lucide-react";
 
 interface ChartsTabProps {
   history: SessionHistoryRecord[];
 }
 
 export const ChartsTab: React.FC<ChartsTabProps> = ({ history }) => {
-  const [activeMetric, setActiveMetric] = useState<"wpm" | "accuracy">("wpm");
+  const [activeMetric, setActiveMetric] = useState<"wpm" | "accuracy" | "consistency">("wpm");
 
   // Chronological order for charting (oldest to newest)
   const chartData = useMemo(() => {
@@ -19,17 +19,19 @@ export const ChartsTab: React.FC<ChartsTabProps> = ({ history }) => {
   // Aggregate stats
   const stats = useMemo(() => {
     if (history.length === 0) {
-      return { avgWpm: 0, peakWpm: 0, avgAcc: 100, totalMinutes: 0 };
+      return { avgWpm: 0, peakWpm: 0, avgAcc: 100, avgCons: 100, totalMinutes: 0 };
     }
     const totalWpm = history.reduce((acc, h) => acc + (h.wpm || 0), 0);
     const peakWpm = Math.max(...history.map((h) => h.wpm || 0));
     const totalAcc = history.reduce((acc, h) => acc + (h.accuracy || 0), 0);
+    const totalCons = history.reduce((acc, h) => acc + (h.consistency ?? 90), 0);
     const totalSecs = history.reduce((acc, h) => acc + (h.duration || 0), 0);
 
     return {
       avgWpm: Math.round(totalWpm / history.length),
       peakWpm,
       avgAcc: Math.round(totalAcc / history.length),
+      avgCons: Math.round(totalCons / history.length),
       totalMinutes: Math.round(totalSecs / 60),
     };
   }, [history]);
@@ -42,12 +44,16 @@ export const ChartsTab: React.FC<ChartsTabProps> = ({ history }) => {
   const chartPoints = useMemo(() => {
     if (chartData.length === 0) return { path: "", points: [], minVal: 0, maxVal: 100 };
 
-    const values = chartData.map((d) => (activeMetric === "wpm" ? d.wpm : d.accuracy));
+    const values = chartData.map((d) => {
+      if (activeMetric === "wpm") return d.wpm;
+      if (activeMetric === "accuracy") return d.accuracy;
+      return d.consistency ?? 90;
+    });
     let minVal = Math.min(...values);
     let maxVal = Math.max(...values);
 
-    if (activeMetric === "accuracy") {
-      minVal = Math.min(minVal, 70);
+    if (activeMetric === "accuracy" || activeMetric === "consistency") {
+      minVal = Math.min(minVal, 60);
       maxVal = 100;
     } else {
       minVal = Math.max(0, minVal - 10);
@@ -59,7 +65,12 @@ export const ChartsTab: React.FC<ChartsTabProps> = ({ history }) => {
     const innerHeight = height - padding.top - padding.bottom;
 
     const points = chartData.map((d, i) => {
-      const val = activeMetric === "wpm" ? d.wpm : d.accuracy;
+      const val =
+        activeMetric === "wpm"
+          ? d.wpm
+          : activeMetric === "accuracy"
+          ? d.accuracy
+          : (d.consistency ?? 90);
       const x = padding.left + (chartData.length > 1 ? (i / (chartData.length - 1)) * innerWidth : innerWidth / 2);
       const y = padding.top + innerHeight - ((val - minVal) / range) * innerHeight;
       return { x, y, val, date: d.timestamp };
@@ -75,8 +86,8 @@ export const ChartsTab: React.FC<ChartsTabProps> = ({ history }) => {
   return (
     <div className="space-y-6 animate-fadeIn font-mono">
       {/* Metric Cards Banner */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-        <div className="p-3.5 rounded-xl border border-sub/20 bg-sub/5 space-y-1">
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-2.5">
+        <div className="p-3 rounded-xl border border-sub/20 bg-sub/5 space-y-1">
           <div className="flex items-center gap-1.5 text-xs text-sub">
             <Zap className="w-3.5 h-3.5 text-main" />
             <span>Avg WPM</span>
@@ -84,7 +95,7 @@ export const ChartsTab: React.FC<ChartsTabProps> = ({ history }) => {
           <div className="text-xl font-bold text-text">{stats.avgWpm}</div>
         </div>
 
-        <div className="p-3.5 rounded-xl border border-sub/20 bg-sub/5 space-y-1">
+        <div className="p-3 rounded-xl border border-sub/20 bg-sub/5 space-y-1">
           <div className="flex items-center gap-1.5 text-xs text-sub">
             <Flame className="w-3.5 h-3.5 text-amber-400" />
             <span>Peak WPM</span>
@@ -92,17 +103,25 @@ export const ChartsTab: React.FC<ChartsTabProps> = ({ history }) => {
           <div className="text-xl font-bold text-amber-400">{stats.peakWpm}</div>
         </div>
 
-        <div className="p-3.5 rounded-xl border border-sub/20 bg-sub/5 space-y-1">
+        <div className="p-3 rounded-xl border border-sub/20 bg-sub/5 space-y-1">
           <div className="flex items-center gap-1.5 text-xs text-sub">
             <Target className="w-3.5 h-3.5 text-emerald-400" />
-            <span>Avg Accuracy</span>
+            <span>Accuracy</span>
           </div>
           <div className="text-xl font-bold text-text">{stats.avgAcc}%</div>
         </div>
 
-        <div className="p-3.5 rounded-xl border border-sub/20 bg-sub/5 space-y-1">
+        <div className="p-3 rounded-xl border border-sub/20 bg-sub/5 space-y-1">
           <div className="flex items-center gap-1.5 text-xs text-sub">
-            <Clock className="w-3.5 h-3.5 text-cyan-400" />
+            <Activity className="w-3.5 h-3.5 text-cyan-400" />
+            <span>Consistency</span>
+          </div>
+          <div className="text-xl font-bold text-cyan-400">{stats.avgCons}%</div>
+        </div>
+
+        <div className="p-3 rounded-xl border border-sub/20 bg-sub/5 space-y-1">
+          <div className="flex items-center gap-1.5 text-xs text-sub">
+            <Clock className="w-3.5 h-3.5 text-sub" />
             <span>Time Typed</span>
           </div>
           <div className="text-xl font-bold text-text">{stats.totalMinutes}m</div>
@@ -136,6 +155,16 @@ export const ChartsTab: React.FC<ChartsTabProps> = ({ history }) => {
               }`}
             >
               Accuracy
+            </button>
+            <button
+              onClick={() => setActiveMetric("consistency")}
+              className={`px-3 py-1 rounded text-xs transition-colors ${
+                activeMetric === "consistency"
+                  ? "bg-cyan-500 text-bg font-bold"
+                  : "text-sub hover:text-text"
+              }`}
+            >
+              Consistency
             </button>
           </div>
         </div>
@@ -178,7 +207,13 @@ export const ChartsTab: React.FC<ChartsTabProps> = ({ history }) => {
                 <path
                   d={chartPoints.path}
                   fill="none"
-                  stroke={activeMetric === "wpm" ? "var(--main)" : "#10b981"}
+                  stroke={
+                    activeMetric === "wpm"
+                      ? "var(--main)"
+                      : activeMetric === "accuracy"
+                      ? "#10b981"
+                      : "#06b6d4"
+                  }
                   strokeWidth="2.5"
                   strokeLinecap="round"
                   strokeLinejoin="round"
@@ -192,7 +227,13 @@ export const ChartsTab: React.FC<ChartsTabProps> = ({ history }) => {
                   cx={p.x}
                   cy={p.y}
                   r="3.5"
-                  className={activeMetric === "wpm" ? "fill-main" : "fill-emerald-400"}
+                  className={
+                    activeMetric === "wpm"
+                      ? "fill-main"
+                      : activeMetric === "accuracy"
+                      ? "fill-emerald-400"
+                      : "fill-cyan-400"
+                  }
                   stroke="var(--bg)"
                   strokeWidth="1.5"
                 >

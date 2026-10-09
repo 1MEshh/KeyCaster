@@ -1,3 +1,7 @@
+import { calculateConsistency, calculateRawAndNetWpm } from "./grader";
+
+export { calculateConsistency, calculateRawAndNetWpm };
+
 export interface SentenceGradingInput {
   charCount: number;
   correctChars: number;
@@ -7,6 +11,7 @@ export interface SentenceGradingInput {
   elapsedMs: number;
   wasRetry?: boolean;
   wasSkipped?: boolean;
+  keystrokeIntervals?: number[];
 }
 
 export interface SentenceGradingResult {
@@ -15,6 +20,8 @@ export interface SentenceGradingResult {
   wpm: number;
   accuracy: number;
   avgMsPerChar: number;
+  consistency?: number;
+  rawWpm?: number;
 }
 
 /**
@@ -63,6 +70,11 @@ export function gradeSentence(input: SentenceGradingInput): SentenceGradingResul
   const avgMsPerChar = Math.round(Math.max(0, elapsedMs) / validCharCount);
   const wpm = calculateSentenceWpm(charCount, elapsedMs);
   const accuracy = calculateSentenceAccuracy(correctChars, totalKeystrokes);
+  const { rawWpm } = calculateRawAndNetWpm(totalKeystrokes, correctChars, elapsedMs);
+  const consistency =
+    input.keystrokeIntervals && input.keystrokeIntervals.length >= 2
+      ? calculateConsistency(input.keystrokeIntervals)
+      : 100;
 
   if (wasSkipped) {
     return {
@@ -71,6 +83,8 @@ export function gradeSentence(input: SentenceGradingInput): SentenceGradingResul
       wpm,
       accuracy,
       avgMsPerChar,
+      consistency,
+      rawWpm,
     };
   }
 
@@ -104,6 +118,8 @@ export function gradeSentence(input: SentenceGradingInput): SentenceGradingResul
     wpm,
     accuracy,
     avgMsPerChar,
+    consistency,
+    rawWpm,
   };
 }
 
