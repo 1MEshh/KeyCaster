@@ -19,6 +19,7 @@ import { AudioIndicator } from "@/components/HUD/AudioIndicator";
 import { LiveStats } from "@/components/HUD/LiveStats";
 import { VirtualKeyboard } from "@/components/VirtualKeyboard/VirtualKeyboard";
 import { SessionEndActions } from "@/components/TypingEngine/SessionEndActions";
+import { CaretSparks } from "@/components/Cursor/CaretSparks";
 
 interface LetterStatus {
   char: string;
@@ -90,6 +91,7 @@ export const TypingStage: React.FC = () => {
   const [liveWpm, setLiveWpm] = useState<number>(0);
   const [liveAccuracy, setLiveAccuracy] = useState<number>(100);
   const [liveStreak, setLiveStreak] = useState<number>(0);
+  const [sparkTrigger, setSparkTrigger] = useState<number>(0);
 
   // Pace Car / Shadow Typist State
   const pbWpm = useProfileStore((s) => s.personalBestWpm) || 70;
@@ -395,6 +397,7 @@ export const TypingStage: React.FC = () => {
 
         const nextIndex = idx + 1;
         setCaretIndex(nextIndex);
+        setSparkTrigger((p) => p + 1);
 
         // Update live stats
         const currentStreakVal = liveStreak + 1;
@@ -678,6 +681,14 @@ export const TypingStage: React.FC = () => {
               transitionDuration: caretDuration,
               transitionTimingFunction: "cubic-bezier(0.2, 0, 0, 1)",
             }}
+          />
+
+          {/* Kinetic Caret Sparks */}
+          <CaretSparks
+            x={caretLeft}
+            y={fontSize * 14}
+            streak={liveStreak}
+            triggerKey={sparkTrigger}
           />
 
           {/* PB Pace Car / Shadow Ghost Caret */}

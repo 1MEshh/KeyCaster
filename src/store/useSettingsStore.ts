@@ -19,6 +19,7 @@ export interface SettingsState {
   // Caret
   caretStyle: CaretStyle;
   smoothCaret: SmoothCaretSpeed;
+  caretSparks: boolean;
 
   // Typing Behavior
   confidenceMode: ConfidenceMode;
@@ -56,6 +57,7 @@ export interface SettingsState {
   // Actions
   setCaretStyle: (style: CaretStyle) => void;
   setSmoothCaret: (speed: SmoothCaretSpeed) => void;
+  setCaretSparks: (enabled: boolean) => void;
   setConfidenceMode: (mode: ConfidenceMode) => void;
   setBlindMode: (blind: boolean) => void;
   setBlindModePro: (pro: boolean) => void;
@@ -160,6 +162,7 @@ export const SMOOTH_CARET_DURATIONS: Record<SmoothCaretSpeed, string> = {
 const DEFAULT_SETTINGS = {
   caretStyle: "default" as CaretStyle,
   smoothCaret: "medium" as SmoothCaretSpeed,
+  caretSparks: true,
   confidenceMode: "off" as ConfidenceMode,
   blindMode: true,
   blindModePro: false,
@@ -192,6 +195,7 @@ export const useSettingsStore = create<SettingsState>()(
 
       setCaretStyle: (caretStyle) => set({ caretStyle }),
       setSmoothCaret: (smoothCaret) => set({ smoothCaret }),
+      setCaretSparks: (caretSparks) => set({ caretSparks }),
       setConfidenceMode: (confidenceMode) => set({ confidenceMode }),
       setBlindMode: (blindMode) => set({ blindMode }),
       setBlindModePro: (blindModePro) => set({ blindModePro }),

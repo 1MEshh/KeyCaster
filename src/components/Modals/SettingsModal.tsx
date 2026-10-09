@@ -50,6 +50,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
     setCaretStyle,
     smoothCaret,
     setSmoothCaret,
+    caretSparks,
+    setCaretSparks,
     confidenceMode,
     setConfidenceMode,
     blindMode,
@@ -345,6 +347,22 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                     </button>
                   ))}
                 </div>
+              </div>
+
+              {/* Kinetic Caret Sparks */}
+              <div className="flex items-center justify-between p-3 rounded-lg border border-sub/20 bg-sub/5">
+                <div>
+                  <div className="text-xs font-semibold text-text">Kinetic Caret Sparks</div>
+                  <div className="text-[11px] text-sub">
+                    Micro-combustion particle flare erupting from the active typing caret.
+                  </div>
+                </div>
+                <input
+                  type="checkbox"
+                  checked={caretSparks}
+                  onChange={(e) => setCaretSparks(e.target.checked)}
+                  className="w-4 h-4 rounded border-sub/30 text-main focus:ring-main accent-main cursor-pointer"
+                />
               </div>
 
               {/* Stop on Error */}
