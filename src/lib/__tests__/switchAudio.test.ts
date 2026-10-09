@@ -1,6 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { playMechanicalClick, type SwitchSoundProfile } from "../audio";
+import {
+  playMechanicalClick,
+  playStreakChord,
+  playSuccessChime,
+  type SwitchSoundProfile,
+} from "../audio";
 
 test("Switch Audio: gracefully handles execution without audio context (SSR / headless)", () => {
   const switchProfiles: SwitchSoundProfile[] = [
@@ -22,5 +27,23 @@ test("Switch Audio: gracefully handles zero or negative volume", () => {
   assert.doesNotThrow(() => {
     playMechanicalClick(0, "cherry_blue");
     playMechanicalClick(-0.5, "typewriter");
+  });
+});
+
+test("Harmonic Synthesizer: playStreakChord handles milestone thresholds and non-browser env", () => {
+  const streaks = [5, 10, 25, 50, 100, 250];
+  for (const streak of streaks) {
+    assert.doesNotThrow(() => {
+      playStreakChord(streak, 0.5);
+      playStreakChord(streak, 0); // muted
+    }, `playStreakChord failed on streak ${streak}`);
+  }
+});
+
+test("Harmonic Synthesizer: playSuccessChime handles headless runtime without errors", () => {
+  assert.doesNotThrow(() => {
+    playSuccessChime(0.5);
+    playSuccessChime(0);
+    playSuccessChime(-1);
   });
 });
