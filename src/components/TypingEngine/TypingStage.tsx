@@ -6,7 +6,13 @@ import { Lightbulb } from "lucide-react";
 import { useSettingsStore, SMOOTH_CARET_DURATIONS } from "@/store/useSettingsStore";
 import { useSessionStore } from "@/store/useSessionStore";
 import { useKeyStore } from "@/store/useKeyStore";
-import { playMechanicalClick, playErrorThud, TTSController } from "@/lib/audio";
+import {
+  playMechanicalClick,
+  playErrorThud,
+  playStreakChord,
+  playSuccessChime,
+  TTSController,
+} from "@/lib/audio";
 import { getWordMetadata } from "@/lib/wordDictionary";
 import { AudioIndicator } from "@/components/HUD/AudioIndicator";
 import { LiveStats } from "@/components/HUD/LiveStats";
@@ -346,6 +352,18 @@ export const TypingStage: React.FC = () => {
         const currentStreakVal = liveStreak + 1;
         setLiveStreak(currentStreakVal);
 
+        // Milestone harmonic chord on streaks
+        if (
+          clickSfx &&
+          (currentStreakVal === 10 ||
+            currentStreakVal === 25 ||
+            currentStreakVal === 50 ||
+            currentStreakVal === 100 ||
+            (currentStreakVal > 100 && currentStreakVal % 50 === 0))
+        ) {
+          playStreakChord(currentStreakVal, vol);
+        }
+
         const totalKeys = totalKeystrokesRef.current;
         const correctKeys = correctKeystrokesRef.current;
         const newAcc = Math.round((correctKeys / Math.max(1, totalKeys)) * 100);
@@ -357,6 +375,11 @@ export const TypingStage: React.FC = () => {
           const typingDuration = Math.max(150, Date.now() - (firstKeyTimeRef.current || Date.now()));
           const currentWordWpm = Math.round((curWord.word.length / 5) / (typingDuration / 60000));
           setLiveWpm(currentWordWpm);
+
+          // Acoustic feedback: flawless completion chime
+          if (clickSfx && errorCountRef.current === 0) {
+            playSuccessChime(vol);
+          }
 
           // Seamless transition directly to next word (no grade badge delay)
           setTimeout(async () => {

@@ -309,6 +309,118 @@ export function playErrorThud(volume = 0.5): void {
 }
 
 /**
+ * Procedural Harmonic Streak Synthesizer
+ * Plays lush arpeggios upon crossing milestone streaks:
+ * - 10x streak: C-Major Triad (C5 -> E5 -> G5)
+ * - 25x streak: Luminous Major 7th (C5 -> E5 -> G5 -> B5)
+ * - 50x streak: High-voltage Pentatonic shimmer (C5 -> E5 -> G5 -> A5 -> C6)
+ * - 100x+ streak: Grand triumphant overtone cascade (C5 -> G5 -> C6 -> E6 -> G6)
+ */
+export function playStreakChord(streak: number, volume = 0.5): void {
+  try {
+    const ctx = getAudioContext();
+    if (!ctx || volume <= 0) return;
+
+    const now = ctx.currentTime;
+    let notes: number[] = [];
+    let noteSpacing = 0.055;
+    let noteDuration = 0.22;
+
+    if (streak >= 100) {
+      // Grand cascade: C5, G5, C6, E6, G6
+      notes = [523.25, 783.99, 1046.50, 1318.51, 1567.98];
+      noteSpacing = 0.045;
+      noteDuration = 0.35;
+    } else if (streak >= 50) {
+      // Pentatonic shimmer: C5, E5, G5, A5, C6
+      notes = [523.25, 659.25, 783.99, 880.00, 1046.50];
+      noteSpacing = 0.05;
+      noteDuration = 0.28;
+    } else if (streak >= 25) {
+      // Major 7th: C5, E5, G5, B5
+      notes = [523.25, 659.25, 783.99, 987.77];
+      noteSpacing = 0.055;
+      noteDuration = 0.24;
+    } else if (streak >= 10) {
+      // Major Triad: C5, E5, G5
+      notes = [523.25, 659.25, 783.99];
+      noteSpacing = 0.06;
+      noteDuration = 0.2;
+    } else {
+      return;
+    }
+
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(volume * 0.35, now);
+    masterGain.connect(ctx.destination);
+
+    notes.forEach((freq, idx) => {
+      const noteTime = now + idx * noteSpacing;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = streak >= 50 ? "triangle" : "sine";
+      osc.frequency.setValueAtTime(freq, noteTime);
+
+      gain.gain.setValueAtTime(0, noteTime);
+      gain.gain.linearRampToValueAtTime(0.8, noteTime + 0.012);
+      gain.gain.exponentialRampToValueAtTime(0.001, noteTime + noteDuration);
+
+      osc.connect(gain);
+      gain.connect(masterGain);
+
+      osc.start(noteTime);
+      osc.stop(noteTime + noteDuration + 0.02);
+    });
+  } catch {
+    // Non-blocking fallback
+  }
+}
+
+/**
+ * Procedural Flawless Completion Chime
+ * Radiant 3-note harmonic chime (G5 -> C6 -> E6) with bell decay
+ */
+export function playSuccessChime(volume = 0.5): void {
+  try {
+    const ctx = getAudioContext();
+    if (!ctx || volume <= 0) return;
+
+    const now = ctx.currentTime;
+    const masterGain = ctx.createGain();
+    masterGain.gain.setValueAtTime(volume * 0.3, now);
+    masterGain.connect(ctx.destination);
+
+    const notes = [
+      { freq: 783.99, delay: 0 },      // G5
+      { freq: 1046.50, delay: 0.06 },  // C6
+      { freq: 1318.51, delay: 0.12 },  // E6
+    ];
+
+    notes.forEach(({ freq, delay }) => {
+      const t = now + delay;
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(freq, t);
+
+      gain.gain.setValueAtTime(0, t);
+      gain.gain.linearRampToValueAtTime(0.9, t + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.32);
+
+      osc.connect(gain);
+      gain.connect(masterGain);
+
+      osc.start(t);
+      osc.stop(t + 0.35);
+    });
+  } catch {
+    // Non-blocking fallback
+  }
+}
+
+/**
  * Speech Synthesis TTS Controller
  */
 export class TTSController {

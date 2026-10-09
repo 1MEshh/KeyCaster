@@ -20,7 +20,12 @@ import confetti from "canvas-confetti";
 import { useSentenceStore } from "@/store/useSentenceStore";
 import { useSettingsStore, SMOOTH_CARET_DURATIONS } from "@/store/useSettingsStore";
 import { useKeyStore } from "@/store/useKeyStore";
-import { playMechanicalClick, playErrorThud, TTSController } from "@/lib/audio";
+import {
+  playMechanicalClick,
+  playErrorThud,
+  playSuccessChime,
+  TTSController,
+} from "@/lib/audio";
 import { getTargetText } from "@/store/useSentenceStore";
 import { gradeSentence, calculateSentenceXP } from "@/lib/sentenceGrader";
 import { AcousticVisualizer } from "@/components/HUD/AcousticVisualizer";
@@ -157,6 +162,13 @@ export const TranslationStage: React.FC = () => {
       }, 50);
     }
   }, [currentSentence, isSentenceComplete, isSessionComplete, speakFullSentence]);
+
+  // Trigger celebration chime upon sentence completion
+  useEffect(() => {
+    if (isSentenceComplete && soundOnClick) {
+      playSuccessChime(soundVolume);
+    }
+  }, [isSentenceComplete, soundOnClick, soundVolume]);
 
   // Celebratory confetti on batch complete
   useEffect(() => {

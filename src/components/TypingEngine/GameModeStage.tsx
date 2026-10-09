@@ -7,7 +7,13 @@ import { useGameModeStore } from "@/store/useGameModeStore";
 import { useSettingsStore, SMOOTH_CARET_DURATIONS } from "@/store/useSettingsStore";
 import { useKeyStore } from "@/store/useKeyStore";
 import { VirtualKeyboard } from "@/components/VirtualKeyboard/VirtualKeyboard";
-import { playMechanicalClick, playErrorThud, TTSController } from "@/lib/audio";
+import {
+  playMechanicalClick,
+  playErrorThud,
+  playStreakChord,
+  playSuccessChime,
+  TTSController,
+} from "@/lib/audio";
 import { getWordMetadata } from "@/lib/wordDictionary";
 
 export const GameModeStage: React.FC = () => {
@@ -243,6 +249,21 @@ export const GameModeStage: React.FC = () => {
       if (nextIndex >= currentWord.length) {
         // Complete word cleanly
         isTransitioningRef.current = true;
+        if (soundOnClick) {
+          if (wordErrors === 0) {
+            playSuccessChime(soundVolume);
+          }
+          const nextStreak = wordErrors === 0 ? currentStreak + 1 : 0;
+          if (
+            nextStreak === 10 ||
+            nextStreak === 25 ||
+            nextStreak === 50 ||
+            nextStreak === 100 ||
+            (nextStreak > 100 && nextStreak % 50 === 0)
+          ) {
+            playStreakChord(nextStreak, soundVolume);
+          }
+        }
         setTimeout(() => {
           submitWord({ errors: wordErrors, chars: currentWord.length });
         }, 50);
