@@ -1,6 +1,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
+import { type SwitchSoundProfile } from "@/lib/audio";
+
 export type CaretStyle = "default" | "block" | "underline" | "outline";
 export type SmoothCaretSpeed = "off" | "fast" | "medium" | "slow";
 export type ConfidenceMode = "off" | "on" | "max";
@@ -41,6 +43,7 @@ export interface SettingsState {
   soundVolume: number;
   soundOnClick: boolean;
   soundOnError: boolean;
+  switchSound: SwitchSoundProfile;
   speechRate: number;
   ttsVoiceURI: string;
 
@@ -68,6 +71,7 @@ export interface SettingsState {
   setSoundVolume: (volume: number) => void;
   setSoundOnClick: (val: boolean) => void;
   setSoundOnError: (val: boolean) => void;
+  setSwitchSound: (profile: SwitchSoundProfile) => void;
   setSpeechRate: (rate: number) => void;
   setTtsVoiceURI: (uri: string) => void;
   setSessionSize: (size: number) => void;
@@ -167,6 +171,7 @@ const DEFAULT_SETTINGS = {
   soundVolume: 0.6,
   soundOnClick: true,
   soundOnError: true,
+  switchSound: "cherry_brown" as SwitchSoundProfile,
   speechRate: 0.95,
   ttsVoiceURI: "",
   sessionSize: 15,
@@ -206,6 +211,7 @@ export const useSettingsStore = create<SettingsState>()(
       setSoundVolume: (soundVolume) => set({ soundVolume }),
       setSoundOnClick: (soundOnClick) => set({ soundOnClick }),
       setSoundOnError: (soundOnError) => set({ soundOnError }),
+      setSwitchSound: (switchSound) => set({ switchSound }),
       setSpeechRate: (speechRate) => set({ speechRate }),
       setTtsVoiceURI: (ttsVoiceURI) => set({ ttsVoiceURI }),
       setSessionSize: (sessionSize) => set({ sessionSize }),

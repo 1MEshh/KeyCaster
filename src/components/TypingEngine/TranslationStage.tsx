@@ -70,6 +70,7 @@ export const TranslationStage: React.FC = () => {
     soundVolume,
     soundOnClick,
     soundOnError,
+    switchSound,
     speechRate,
     ttsVoiceURI,
   } = useSettingsStore();
@@ -287,7 +288,7 @@ export const TranslationStage: React.FC = () => {
             (/[-–—]/.test(targetLetter.char) && key === "-");
 
           if (isCorrect) {
-            if (soundOnClick) playMechanicalClick(soundVolume);
+            if (soundOnClick) playMechanicalClick(soundVolume, switchSound);
           } else {
             if (soundOnError) playErrorThud(soundVolume);
           }
