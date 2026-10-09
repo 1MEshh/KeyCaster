@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
 import { Lightbulb } from "lucide-react";
 import { useSettingsStore, SMOOTH_CARET_DURATIONS } from "@/store/useSettingsStore";
 import { useSessionStore } from "@/store/useSessionStore";
+import { useProfileStore } from "@/store/useProfileStore";
 import { useKeyStore } from "@/store/useKeyStore";
 import {
   playMechanicalClick,
@@ -40,6 +41,7 @@ export const TypingStage: React.FC = () => {
     speechRate,
     ttsVoiceURI,
     switchSound,
+    paceCarMode,
     activeCategory,
     sessionSize,
   } = useSettingsStore();
@@ -88,6 +90,52 @@ export const TypingStage: React.FC = () => {
   const [liveWpm, setLiveWpm] = useState<number>(0);
   const [liveAccuracy, setLiveAccuracy] = useState<number>(100);
   const [liveStreak, setLiveStreak] = useState<number>(0);
+
+  // Pace Car / Shadow Typist State
+  const pbWpm = useProfileStore((s) => s.personalBestWpm) || 70;
+  const targetWpm = useMemo(() => {
+    if (paceCarMode === "pb") return pbWpm;
+    if (paceCarMode === "target_60") return 60;
+    if (paceCarMode === "target_80") return 80;
+    if (paceCarMode === "target_100") return 100;
+    if (paceCarMode === "target_120") return 120;
+    return 0;
+  }, [paceCarMode, pbWpm]);
+
+  const [ghostCharIndex, setGhostCharIndex] = useState(0);
+  const [ghostLeft, setGhostLeft] = useState<number>(0);
+  const [ghostWidth, setGhostWidth] = useState<number>(2);
+
+  useEffect(() => {
+    if (paceCarMode === "off" || !firstKeyTimeRef.current || isSessionComplete || !currentWord) {
+      setGhostCharIndex(0);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      if (!firstKeyTimeRef.current || !currentWord?.word) return;
+      const elapsedSec = (Date.now() - firstKeyTimeRef.current) / 1000;
+      const charPace = (targetWpm * 5) / 60;
+      const expected = Math.min(currentWord.word.length, Math.floor(elapsedSec * charPace));
+      setGhostCharIndex(expected);
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [paceCarMode, targetWpm, currentWord, isSessionComplete]);
+
+  // Sync ghost cursor coordinates to expected char element
+  useEffect(() => {
+    if (paceCarMode === "off" || !containerRef.current) return;
+    const targetEl = letterRefs.current[ghostCharIndex];
+    if (targetEl && containerRef.current) {
+      const containerRect = containerRef.current.getBoundingClientRect();
+      const elRect = targetEl.getBoundingClientRect();
+      setGhostLeft(elRect.left - containerRect.left);
+      setGhostWidth(elRect.width);
+    }
+  }, [ghostCharIndex, paceCarMode]);
+
+  const paceDeltaChars = caretIndex - ghostCharIndex;
 
   // Ref sync for event handlers to prevent closure staleness with 0 latency
   const stateRef = useRef({
@@ -512,7 +560,7 @@ export const TypingStage: React.FC = () => {
       />
 
       {/* Live Stats Bar */}
-      <div className="mb-8 w-full max-w-2xl">
+      <div className="mb-4 w-full max-w-2xl">
         <LiveStats
           wpm={liveWpm}
           accuracy={liveAccuracy}
@@ -523,6 +571,27 @@ export const TypingStage: React.FC = () => {
           isRetryAttempt={isRetryAttempt}
         />
       </div>
+
+      {/* Pace Car Race Delta Indicator */}
+      {paceCarMode !== "off" && firstKeyTimeRef.current && (
+        <div className="mb-6 flex items-center justify-center animate-fadeIn">
+          <div
+            className={`text-xs font-mono px-3.5 py-1 rounded-full border flex items-center gap-2 backdrop-blur-md shadow-sm transition-all ${
+              paceDeltaChars >= 0
+                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.15)]"
+                : "bg-amber-500/10 text-amber-400 border-amber-500/30 shadow-[0_0_10px_rgba(245,158,11,0.15)]"
+            }`}
+          >
+            <span>🏎️</span>
+            <span className="font-semibold">
+              {paceDeltaChars >= 0 ? `+${paceDeltaChars} chars ahead` : `${paceDeltaChars} chars behind`}
+            </span>
+            <span className="text-[10px] opacity-70">
+              ({targetWpm} WPM {paceCarMode === "pb" ? "PB" : "Target"})
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Audio Speaker, Replay & Context Hint */}
       <div className="mb-6 flex flex-col items-center gap-2.5">
@@ -610,6 +679,21 @@ export const TypingStage: React.FC = () => {
               transitionTimingFunction: "cubic-bezier(0.2, 0, 0, 1)",
             }}
           />
+
+          {/* PB Pace Car / Shadow Ghost Caret */}
+          {paceCarMode !== "off" && firstKeyTimeRef.current && (
+            <div
+              className="absolute pointer-events-none transition-all duration-150 border-r-2 border-dashed border-cyan-400/80 h-[1.1em] z-10 -ml-[1px]"
+              style={{
+                left: `${ghostLeft}px`,
+                width: `${ghostWidth}px`,
+              }}
+            >
+              <span className="absolute -top-4 -left-1 text-[8px] font-mono px-1 py-0.2 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 whitespace-nowrap shadow-sm">
+                🏎️ {targetWpm}
+              </span>
+            </div>
+          )}
 
           {/* Letter Elements */}
           {typedLetters.map((l, i) => {

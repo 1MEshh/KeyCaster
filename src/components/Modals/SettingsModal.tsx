@@ -26,6 +26,7 @@ import {
   type StopOnError,
   type FontFamily,
   type LiveStatsMode,
+  type PaceCarMode,
   type KeyboardLayout,
   type AmbientBackdrop,
 } from "@/store/useSettingsStore";
@@ -59,6 +60,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
     setPhraseMode,
     stopOnError,
     setStopOnError,
+    paceCarMode,
+    setPaceCarMode,
     theme,
     setTheme,
     fontFamily,
@@ -387,6 +390,36 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                       onClick={() => setConfidenceMode(item.id as ConfidenceMode)}
                       className={`p-2.5 rounded-lg border text-left transition-all ${
                         confidenceMode === item.id
+                          ? "border-main bg-main/10 text-main font-bold"
+                          : "border-sub/20 text-sub hover:border-sub/50"
+                      }`}
+                    >
+                      <div className="text-xs">{item.label}</div>
+                      <div className="text-[10px] opacity-70 font-normal">{item.desc}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* PB Pace Car / Shadow Typist */}
+              <div>
+                <label className="text-xs uppercase text-sub font-semibold block mb-2">
+                  🏎️ Pace Car / Shadow Typist Ghost
+                </label>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {[
+                    { id: "off", label: "Off", desc: "No ghost cursor" },
+                    { id: "pb", label: "Personal Best", desc: "Race your all-time PB" },
+                    { id: "target_60", label: "60 WPM", desc: "Brisk target pace" },
+                    { id: "target_80", label: "80 WPM", desc: "Fast sprint pace" },
+                    { id: "target_100", label: "100 WPM", desc: "Century club pace" },
+                    { id: "target_120", label: "120 WPM", desc: "Grandmaster pace" },
+                  ].map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => setPaceCarMode(item.id as PaceCarMode)}
+                      className={`p-2.5 rounded-lg border text-left transition-all ${
+                        paceCarMode === item.id
                           ? "border-main bg-main/10 text-main font-bold"
                           : "border-sub/20 text-sub hover:border-sub/50"
                       }`}
