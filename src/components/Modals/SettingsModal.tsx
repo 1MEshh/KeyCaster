@@ -672,8 +672,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                 <label className="text-xs uppercase text-sub font-semibold block mb-2">
                   Live Stats HUD
                 </label>
-                <div className="grid grid-cols-3 gap-2">
-                  {(["text", "mini", "off"] as LiveStatsMode[]).map((mode) => (
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {(["tachometer", "text", "mini", "off"] as LiveStatsMode[]).map((mode) => (
                     <button
                       key={mode}
                       onClick={() => setLiveStats(mode)}
