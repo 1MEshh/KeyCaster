@@ -19,6 +19,7 @@ import {
   Languages,
   Flame,
   Award,
+  EyeOff,
 } from "lucide-react";
 import {
   useSettingsStore,
@@ -57,6 +58,8 @@ export const TopNav: React.FC<TopNavProps> = ({
     sessionSize,
     activeSection: storeActiveSection,
     setActiveSection: storeSetActiveSection,
+    isZenMode,
+    toggleZenMode,
   } = useSettingsStore();
 
   const currentSection = propActiveSection || storeActiveSection || "srs_words";
@@ -483,6 +486,19 @@ export const TopNav: React.FC<TopNavProps> = ({
               <kbd className="text-[10px] bg-sub/15 px-1 py-0.5 rounded text-main font-bold">⌘K</kbd>
             </button>
           )}
+
+          {/* Zen Distraction-Free Flow Mode Button */}
+          <button
+            onClick={toggleZenMode}
+            className={`p-2 rounded-lg border transition-colors ${
+              isZenMode
+                ? "text-emerald-400 bg-emerald-500/15 border-emerald-500/40 shadow-xs"
+                : "text-sub hover:text-text hover:bg-sub/10 border-sub/20"
+            }`}
+            title={`Zen Mode (Flow State): ${isZenMode ? "Active (Alt+Z to exit)" : "Enter (Alt+Z)"}`}
+          >
+            <EyeOff className="w-4 h-4" />
+          </button>
 
           {/* Settings Icon */}
           <button

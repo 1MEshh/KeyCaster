@@ -73,6 +73,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     setActiveSection,
     activeCategory,
     sessionSize,
+    isZenMode,
+    setIsZenMode,
   } = useSettingsStore();
 
   const { initSession } = useSessionStore();
@@ -287,6 +289,16 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
       },
 
       // Toggles & Settings
+      {
+        id: "toggle-zen",
+        category: "Toggles",
+        title: `Zen Mode (Flow State): ${isZenMode ? "Exit" : "Enter"}`,
+        subtitle: "Distraction-free auto-dimming with focus vignette (Alt+Z / Ctrl+Shift+F)",
+        icon: <Sparkles className="w-4 h-4 text-emerald-400" />,
+        keywords: ["zen", "flow", "distraction free", "focus", "dim", "vignette", "toggle"],
+        active: isZenMode,
+        action: () => setIsZenMode(!isZenMode),
+      },
       {
         id: "toggle-keyboard",
         category: "Toggles",
