@@ -11,6 +11,7 @@ import { CustomCursor } from "@/components/Cursor/CustomCursor";
 import { SettingsModal } from "@/components/Modals/SettingsModal";
 import { CustomDeckModal } from "@/components/Modals/CustomDeckModal";
 import { ProgressDashboard } from "@/components/Dashboard/ProgressDashboard";
+import { CommandPalette } from "@/components/Navigation/CommandPalette";
 import { OnboardingFlow } from "@/components/Onboarding/OnboardingFlow";
 import { AudioUnlockOverlay } from "@/components/Onboarding/AudioUnlockOverlay";
 import { XPToastBadge } from "@/components/HUD/XPToastBadge";
@@ -26,6 +27,7 @@ export default function Home() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [isDashboardOpen, setIsDashboardOpen] = useState(false);
   const [isCustomDeckOpen, setIsCustomDeckOpen] = useState(false);
+  const [isCommandPaletteOpen, setIsCommandPaletteOpen] = useState(false);
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
   const [isInitialized, setIsInitialized] = useState(false);
   const [audioUnlocked, setAudioUnlocked] = useState(false);
@@ -181,8 +183,15 @@ export default function Home() {
         return;
       }
 
-      // Ctrl+K -> Toggle Virtual Keyboard
+      // Cmd+K / Ctrl+K -> Command Palette
       if ((e.ctrlKey || e.metaKey) && (e.key === "k" || e.key === "K")) {
+        e.preventDefault();
+        setIsCommandPaletteOpen((prev) => !prev);
+        return;
+      }
+
+      // Ctrl+B -> Toggle Virtual Keyboard
+      if ((e.ctrlKey || e.metaKey) && (e.key === "b" || e.key === "B")) {
         e.preventDefault();
         setShowKeyboard(!showKeyboard);
         return;
@@ -249,6 +258,7 @@ export default function Home() {
           onOpenSettings={() => setIsSettingsOpen(true)}
           onOpenDashboard={() => setIsDashboardOpen(true)}
           onOpenCustomDeck={() => setIsCustomDeckOpen(true)}
+          onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
           activeSection={activeSection}
           onSelectSection={handleSwitchSection}
         />
@@ -302,19 +312,28 @@ export default function Home() {
 
         {/* High-density Footer Keybindings */}
         <footer className="py-4 text-center text-[11px] font-mono text-sub/50 select-none">
-          <span>KeyCaster 3.0 · local-first SM-2 acoustic typing · </span>
+          <span>KeyCaster 3.1 · local-first SM-2 acoustic typing · </span>
           <span className="opacity-75">
             <kbd className="px-1 bg-sub/10 rounded">Ctrl+1</kbd> Words ·{" "}
             <kbd className="px-1 bg-sub/10 rounded">Ctrl+2</kbd> Sentences ·{" "}
             <kbd className="px-1 bg-sub/10 rounded">Ctrl+3</kbd> Dictation ·{" "}
             <kbd className="px-1 bg-sub/10 rounded">Ctrl+4</kbd> Arcade ·{" "}
+            <kbd className="px-1 bg-sub/10 rounded">⌘K</kbd> Commands ·{" "}
             <kbd className="px-1 bg-sub/10 rounded">Ctrl+,</kbd> Settings ·{" "}
             <kbd className="px-1 bg-sub/10 rounded">Ctrl+D</kbd> Dashboard ·{" "}
-            <kbd className="px-1 bg-sub/10 rounded">Ctrl+K</kbd> Keyboard
+            <kbd className="px-1 bg-sub/10 rounded">Ctrl+B</kbd> Keyboard
           </span>
         </footer>
 
         {/* Modals Layer */}
+        <CommandPalette
+          isOpen={isCommandPaletteOpen}
+          onClose={() => setIsCommandPaletteOpen(false)}
+          onOpenSettings={() => setIsSettingsOpen(true)}
+          onOpenDashboard={() => setIsDashboardOpen(true)}
+          onOpenCustomDeck={() => setIsCustomDeckOpen(true)}
+        />
+
         <SettingsModal isOpen={isSettingsOpen} onClose={() => setIsSettingsOpen(false)} />
 
         <CustomDeckModal
