@@ -36,6 +36,7 @@ interface TopNavProps {
   onOpenSettings: () => void;
   onOpenDashboard: () => void;
   onOpenCustomDeck: () => void;
+  onOpenCommandPalette?: () => void;
   activeSection?: AppSection;
   onSelectSection?: (section: AppSection) => void;
 }
@@ -44,6 +45,7 @@ export const TopNav: React.FC<TopNavProps> = ({
   onOpenSettings,
   onOpenDashboard,
   onOpenCustomDeck,
+  onOpenCommandPalette,
   activeSection: propActiveSection,
   onSelectSection: propOnSelectSection,
 }) => {
@@ -470,6 +472,17 @@ export const TopNav: React.FC<TopNavProps> = ({
           >
             <TrendingUp className="w-4 h-4" />
           </button>
+
+          {/* Command Palette Button */}
+          {onOpenCommandPalette && (
+            <button
+              onClick={onOpenCommandPalette}
+              className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-mono text-sub hover:text-text hover:bg-sub/10 border border-sub/20 transition-colors"
+              title="Command Palette (Cmd+K / Ctrl+K)"
+            >
+              <kbd className="text-[10px] bg-sub/15 px-1 py-0.5 rounded text-main font-bold">⌘K</kbd>
+            </button>
+          )}
 
           {/* Settings Icon */}
           <button
