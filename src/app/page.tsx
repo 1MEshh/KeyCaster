@@ -39,6 +39,9 @@ export default function Home() {
     setShowKeyboard,
     activeSection,
     setActiveSection,
+    isZenMode,
+    setIsZenMode,
+    toggleZenMode,
   } = useSettingsStore();
 
   const {
@@ -190,6 +193,30 @@ export default function Home() {
         return;
       }
 
+      // Alt+Z / Ctrl+Shift+F -> Toggle Zen Flow State
+      if (
+        (e.altKey && (e.key === "z" || e.key === "Z")) ||
+        ((e.ctrlKey || e.metaKey) && e.shiftKey && (e.key === "f" || e.key === "F"))
+      ) {
+        e.preventDefault();
+        toggleZenMode();
+        return;
+      }
+
+      // Esc -> Exit Zen Mode if active and no modals are open
+      if (
+        e.key === "Escape" &&
+        isZenMode &&
+        !isSettingsOpen &&
+        !isDashboardOpen &&
+        !isCustomDeckOpen &&
+        !isCommandPaletteOpen
+      ) {
+        e.preventDefault();
+        setIsZenMode(false);
+        return;
+      }
+
       // Ctrl+B -> Toggle Virtual Keyboard
       if ((e.ctrlKey || e.metaKey) && (e.key === "b" || e.key === "B")) {
         e.preventDefault();
@@ -219,6 +246,13 @@ export default function Home() {
     activeSection,
     activeCategory,
     sessionSize,
+    isZenMode,
+    setIsZenMode,
+    toggleZenMode,
+    isSettingsOpen,
+    isDashboardOpen,
+    isCustomDeckOpen,
+    isCommandPaletteOpen,
     handleSwitchSection,
     initSession,
     initSentenceSession,
@@ -253,15 +287,23 @@ export default function Home() {
         {/* iOS Safari Audio Unlock Overlay — only visible on iOS before session starts */}
         <AudioUnlockOverlay onUnlocked={() => setAudioUnlocked(true)} />
 
-        {/* High-Density Linear/Raycast Navigation */}
-        <TopNav
-          onOpenSettings={() => setIsSettingsOpen(true)}
-          onOpenDashboard={() => setIsDashboardOpen(true)}
-          onOpenCustomDeck={() => setIsCustomDeckOpen(true)}
-          onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
-          activeSection={activeSection}
-          onSelectSection={handleSwitchSection}
-        />
+        {/* High-Density Linear/Raycast Navigation (Zen-mode auto-dimming) */}
+        <header
+          className={`transition-opacity duration-300 ${
+            isZenMode
+              ? "opacity-0 hover:opacity-100 focus-within:opacity-100 pointer-events-none hover:pointer-events-auto"
+              : "opacity-100"
+          }`}
+        >
+          <TopNav
+            onOpenSettings={() => setIsSettingsOpen(true)}
+            onOpenDashboard={() => setIsDashboardOpen(true)}
+            onOpenCustomDeck={() => setIsCustomDeckOpen(true)}
+            onOpenCommandPalette={() => setIsCommandPaletteOpen(true)}
+            activeSection={activeSection}
+            onSelectSection={handleSwitchSection}
+          />
+        </header>
 
         {/* Main Stage Container */}
         <main className="flex-1 flex flex-col items-center justify-center max-w-5xl w-full mx-auto px-4 py-6">
@@ -310,8 +352,14 @@ export default function Home() {
           )}
         </main>
 
-        {/* High-density Footer Keybindings */}
-        <footer className="py-4 text-center text-[11px] font-mono text-sub/50 select-none">
+        {/* High-density Footer Keybindings (Zen-mode auto-dimming) */}
+        <footer
+          className={`py-4 text-center text-[11px] font-mono text-sub/50 select-none transition-opacity duration-300 ${
+            isZenMode
+              ? "opacity-0 hover:opacity-100 pointer-events-none hover:pointer-events-auto"
+              : "opacity-100"
+          }`}
+        >
           <span>KeyCaster 3.1 · local-first SM-2 acoustic typing · </span>
           <span className="opacity-75">
             <kbd className="px-1 bg-sub/10 rounded">Ctrl+1</kbd> Words ·{" "}
@@ -319,11 +367,36 @@ export default function Home() {
             <kbd className="px-1 bg-sub/10 rounded">Ctrl+3</kbd> Dictation ·{" "}
             <kbd className="px-1 bg-sub/10 rounded">Ctrl+4</kbd> Arcade ·{" "}
             <kbd className="px-1 bg-sub/10 rounded">⌘K</kbd> Commands ·{" "}
+            <kbd className="px-1 bg-sub/10 rounded">Alt+Z</kbd> Zen ·{" "}
             <kbd className="px-1 bg-sub/10 rounded">Ctrl+,</kbd> Settings ·{" "}
             <kbd className="px-1 bg-sub/10 rounded">Ctrl+D</kbd> Dashboard ·{" "}
             <kbd className="px-1 bg-sub/10 rounded">Ctrl+B</kbd> Keyboard
           </span>
         </footer>
+
+        {/* Distraction-Free Zen Flow State Peripheral Vignette & Exit Chip */}
+        {isZenMode && (
+          <>
+            <div
+              className="fixed inset-0 pointer-events-none z-20 transition-opacity duration-700 animate-fadeIn"
+              style={{
+                boxShadow:
+                  "inset 0 0 100px rgba(0, 0, 0, 0.8), inset 0 0 180px rgba(0, 0, 0, 0.45)",
+              }}
+            />
+            <div className="fixed bottom-4 right-4 z-30 transition-opacity duration-300 opacity-30 hover:opacity-100">
+              <button
+                onClick={() => setIsZenMode(false)}
+                className="px-3 py-1.5 rounded-full bg-sub/15 hover:bg-sub/30 text-sub hover:text-text text-xs font-mono border border-sub/25 backdrop-blur-md flex items-center gap-2 shadow-sm"
+                title="Exit Zen Mode (Alt+Z / Esc)"
+              >
+                <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                <span>Zen Flow</span>
+                <kbd className="text-[10px] bg-sub/20 px-1 py-0.5 rounded text-sub">Alt+Z</kbd>
+              </button>
+            </div>
+          </>
+        )}
 
         {/* Modals Layer */}
         <CommandPalette

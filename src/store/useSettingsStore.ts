@@ -54,6 +54,9 @@ export interface SettingsState {
   sessionSize: number;
   activeCategory: string;
 
+  // Zen Flow State Mode
+  isZenMode: boolean;
+
   // Actions
   setCaretStyle: (style: CaretStyle) => void;
   setSmoothCaret: (speed: SmoothCaretSpeed) => void;
@@ -81,6 +84,8 @@ export interface SettingsState {
   setTtsVoiceURI: (uri: string) => void;
   setSessionSize: (size: number) => void;
   setActiveCategory: (cat: string) => void;
+  setIsZenMode: (isZenMode: boolean) => void;
+  toggleZenMode: () => void;
   resetToDefaults: () => void;
 }
 
@@ -186,6 +191,7 @@ const DEFAULT_SETTINGS = {
   ambientBackdrop: "constellation" as AmbientBackdrop,
   activeSection: "srs_words" as AppSection,
   customCursor: true,
+  isZenMode: false,
 };
 
 export const useSettingsStore = create<SettingsState>()(
@@ -225,6 +231,8 @@ export const useSettingsStore = create<SettingsState>()(
       setTtsVoiceURI: (ttsVoiceURI) => set({ ttsVoiceURI }),
       setSessionSize: (sessionSize) => set({ sessionSize }),
       setActiveCategory: (activeCategory) => set({ activeCategory }),
+      setIsZenMode: (isZenMode) => set({ isZenMode }),
+      toggleZenMode: () => set((state) => ({ isZenMode: !state.isZenMode })),
       resetToDefaults: () => {
         set(DEFAULT_SETTINGS);
         applyThemeCSS(DEFAULT_SETTINGS.theme);
