@@ -45,56 +45,229 @@ function getNoiseBuffer(ctx: AudioContext): AudioBuffer {
   return noiseBuffer;
 }
 
+export type SwitchSoundProfile =
+  | "cherry_brown"
+  | "cherry_blue"
+  | "gateron_ink_black"
+  | "topre_capacitive"
+  | "typewriter";
+
 /**
- * Procedural Cherry MX Brown style mechanical keystroke click
- * 0.05s high-frequency oscillator click mixed with bandpass-filtered noise
+ * Procedural Mechanical Switch Synthesizer
+ * Synthesizes 5 authentic switch profiles in real-time with zero audio asset overhead:
+ * - Cherry MX Brown: classic tactile bump and balanced snap
+ * - Cherry MX Blue: sharp dual-stage clicky leaf click
+ * - Gateron Ink Black: creamy deep low-pitched thock
+ * - Topre Capacitive: smooth muted electrostatic dome pop
+ * - Vintage Typewriter: heavy metallic strike and resonant carriage ping
  */
-export function playMechanicalClick(volume = 0.5): void {
+export function playMechanicalClick(
+  volume = 0.5,
+  switchType: SwitchSoundProfile = "cherry_brown"
+): void {
   try {
     const ctx = getAudioContext();
     if (!ctx || volume <= 0) return;
 
     const now = ctx.currentTime;
     const masterGain = ctx.createGain();
-    masterGain.gain.setValueAtTime(volume * 0.4, now);
-    masterGain.connect(ctx.destination);
 
-    // 1. High frequency micro-click (oscillator transient)
-    const osc = ctx.createOscillator();
-    const oscGain = ctx.createGain();
+    if (switchType === "cherry_blue") {
+      // Crisp clicky switch: high-pitched leaf snap + sharp transient clack
+      masterGain.gain.setValueAtTime(volume * 0.45, now);
+      masterGain.connect(ctx.destination);
 
-    osc.type = "sine";
-    osc.frequency.setValueAtTime(2200, now);
-    osc.frequency.exponentialRampToValueAtTime(700, now + 0.045);
+      const osc = ctx.createOscillator();
+      const oscGain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(4200, now);
+      osc.frequency.exponentialRampToValueAtTime(1400, now + 0.025);
 
-    oscGain.gain.setValueAtTime(0.8, now);
-    oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
+      oscGain.gain.setValueAtTime(0.9, now);
+      oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.025);
+      osc.connect(oscGain);
+      oscGain.connect(masterGain);
+      osc.start(now);
+      osc.stop(now + 0.03);
 
-    osc.connect(oscGain);
-    oscGain.connect(masterGain);
+      // Click leaf tactile rebound click (+8ms)
+      const rebound = ctx.createOscillator();
+      const reboundGain = ctx.createGain();
+      rebound.type = "triangle";
+      rebound.frequency.setValueAtTime(3200, now + 0.008);
+      rebound.frequency.exponentialRampToValueAtTime(1800, now + 0.028);
 
-    osc.start(now);
-    osc.stop(now + 0.05);
+      reboundGain.gain.setValueAtTime(0, now);
+      reboundGain.gain.setValueAtTime(0.6, now + 0.008);
+      reboundGain.gain.exponentialRampToValueAtTime(0.001, now + 0.028);
+      rebound.connect(reboundGain);
+      reboundGain.connect(masterGain);
+      rebound.start(now + 0.008);
+      rebound.stop(now + 0.035);
 
-    // 2. White noise burst through bandpass filter for mechanical tactility
-    const noise = ctx.createBufferSource();
-    noise.buffer = getNoiseBuffer(ctx);
+      // Noise clack
+      const noise = ctx.createBufferSource();
+      noise.buffer = getNoiseBuffer(ctx);
+      const filter = ctx.createBiquadFilter();
+      filter.type = "highpass";
+      filter.frequency.setValueAtTime(3200, now);
 
-    const filter = ctx.createBiquadFilter();
-    filter.type = "bandpass";
-    filter.frequency.setValueAtTime(2800, now);
-    filter.Q.setValueAtTime(2.0, now);
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.5, now);
+      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.025);
+      noise.connect(filter);
+      filter.connect(noiseGain);
+      noiseGain.connect(masterGain);
+      noise.start(now);
+      noise.stop(now + 0.03);
+    } else if (switchType === "gateron_ink_black") {
+      // Creamy deep lubed thock: low-pass body + damp sub-thump
+      masterGain.gain.setValueAtTime(volume * 0.55, now);
+      masterGain.connect(ctx.destination);
 
-    const noiseGain = ctx.createGain();
-    noiseGain.gain.setValueAtTime(0.6, now);
-    noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+      const osc = ctx.createOscillator();
+      const oscGain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(420, now);
+      osc.frequency.exponentialRampToValueAtTime(130, now + 0.065);
 
-    noise.connect(filter);
-    filter.connect(noiseGain);
-    noiseGain.connect(masterGain);
+      oscGain.gain.setValueAtTime(1.0, now);
+      oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.065);
+      osc.connect(oscGain);
+      oscGain.connect(masterGain);
+      osc.start(now);
+      osc.stop(now + 0.07);
 
-    noise.start(now);
-    noise.stop(now + 0.04);
+      // Dampened housing noise
+      const noise = ctx.createBufferSource();
+      noise.buffer = getNoiseBuffer(ctx);
+      const filter = ctx.createBiquadFilter();
+      filter.type = "lowpass";
+      filter.frequency.setValueAtTime(700, now);
+      filter.Q.setValueAtTime(2.5, now);
+
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.8, now);
+      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
+      noise.connect(filter);
+      filter.connect(noiseGain);
+      noiseGain.connect(masterGain);
+      noise.start(now);
+      noise.stop(now + 0.05);
+    } else if (switchType === "topre_capacitive") {
+      // Electrostatic dome pop: smooth rounded pop + muted bottom-out
+      masterGain.gain.setValueAtTime(volume * 0.4, now);
+      masterGain.connect(ctx.destination);
+
+      const osc = ctx.createOscillator();
+      const oscGain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(850, now);
+      osc.frequency.exponentialRampToValueAtTime(260, now + 0.04);
+
+      oscGain.gain.setValueAtTime(0.7, now);
+      oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+      osc.connect(oscGain);
+      oscGain.connect(masterGain);
+      osc.start(now);
+      osc.stop(now + 0.045);
+
+      // Rubber dome return sound
+      const noise = ctx.createBufferSource();
+      noise.buffer = getNoiseBuffer(ctx);
+      const filter = ctx.createBiquadFilter();
+      filter.type = "bandpass";
+      filter.frequency.setValueAtTime(1400, now);
+      filter.Q.setValueAtTime(1.8, now);
+
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.45, now);
+      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.03);
+      noise.connect(filter);
+      filter.connect(noiseGain);
+      noiseGain.connect(masterGain);
+      noise.start(now);
+      noise.stop(now + 0.035);
+    } else if (switchType === "typewriter") {
+      // Vintage mechanical typewriter: metal strike + resonant chassis ring
+      masterGain.gain.setValueAtTime(volume * 0.5, now);
+      masterGain.connect(ctx.destination);
+
+      const osc = ctx.createOscillator();
+      const oscGain = ctx.createGain();
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(2800, now);
+      osc.frequency.exponentialRampToValueAtTime(850, now + 0.035);
+
+      oscGain.gain.setValueAtTime(0.85, now);
+      oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+      osc.connect(oscGain);
+      oscGain.connect(masterGain);
+      osc.start(now);
+      osc.stop(now + 0.04);
+
+      // Resonant metal ping
+      const ping = ctx.createOscillator();
+      const pingGain = ctx.createGain();
+      ping.type = "sine";
+      ping.frequency.setValueAtTime(1950, now);
+      pingGain.gain.setValueAtTime(0.3, now);
+      pingGain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+      ping.connect(pingGain);
+      pingGain.connect(masterGain);
+      ping.start(now);
+      ping.stop(now + 0.085);
+
+      // Mechanical lever noise
+      const noise = ctx.createBufferSource();
+      noise.buffer = getNoiseBuffer(ctx);
+      const filter = ctx.createBiquadFilter();
+      filter.type = "bandpass";
+      filter.frequency.setValueAtTime(2200, now);
+      filter.Q.setValueAtTime(1.5, now);
+
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.65, now);
+      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+      noise.connect(filter);
+      filter.connect(noiseGain);
+      noiseGain.connect(masterGain);
+      noise.start(now);
+      noise.stop(now + 0.04);
+    } else {
+      // Default: Cherry MX Brown (balanced tactile bump)
+      masterGain.gain.setValueAtTime(volume * 0.4, now);
+      masterGain.connect(ctx.destination);
+
+      const osc = ctx.createOscillator();
+      const oscGain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(2200, now);
+      osc.frequency.exponentialRampToValueAtTime(700, now + 0.045);
+
+      oscGain.gain.setValueAtTime(0.8, now);
+      oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
+      osc.connect(oscGain);
+      oscGain.connect(masterGain);
+      osc.start(now);
+      osc.stop(now + 0.05);
+
+      const noise = ctx.createBufferSource();
+      noise.buffer = getNoiseBuffer(ctx);
+      const filter = ctx.createBiquadFilter();
+      filter.type = "bandpass";
+      filter.frequency.setValueAtTime(2800, now);
+      filter.Q.setValueAtTime(2.0, now);
+
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.6, now);
+      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+      noise.connect(filter);
+      filter.connect(noiseGain);
+      noiseGain.connect(masterGain);
+      noise.start(now);
+      noise.stop(now + 0.04);
+    }
   } catch {
     // Non-blocking fallback if audio context fails
   }

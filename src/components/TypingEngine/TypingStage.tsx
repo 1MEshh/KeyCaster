@@ -33,6 +33,7 @@ export const TypingStage: React.FC = () => {
     soundOnError,
     speechRate,
     ttsVoiceURI,
+    switchSound,
     activeCategory,
     sessionSize,
   } = useSettingsStore();
@@ -97,6 +98,7 @@ export const TypingStage: React.FC = () => {
     soundOnError,
     speechRate,
     ttsVoiceURI,
+    switchSound,
     isSpeaking,
   });
 
@@ -114,6 +116,7 @@ export const TypingStage: React.FC = () => {
     soundOnError,
     speechRate,
     ttsVoiceURI,
+    switchSound,
     isSpeaking,
   };
 
@@ -215,6 +218,7 @@ export const TypingStage: React.FC = () => {
         soundVolume: vol,
         soundOnClick: clickSfx,
         soundOnError: errSfx,
+        switchSound: swSound,
       } = stateRef.current;
 
       if (!curWord || !isSessionActive || isSessionComplete || isTransitioningRef.current) {
@@ -325,7 +329,7 @@ export const TypingStage: React.FC = () => {
         setHasError(false);
         setIsShaking(false);
         correctKeystrokesRef.current += 1;
-        if (clickSfx) playMechanicalClick(vol);
+        if (clickSfx) playMechanicalClick(vol, swSound);
 
         setTypedLetters((prev) => {
           const copy = [...prev];

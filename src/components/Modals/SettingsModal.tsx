@@ -29,7 +29,7 @@ import {
   type KeyboardLayout,
   type AmbientBackdrop,
 } from "@/store/useSettingsStore";
-import { playMechanicalClick, TTSController } from "@/lib/audio";
+import { playMechanicalClick, TTSController, type SwitchSoundProfile } from "@/lib/audio";
 import { db } from "@/lib/db";
 import { validateBackupPayload, MAX_BACKUP_FILE_BYTES } from "@/lib/sanitize";
 
@@ -77,6 +77,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
     setSoundOnClick,
     soundOnError,
     setSoundOnError,
+    switchSound,
+    setSwitchSound,
     speechRate,
     setSpeechRate,
     ttsVoiceURI,
@@ -709,11 +711,58 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                     className="w-full accent-main cursor-pointer"
                   />
                   <button
-                    onClick={() => playMechanicalClick(soundVolume)}
+                    onClick={() => playMechanicalClick(soundVolume, switchSound)}
                     className="px-2.5 py-1 text-xs rounded border border-main/40 text-main hover:bg-main/10 whitespace-nowrap"
                   >
                     Test Click
                   </button>
+                </div>
+              </div>
+
+              {/* Mechanical Switch Profiles */}
+              <div>
+                <label className="text-xs uppercase text-sub font-semibold block mb-2">
+                  Mechanical Switch Profile
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  {[
+                    { id: "cherry_brown", name: "Cherry MX Brown", desc: "Tactile bump & balanced snap (Default)" },
+                    { id: "cherry_blue", name: "Cherry MX Blue", desc: "Crisp clicky dual-stage snap" },
+                    { id: "gateron_ink_black", name: "Gateron Ink Black", desc: "Deep creamy lubed thock" },
+                    { id: "topre_capacitive", name: "Topre Capacitive", desc: "Smooth dome pop & muted thunk" },
+                    { id: "typewriter", name: "Vintage Typewriter", desc: "Metallic strike & chassis ring" },
+                  ].map((sw) => {
+                    const isSelected = switchSound === sw.id;
+                    return (
+                      <div
+                        key={sw.id}
+                        className={`p-2.5 rounded-xl border flex items-center justify-between transition-all ${
+                          isSelected
+                            ? "border-main bg-main/10 ring-1 ring-main"
+                            : "border-sub/20 bg-sub/5 hover:border-sub/40"
+                        }`}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => setSwitchSound(sw.id as SwitchSoundProfile)}
+                          className="text-left flex-1"
+                        >
+                          <div className={`text-xs font-bold ${isSelected ? "text-main" : "text-text"}`}>
+                            {sw.name}
+                          </div>
+                          <div className="text-[10px] text-sub mt-0.5">{sw.desc}</div>
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => playMechanicalClick(soundVolume, sw.id as SwitchSoundProfile)}
+                          className="px-2 py-1 ml-2 text-[10px] font-mono rounded border border-sub/30 text-sub hover:text-main hover:border-main hover:bg-main/10 whitespace-nowrap"
+                          title="Audition sound"
+                        >
+                          Audition
+                        </button>
+                      </div>
+                    );
+                  })}
                 </div>
               </div>
 

@@ -45,6 +45,7 @@ export const GameModeStage: React.FC = () => {
     soundOnError,
     speechRate,
     ttsVoiceURI,
+    switchSound,
     fontSize,
   } = useSettingsStore();
 
@@ -226,7 +227,7 @@ export const GameModeStage: React.FC = () => {
 
     if (pressedChar === targetChar) {
       recordKeystroke(true);
-      if (soundOnClick) playMechanicalClick(soundVolume);
+      if (soundOnClick) playMechanicalClick(soundVolume, switchSound);
 
       setTypedLetters((prev) => {
         const copy = [...prev];
