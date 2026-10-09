@@ -82,6 +82,8 @@ export const TypingStage: React.FC = () => {
   // Transition & timing refs
   const isTransitioningRef = useRef<boolean>(false);
   const firstKeyTimeRef = useRef<number | null>(null);
+  const lastKeyTimeRef = useRef<number | null>(null);
+  const keystrokeIntervalsRef = useRef<number[]>([]);
   const errorCountRef = useRef<number>(0);
   const backspaceCountRef = useRef<number>(0);
   const totalKeystrokesRef = useRef<number>(0);
@@ -213,6 +215,8 @@ export const TypingStage: React.FC = () => {
     isTransitioningRef.current = false;
     letterRefs.current = [];
     firstKeyTimeRef.current = null;
+    lastKeyTimeRef.current = null;
+    keystrokeIntervalsRef.current = [];
     errorCountRef.current = 0;
     backspaceCountRef.current = 0;
 
@@ -370,10 +374,17 @@ export const TypingStage: React.FC = () => {
 
       e.preventDefault();
 
+      const now = Date.now();
       // Start timing from first typed character to ignore speech listening idle time
       if (!firstKeyTimeRef.current) {
-        firstKeyTimeRef.current = Date.now();
+        firstKeyTimeRef.current = now;
+      } else if (lastKeyTimeRef.current) {
+        const delta = now - lastKeyTimeRef.current;
+        if (delta >= 10 && delta <= 3000) {
+          keystrokeIntervalsRef.current.push(delta);
+        }
       }
+      lastKeyTimeRef.current = now;
 
       totalKeystrokesRef.current += 1;
 
@@ -438,6 +449,8 @@ export const TypingStage: React.FC = () => {
               errors: errorCountRef.current,
               backspaces: backspaceCountRef.current,
               elapsedMs: typingDuration,
+              keystrokeIntervals: [...keystrokeIntervalsRef.current],
+              totalKeystrokes: totalKeystrokesRef.current,
             });
           }, 80);
         }

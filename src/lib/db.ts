@@ -36,6 +36,8 @@ export interface SessionHistoryRecord {
   errors: number;
   category: string;
   duration: number; // in seconds
+  consistency?: number;
+  rawWpm?: number;
 }
 
 export interface SentenceHistoryRecord {
@@ -48,6 +50,8 @@ export interface SentenceHistoryRecord {
   errors: number;
   elapsedMs: number;
   timestamp: string;
+  consistency?: number;
+  rawWpm?: number;
 }
 
 export interface TranslationMasteryRecord {
