@@ -501,6 +501,58 @@ export class TTSController {
     }
   }
 
+  public static speakArabic(
+    text: string,
+    options: {
+      rate?: number;
+      onStart?: () => void;
+      onEnd?: () => void;
+    } = {}
+  ): void {
+    if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
+
+    try {
+      window.speechSynthesis.cancel();
+
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = options.rate ?? 0.88;
+      utterance.lang = "ar-SA";
+
+      const voices = this.getVoices();
+      const arabicVoice =
+        voices.find(
+          (v) =>
+            v.lang.startsWith("ar") &&
+            (v.name.includes("Maged") ||
+              v.name.includes("Tarik") ||
+              v.name.includes("Laila") ||
+              v.name.includes("Natural") ||
+              v.name.includes("Google"))
+        ) || voices.find((v) => v.lang.startsWith("ar"));
+
+      if (arabicVoice) {
+        utterance.voice = arabicVoice;
+      }
+
+      utterance.onstart = () => {
+        options.onStart?.();
+      };
+
+      utterance.onend = () => {
+        options.onEnd?.();
+      };
+
+      utterance.onerror = () => {
+        options.onEnd?.();
+      };
+
+      this.activeUtterance = utterance;
+      window.speechSynthesis.speak(utterance);
+    } catch {
+      // Non-blocking
+    }
+  }
+
   public static cancel(): void {
     if (typeof window === "undefined" || !("speechSynthesis" in window)) return;
     window.speechSynthesis.cancel();

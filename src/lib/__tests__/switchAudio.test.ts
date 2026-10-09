@@ -4,6 +4,7 @@ import {
   playMechanicalClick,
   playStreakChord,
   playSuccessChime,
+  TTSController,
   type SwitchSoundProfile,
 } from "../audio";
 
@@ -45,5 +46,12 @@ test("Harmonic Synthesizer: playSuccessChime handles headless runtime without er
     playSuccessChime(0.5);
     playSuccessChime(0);
     playSuccessChime(-1);
+  });
+});
+
+test("TTSController: speakArabic gracefully handles headless/SSR environment without throwing", () => {
+  assert.doesNotThrow(() => {
+    TTSController.speakArabic("مرحبا بالعالم", { rate: 0.9 });
+    TTSController.speakArabic("", {});
   });
 });

@@ -103,6 +103,8 @@ export const TranslationStage: React.FC = () => {
     height: 24,
   });
   const [isFocused, setIsFocused] = useState<boolean>(true);
+  const [isSpeakingArabic, setIsSpeakingArabic] = useState<boolean>(false);
+  const [showPhoneticBreakdown, setShowPhoneticBreakdown] = useState<boolean>(false);
 
   const bilingualSentence = currentSentence as BilingualSentence | null;
   const arabicText = bilingualSentence && "arabic" in bilingualSentence ? bilingualSentence.arabic : "";
@@ -113,6 +115,19 @@ export const TranslationStage: React.FC = () => {
       ? bilingualSentence.vocabularyCards || []
       : [];
   const targetEnglish = getTargetText(currentSentence);
+
+  // Speak authentic native Arabic prompt
+  const speakArabicSentence = useCallback(() => {
+    if (!arabicText) return;
+    setIsSpeakingArabic(true);
+    setTimeout(() => {
+      TTSController.speakArabic(arabicText, {
+        rate: speechRate,
+        onStart: () => setIsSpeakingArabic(true),
+        onEnd: () => setIsSpeakingArabic(false),
+      });
+    }, 40);
+  }, [arabicText, speechRate]);
 
   // Speak full target English sentence
   const speakFullSentence = useCallback(
@@ -489,6 +504,39 @@ export const TranslationStage: React.FC = () => {
               <span className="hidden sm:inline">Full Audio</span>
             </button>
 
+            {/* Native Arabic Voice Player */}
+            <button
+              type="button"
+              onClick={speakArabicSentence}
+              className={`px-3 py-1.5 rounded-xl flex items-center gap-1.5 transition-all text-xs font-medium border ${
+                isSpeakingArabic
+                  ? "bg-emerald-500/25 text-emerald-300 border-emerald-500/40 shadow-md shadow-emerald-500/20"
+                  : "bg-sub/15 text-sub hover:text-text border-sub/20 hover:border-sub/40"
+              }`}
+              title="Pronounce Arabic cue sentence in native Arabic"
+            >
+              <Volume2 className="w-3.5 h-3.5 text-emerald-400" />
+              <span className="font-thmanyah font-bold text-emerald-400 text-xs">صوت عربي</span>
+              {isSpeakingArabic && (
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping ml-0.5" />
+              )}
+            </button>
+
+            {/* Phonetic Breakdown Toggle */}
+            <button
+              type="button"
+              onClick={() => setShowPhoneticBreakdown((prev) => !prev)}
+              className={`px-2.5 py-1.5 rounded-xl flex items-center gap-1.5 transition-all text-xs font-medium border ${
+                showPhoneticBreakdown
+                  ? "bg-cyan-500/25 text-cyan-300 border-cyan-500/40"
+                  : "bg-sub/15 text-sub hover:text-text border-sub/20 hover:border-sub/40"
+              }`}
+              title="Toggle phonetic syllable & token breakdown"
+            >
+              <span className="text-[10px] font-mono font-bold text-cyan-400">Aa</span>
+              <span className="hidden sm:inline text-xs">Breakdown</span>
+            </button>
+
             {/* Vocabulary Hints Toggle */}
             <button
               type="button"
@@ -515,6 +563,21 @@ export const TranslationStage: React.FC = () => {
         >
           {arabicText}
         </div>
+
+        {/* Phonetic Syllables & Word Breakdown Bar */}
+        {showPhoneticBreakdown && vocabCards.length > 0 && (
+          <div className="mt-2 mb-3 p-3 rounded-xl bg-sub/10 border border-sub/20 flex flex-wrap gap-2 justify-end animate-fadeIn">
+            {vocabCards.map((card, idx) => (
+              <div
+                key={idx}
+                className="px-2.5 py-1 rounded-lg bg-bg/90 border border-sub/20 flex flex-col items-center text-xs shadow-xs"
+              >
+                <span className="font-thmanyah font-bold text-main text-sm">{card.ar}</span>
+                <span className="font-mono text-[10px] text-sub/80">{card.en}</span>
+              </div>
+            ))}
+          </div>
+        )}
 
         {/* Literal Meaning Footer inside Cue Card (Hidden by default to avoid spoilers) */}
         {literalMeaning && (
