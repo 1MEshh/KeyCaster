@@ -1,10 +1,26 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import confetti from "canvas-confetti";
-import { Trophy, RotateCcw, ArrowRight, CheckCircle2, AlertCircle, Activity } from "lucide-react";
+import {
+  Trophy,
+  RotateCcw,
+  ArrowRight,
+  CheckCircle2,
+  AlertCircle,
+  Activity,
+  Download,
+  Copy,
+  Check,
+  Share2,
+} from "lucide-react";
 import { useSessionStore } from "@/store/useSessionStore";
-import { useSettingsStore } from "@/store/useSettingsStore";
+import { useSettingsStore, THEME_VARIABLES } from "@/store/useSettingsStore";
+import {
+  formatSessionSummaryText,
+  exportScoreCardCanvas,
+  downloadDataUrl,
+} from "@/lib/scoreCardExporter";
 
 interface SessionSummaryModalProps {
   isOpen: boolean;
@@ -18,7 +34,9 @@ export const SessionSummaryModal: React.FC<SessionSummaryModalProps> = ({
   onOpenDashboard,
 }) => {
   const { completedWords, startTime, endTime } = useSessionStore();
-  const { activeCategory } = useSettingsStore();
+  const { activeCategory, theme } = useSettingsStore();
+  const [copied, setCopied] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -55,6 +73,52 @@ export const SessionSummaryModal: React.FC<SessionSummaryModalProps> = ({
 
   const masteredWords = completedWords.filter((c) => c.grade >= 3);
   const failedWords = completedWords.filter((c) => c.grade < 3);
+
+  const handleCopySummary = async () => {
+    try {
+      const text = formatSessionSummaryText({
+        deckName: activeCategory,
+        wpm: avgWpm,
+        rawWpm: avgRawWpm,
+        accuracy: avgAccuracy,
+        consistency: avgConsistency,
+        durationSec,
+        totalWords,
+        passedWords: masteredWords.length,
+        failedWords: failedWords.length,
+      });
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // Clipboard fallback
+    }
+  };
+
+  const handleExportCard = () => {
+    setIsExporting(true);
+    try {
+      const themeColors = THEME_VARIABLES[theme] || THEME_VARIABLES.cyberpunk;
+      const dataUrl = exportScoreCardCanvas({
+        deckName: activeCategory,
+        wpm: avgWpm,
+        rawWpm: avgRawWpm,
+        accuracy: avgAccuracy,
+        consistency: avgConsistency,
+        durationSec,
+        totalWords,
+        passedWords: masteredWords.length,
+        failedWords: failedWords.length,
+        themeMainColor: themeColors.main,
+        themeBgColor: themeColors.bg,
+      });
+      if (dataUrl) {
+        downloadDataUrl(dataUrl, `keycaster-scorecard-${activeCategory}-${Date.now()}.png`);
+      }
+    } finally {
+      setTimeout(() => setIsExporting(false), 600);
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-md animate-fadeIn">
@@ -173,6 +237,39 @@ export const SessionSummaryModal: React.FC<SessionSummaryModalProps> = ({
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Social Share & Score Card Export */}
+        <div className="flex flex-col sm:flex-row items-center gap-2.5 p-3 rounded-xl bg-sub/5 border border-sub/20">
+          <button
+            type="button"
+            onClick={handleExportCard}
+            disabled={isExporting}
+            className="w-full sm:flex-1 py-2 px-3 rounded-lg border border-main/30 bg-main/10 hover:bg-main/20 text-main font-semibold text-xs transition-colors flex items-center justify-center gap-2"
+            title="Download high-resolution 1200x675 PNG scorecard for Twitter/Discord/LinkedIn"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>{isExporting ? "Generating PNG..." : "Export Score Card (PNG)"}</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={handleCopySummary}
+            className="w-full sm:w-auto py-2 px-3.5 rounded-lg border border-sub/30 bg-sub/10 hover:bg-sub/20 text-text font-semibold text-xs transition-colors flex items-center justify-center gap-2"
+            title="Copy clean summary to clipboard"
+          >
+            {copied ? (
+              <>
+                <Check className="w-3.5 h-3.5 text-main" />
+                <span className="text-main">Copied!</span>
+              </>
+            ) : (
+              <>
+                <Copy className="w-3.5 h-3.5 text-sub" />
+                <span>Copy Summary</span>
+              </>
+            )}
+          </button>
         </div>
 
         {/* Action Buttons */}
