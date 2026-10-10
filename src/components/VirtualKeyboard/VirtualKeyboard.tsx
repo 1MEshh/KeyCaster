@@ -74,7 +74,7 @@ interface VirtualKeyboardProps {
 }
 
 export const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({ expectedNextChar }) => {
-  const { showKeyboard, keyboardLayout } = useSettingsStore();
+  const { showKeyboard, keyboardLayout, setKeyboardLayout } = useSettingsStore();
   const activeKey = useKeyStore((s) => s.activeKey);
   const [displayMode, setDisplayMode] = useState<KeyboardDisplayMode>("classic");
   const [mistakeCounts, setMistakeCounts] = useState<Record<string, number>>({});
@@ -120,9 +120,26 @@ export const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({ expectedNextCh
       {/* Top Controls: Layout Indicator & Mode Selector */}
       <div className="flex items-center justify-between mb-3 px-1 text-xs text-sub">
         <div className="flex items-center gap-2">
-          <span className="font-mono uppercase font-bold text-main tracking-wider">{keyboardLayout}</span>
+          {/* Quick Layout Switcher */}
+          <div className="flex items-center gap-1 bg-sub/10 p-0.5 rounded-lg border border-sub/20 text-[10px] font-mono">
+            {(["qwerty", "dvorak", "colemak"] as KeyboardLayout[]).map((layout) => (
+              <button
+                key={layout}
+                type="button"
+                onClick={() => setKeyboardLayout(layout)}
+                className={`px-1.5 py-0.5 rounded uppercase font-bold transition-all ${
+                  keyboardLayout === layout
+                    ? "bg-main text-bg shadow-xs"
+                    : "text-sub hover:text-text"
+                }`}
+                title={`Switch layout to ${layout.toUpperCase()}`}
+              >
+                {layout}
+              </button>
+            ))}
+          </div>
           <span className="text-sub/40">·</span>
-          <span className="font-mono text-[11px] opacity-70">Touch-Typing Matrix</span>
+          <span className="font-mono text-[10px] opacity-70 hidden sm:inline">Touch-Typing Matrix</span>
         </div>
 
         {/* View Mode Segmented Pill */}
