@@ -12,7 +12,14 @@ export type FontFamily = "Thmanyah Sans" | "JetBrains Mono" | "Roboto Mono" | "F
 export type LiveStatsMode = "off" | "text" | "mini" | "tachometer";
 export type PaceCarMode = "off" | "pb" | "target_60" | "target_80" | "target_100" | "target_120";
 export type KeyboardLayout = "qwerty" | "dvorak" | "colemak";
-export type AmbientBackdrop = "cyber_grid" | "constellation" | "grid" | "particles" | "off";
+export type AmbientBackdrop =
+  | "cyber_grid"
+  | "constellation"
+  | "grid"
+  | "particles"
+  | "matrix_rain"
+  | "sine_wave"
+  | "off";
 export type AppSection = "srs_words" | "sentences" | "arabic_dictation" | "arcade";
 
 export interface SettingsState {

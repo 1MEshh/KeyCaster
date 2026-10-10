@@ -17,6 +17,8 @@ import {
   RotateCcw,
   Sparkles,
   Check,
+  Binary,
+  Waves,
 } from "lucide-react";
 import { useSettingsStore, type Theme, type AppSection, type AmbientBackdrop } from "@/store/useSettingsStore";
 import { useSessionStore } from "@/store/useSessionStore";
@@ -338,6 +340,26 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         keywords: ["backdrop", "cyber horizon", "synthwave", "canvas", "grid"],
         active: ambientBackdrop === "cyber_grid",
         action: () => setAmbientBackdrop("cyber_grid"),
+      },
+      {
+        id: "backdrop-matrix",
+        category: "Toggles",
+        title: "Backdrop: Matrix Digital Rain",
+        subtitle: "Cascading cyberpunk glyph streams with keystroke acceleration",
+        icon: <Binary className="w-4 h-4 text-emerald-400" />,
+        keywords: ["backdrop", "matrix", "rain", "cyber", "glyphs", "terminal"],
+        active: ambientBackdrop === "matrix_rain",
+        action: () => setAmbientBackdrop("matrix_rain"),
+      },
+      {
+        id: "backdrop-sine",
+        category: "Toggles",
+        title: "Backdrop: Cyber Sine Wave Mesh",
+        subtitle: "3D harmonic undulating ribbons with keystroke energy bloom",
+        icon: <Waves className="w-4 h-4 text-cyan-400" />,
+        keywords: ["backdrop", "sine wave", "mesh", "ribbon", "waves", "harmonic"],
+        active: ambientBackdrop === "sine_wave",
+        action: () => setAmbientBackdrop("sine_wave"),
       },
 
       // Actions & Modals
