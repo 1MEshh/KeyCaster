@@ -19,12 +19,15 @@ import {
   Check,
   Binary,
   Waves,
+  Download,
+  HardDrive,
 } from "lucide-react";
 import { useSettingsStore, type Theme, type AppSection, type AmbientBackdrop } from "@/store/useSettingsStore";
 import { useSessionStore } from "@/store/useSessionStore";
 import { useSentenceStore } from "@/store/useSentenceStore";
 import { useGameModeStore } from "@/store/useGameModeStore";
 import { playMechanicalClick, type SwitchSoundProfile } from "@/lib/audio";
+import { exportQuickBackupJson } from "@/lib/backupHealth";
 
 interface CommandItem {
   id: string;
@@ -389,6 +392,17 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         icon: <PlusCircle className="w-4 h-4 text-main" />,
         keywords: ["custom deck", "import", "words", "add deck", "list"],
         action: onOpenCustomDeck,
+      },
+      {
+        id: "action-backup",
+        category: "Actions",
+        title: "Quick Backup Export (JSON)",
+        subtitle: "Export timestamped JSON archive of words, custom decks, and SRS history",
+        icon: <HardDrive className="w-4 h-4 text-emerald-400" />,
+        keywords: ["backup", "export", "json", "save", "sync", "download"],
+        action: () => {
+          exportQuickBackupJson();
+        },
       },
       {
         id: "action-restart",
