@@ -422,7 +422,12 @@ export default function Home() {
 
         <OnboardingFlow
           isOpen={isOnboardingOpen}
-          onComplete={() => setIsOnboardingOpen(false)}
+          onComplete={async () => {
+            setIsOnboardingOpen(false);
+            if (activeSection === "srs_words") {
+              await initSession(activeCategory, sessionSize);
+            }
+          }}
         />
 
         {/* Gamification Floating Toasts */}

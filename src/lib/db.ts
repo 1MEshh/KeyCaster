@@ -21,6 +21,7 @@ export interface WordRecord {
 
 export interface CustomDeckRecord {
   id?: number;
+  categoryKey?: string;
   name: string;
   description: string;
   words: string[];

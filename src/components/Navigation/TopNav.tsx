@@ -108,7 +108,7 @@ export const TopNav: React.FC<TopNavProps> = ({
     { id: "gaming", label: "Gaming" },
     { id: "coding", label: "Coding" },
     ...customDecks.map((d) => ({
-      id: `custom_${d.id}`,
+      id: d.categoryKey || `custom_${d.id}`,
       label: d.name,
     })),
   ];
@@ -291,20 +291,23 @@ export const TopNav: React.FC<TopNavProps> = ({
                   </div>
 
                   {customDecks.length > 0 ? (
-                    customDecks.map((d) => (
-                      <button
-                        key={d.id}
-                        onClick={() => handleSelectCategory(`custom_${d.id}`)}
-                        className={`w-full text-left px-3 py-2 flex items-center justify-between hover:bg-sub/10 transition-colors ${
-                          activeCategory === `custom_${d.id}`
-                            ? "text-main font-bold"
-                            : "text-text"
-                        }`}
-                      >
-                        <span className="truncate">{d.name}</span>
-                        <span className="text-[10px] text-sub">{d.words?.length || 0}w</span>
-                      </button>
-                    ))
+                    customDecks.map((d) => {
+                      const deckCat = d.categoryKey || `custom_${d.id}`;
+                      return (
+                        <button
+                          key={d.id}
+                          onClick={() => handleSelectCategory(deckCat)}
+                          className={`w-full text-left px-3 py-2 flex items-center justify-between hover:bg-sub/10 transition-colors ${
+                            activeCategory === deckCat
+                              ? "text-main font-bold"
+                              : "text-text"
+                          }`}
+                        >
+                          <span className="truncate">{d.name}</span>
+                          <span className="text-[10px] text-sub">{d.words?.length || 0}w</span>
+                        </button>
+                      );
+                    })
                   ) : (
                     <div className="px-3 py-1.5 text-[11px] text-sub/60 italic">
                       No custom decks yet

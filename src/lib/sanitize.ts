@@ -175,6 +175,7 @@ export function validateBackupPayload(raw: unknown): ValidatedBackupPayload {
       }
 
       customDecks.push({
+        categoryKey: typeof d.categoryKey === "string" ? sanitizeString(d.categoryKey, 50) : undefined,
         name,
         description: sanitizeString(d.description, 200) || `Custom deck ${name}`,
         words: wordsArr,
