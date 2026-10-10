@@ -81,13 +81,23 @@ export interface SentenceState {
 }
 
 /**
- * Normalizes typographical apostrophes, quotes, and dashes for resilient keyboard matching.
+ * Normalizes typographical apostrophes, quotes, dashes, spaces, and Arabic diacritic/letter variants.
  */
 export function areCharsEquivalent(input: string, target: string): boolean {
   if (input === target) return true;
-  if (/['’‘`]/.test(target) && /['`]/.test(input)) return true;
-  if (/["“”«»]/.test(target) && input === '"') return true;
-  if (/[-–—]/.test(target) && input === "-") return true;
+  // Quotes & apostrophes
+  if (/['’‘`´]/.test(target) && /['’‘`´]/.test(input)) return true;
+  if (/["“”«»„‟]/.test(target) && /["“”«»„‟]/.test(input)) return true;
+  // Dashes & hyphens
+  if (/[-–—―]/.test(target) && /[-–—―]/.test(input)) return true;
+  // Non-breaking and standard spaces
+  if (/[\s\u00A0]/.test(target) && /[\s\u00A0]/.test(input)) return true;
+  // Arabic Alif variants (أ / إ / آ / ٱ / ا)
+  if (/[اأإآٱ]/.test(target) && /[اأإآٱ]/.test(input)) return true;
+  // Arabic Ta Marbuta & Ha (ة / ه)
+  if (/[ةه]/.test(target) && /[ةه]/.test(input)) return true;
+  // Arabic Ya & Alif Maqsura (ي / ى)
+  if (/[يى]/.test(target) && /[يى]/.test(input)) return true;
   return false;
 }
 
