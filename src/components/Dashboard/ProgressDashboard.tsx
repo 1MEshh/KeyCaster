@@ -72,7 +72,7 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
           { id: "common_misspellings", name: "Common Misspellings" },
           { id: "gaming", name: "Gaming" },
           { id: "coding", name: "Coding" },
-          ...customDecks.map((d) => ({ id: `custom_${d.id}`, name: d.name })),
+          ...customDecks.map((d) => ({ id: d.categoryKey || `custom_${d.id}`, name: d.name })),
         ];
 
         const catStats: CategoryStats[] = categories.map((cat) => {
