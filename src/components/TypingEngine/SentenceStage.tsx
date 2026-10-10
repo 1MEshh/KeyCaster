@@ -28,6 +28,7 @@ import { getTargetText } from "@/store/useSentenceStore";
 import { gradeSentence, calculateSentenceXP } from "@/lib/sentenceGrader";
 import { AcousticVisualizer } from "@/components/HUD/AcousticVisualizer";
 import { VirtualKeyboard } from "@/components/VirtualKeyboard/VirtualKeyboard";
+import { LiveStats } from "@/components/HUD/LiveStats";
 
 interface CaretCoordinates {
   left: number;
@@ -63,6 +64,8 @@ export const SentenceStage: React.FC = () => {
     activeCategory,
     activeDifficulty,
   } = useSentenceStore();
+
+  const streak = useProfileStore((s) => s.streak);
 
   const {
     caretStyle,
@@ -538,6 +541,20 @@ export const SentenceStage: React.FC = () => {
             <kbd className="hidden sm:inline px-1 py-0.5 bg-sub/20 text-[10px] rounded text-sub">Alt+H</kbd>
           </button>
         </div>
+      </div>
+
+      {/* Live Stats Bar & Dynamic Tachometer */}
+      <div className="w-full max-w-2xl mb-5">
+        <LiveStats
+          wpm={stats.wpm}
+          accuracy={stats.accuracy}
+          streak={streak}
+          currentWordIndex={currentWordIndex}
+          totalWords={words.length}
+          retryCount={0}
+          isRetryAttempt={false}
+          isComplete={isSentenceComplete}
+        />
       </div>
 
       {/* Interactive Multi-word Typing Board */}

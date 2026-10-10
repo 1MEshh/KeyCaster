@@ -30,6 +30,8 @@ import { getTargetText } from "@/store/useSentenceStore";
 import { gradeSentence, calculateSentenceXP } from "@/lib/sentenceGrader";
 import { AcousticVisualizer } from "@/components/HUD/AcousticVisualizer";
 import { VirtualKeyboard } from "@/components/VirtualKeyboard/VirtualKeyboard";
+import { LiveStats } from "@/components/HUD/LiveStats";
+import { useProfileStore } from "@/store/useProfileStore";
 import type { BilingualSentence } from "@/lib/sentenceDictionary";
 
 interface CaretCoordinates {
@@ -66,6 +68,8 @@ export const TranslationStage: React.FC = () => {
     activeCategory,
     activeDifficulty,
   } = useSentenceStore();
+
+  const streak = useProfileStore((s) => s.streak);
 
   const {
     caretStyle,
@@ -453,6 +457,20 @@ export const TranslationStage: React.FC = () => {
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
       />
+
+      {/* Live Stats Bar & Dynamic Tachometer */}
+      <div className="w-full max-w-2xl mb-5">
+        <LiveStats
+          wpm={stats.wpm}
+          accuracy={stats.accuracy}
+          streak={streak}
+          currentWordIndex={currentWordIndex}
+          totalWords={words.length}
+          retryCount={0}
+          isRetryAttempt={false}
+          isComplete={isSentenceComplete}
+        />
+      </div>
 
       {/* Prominent Arabic Cue Card */}
       <div className="w-full bg-sub/10 border border-sub/20 rounded-3xl p-6 sm:p-8 backdrop-blur-md shadow-xl mb-6 relative overflow-hidden">
