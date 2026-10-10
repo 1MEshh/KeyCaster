@@ -212,6 +212,32 @@ export function normalizeSentence(
 }
 
 /**
+ * Strips all Arabic Tashkeel diacritics (Fatha, Damma, Kasra, Sukun, Tanwin, Shadda, etc.)
+ */
+export function stripArabicTashkeel(text: string): string {
+  if (!text) return "";
+  return text.replace(/[\u064B-\u065F\u0670]/g, "");
+}
+
+/**
+ * Normalizes Arabic text for tolerant bilingual matching:
+ * - Strips tashkeel diacritics
+ * - Normalizes Alif variants (أ, إ, آ, ٱ -> ا)
+ * - Normalizes Ta Marbuta (ة -> ه)
+ * - Normalizes Alif Maqsura (ى -> ي)
+ * - Collapses whitespace
+ */
+export function normalizeArabicText(text: string): string {
+  if (!text) return "";
+  return stripArabicTashkeel(text)
+    .replace(/[أإآٱ]/g, "ا")
+    .replace(/ة/g, "ه")
+    .replace(/ى/g, "ي")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/**
  * Map of common English contractions to their expanded equivalents.
  */
 export const CONTRACTIONS_MAP: Record<string, string> = {
