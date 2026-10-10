@@ -27,6 +27,7 @@ import {
 import { getTargetText } from "@/store/useSentenceStore";
 import { gradeSentence, calculateSentenceXP } from "@/lib/sentenceGrader";
 import { AcousticVisualizer } from "@/components/HUD/AcousticVisualizer";
+import { VirtualKeyboard } from "@/components/VirtualKeyboard/VirtualKeyboard";
 
 interface CaretCoordinates {
   left: number;
@@ -435,6 +436,14 @@ export const SentenceStage: React.FC = () => {
     errors: stats.errors,
   });
 
+  const expectedNextChar = useMemo(() => {
+    if (isSentenceComplete) return null;
+    const curWordObj = words[currentWordIndex];
+    if (!curWordObj) return null;
+    const curLetter = curWordObj.letters[currentLetterIndex];
+    return curLetter?.char || null;
+  }, [words, currentWordIndex, currentLetterIndex, isSentenceComplete]);
+
   return (
     <div
       className="w-full max-w-4xl flex flex-col items-center justify-center px-4 py-6 select-none"
@@ -742,6 +751,9 @@ export const SentenceStage: React.FC = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Interactive Virtual Keyboard with Touch Zones & Heatmap */}
+      <VirtualKeyboard expectedNextChar={expectedNextChar} />
     </div>
   );
 };

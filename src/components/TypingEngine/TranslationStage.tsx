@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Volume2,
@@ -29,6 +29,7 @@ import {
 import { getTargetText } from "@/store/useSentenceStore";
 import { gradeSentence, calculateSentenceXP } from "@/lib/sentenceGrader";
 import { AcousticVisualizer } from "@/components/HUD/AcousticVisualizer";
+import { VirtualKeyboard } from "@/components/VirtualKeyboard/VirtualKeyboard";
 import type { BilingualSentence } from "@/lib/sentenceDictionary";
 
 interface CaretCoordinates {
@@ -425,6 +426,14 @@ export const TranslationStage: React.FC = () => {
     errors: stats.errors,
   });
 
+  const expectedNextChar = useMemo(() => {
+    if (isSentenceComplete) return null;
+    const curWordObj = words[currentWordIndex];
+    if (!curWordObj) return null;
+    const curLetter = curWordObj.letters[currentLetterIndex];
+    return curLetter?.char || null;
+  }, [words, currentWordIndex, currentLetterIndex, isSentenceComplete]);
+
   return (
     <div
       className="w-full max-w-4xl flex flex-col items-center justify-center px-4 py-6 select-none"
@@ -802,6 +811,9 @@ export const TranslationStage: React.FC = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Interactive Virtual Keyboard with Touch Zones & Heatmap */}
+      <VirtualKeyboard expectedNextChar={expectedNextChar} />
     </div>
   );
 };
