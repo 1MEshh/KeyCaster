@@ -13,6 +13,8 @@ import {
   Copy,
   Check,
   Share2,
+  ChevronDown,
+  ChevronUp,
 } from "lucide-react";
 import { useSessionStore } from "@/store/useSessionStore";
 import { useSettingsStore, THEME_VARIABLES } from "@/store/useSettingsStore";
@@ -33,10 +35,11 @@ export const SessionSummaryModal: React.FC<SessionSummaryModalProps> = ({
   onNewSession,
   onOpenDashboard,
 }) => {
-  const { completedWords, startTime, endTime } = useSessionStore();
+  const { completedWords, startTime, endTime, startRetryMistakes } = useSessionStore();
   const { activeCategory, theme } = useSettingsStore();
   const [copied, setCopied] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
+  const [expandedWordIdx, setExpandedWordIdx] = useState<number | null>(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -205,37 +208,115 @@ export const SessionSummaryModal: React.FC<SessionSummaryModalProps> = ({
           </div>
         </div>
 
+        {/* Targeted Practice: Drill Failed Words */}
+        {failedWords.length > 0 && (
+          <button
+            type="button"
+            onClick={() => startRetryMistakes()}
+            className="w-full py-2.5 px-4 rounded-xl border border-error/40 bg-error/10 hover:bg-error/20 text-error font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-sm cursor-pointer"
+            title="Launch an immediate queue containing only words that failed in this session"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            <span>Practice Only Failed Words ({failedWords.length})</span>
+          </button>
+        )}
+
         {/* Word Results Breakdown */}
         <div>
-          <div className="text-xs uppercase text-sub font-semibold mb-2">Word Breakdown</div>
-          <div className="max-h-48 overflow-y-auto space-y-1.5 pr-1">
-            {completedWords.map((item, idx) => (
-              <div
-                key={idx}
-                className="flex items-center justify-between p-2 rounded-lg bg-sub/5 border border-sub/15 text-xs"
-              >
-                <div className="flex items-center gap-2">
-                  <span
-                    className={`w-2 h-2 rounded-full ${
-                      item.grade >= 4 ? "bg-main" : item.grade === 3 ? "bg-sub" : "bg-error"
-                    }`}
-                  />
-                  <span className="font-bold text-text">{item.word.word}</span>
-                  {item.wasRetry && (
-                    <span className="text-[9px] bg-sub/20 text-sub px-1 py-0.5 rounded">retry</span>
-                  )}
-                </div>
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs uppercase text-sub font-semibold">Word Breakdown</span>
+            <span className="text-[10px] text-sub/60">Click word to inspect mistakes</span>
+          </div>
+          <div className="max-h-56 overflow-y-auto space-y-2 pr-1">
+            {completedWords.map((item, idx) => {
+              const isExpanded = expandedWordIdx === idx;
+              return (
+                <div
+                  key={idx}
+                  className={`rounded-xl border transition-all text-xs overflow-hidden ${
+                    isExpanded
+                      ? "bg-sub/10 border-main/40 shadow-sm"
+                      : "bg-sub/5 border-sub/15 hover:border-sub/30"
+                  }`}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setExpandedWordIdx(isExpanded ? null : idx)}
+                    className="w-full flex items-center justify-between p-2.5 text-left cursor-pointer"
+                  >
+                    <div className="flex items-center gap-2">
+                      <span
+                        className={`w-2 h-2 rounded-full ${
+                          item.grade >= 4 ? "bg-main" : item.grade === 3 ? "bg-sub" : "bg-error"
+                        }`}
+                      />
+                      <span className="font-bold text-text">{item.word.word}</span>
+                      {item.wasRetry && (
+                        <span className="text-[9px] bg-sub/20 text-sub px-1 py-0.5 rounded">retry</span>
+                      )}
+                      {item.errors > 0 && (
+                        <span className="text-[9px] bg-error/20 text-error px-1.5 py-0.5 rounded font-bold">
+                          {item.errors} {item.errors === 1 ? "error" : "errors"}
+                        </span>
+                      )}
+                    </div>
 
-                <div className="flex items-center gap-3 text-sub text-[11px]">
-                  <span>{item.wpm} wpm</span>
-                  {item.consistency !== undefined && (
-                    <span className="text-cyan-400">{item.consistency}%</span>
+                    <div className="flex items-center gap-2.5 text-sub text-[11px]">
+                      <span>{item.wpm} wpm</span>
+                      {item.consistency !== undefined && (
+                        <span className="text-cyan-400">{item.consistency}%</span>
+                      )}
+                      <span>{item.accuracy}% acc</span>
+                      <span className="font-semibold text-text">{item.label}</span>
+                      {isExpanded ? (
+                        <ChevronUp className="w-3.5 h-3.5 text-main ml-1" />
+                      ) : (
+                        <ChevronDown className="w-3.5 h-3.5 text-sub/60 ml-1" />
+                      )}
+                    </div>
+                  </button>
+
+                  {/* Expanded Drill-down Details */}
+                  {isExpanded && (
+                    <div className="px-3 pb-3 pt-1 border-t border-sub/15 bg-sub/5 space-y-2 text-[11px] font-mono">
+                      {/* Hint & Phonetic */}
+                      <div className="text-sub flex items-center gap-2">
+                        {item.word.phonetic && (
+                          <span className="text-main font-semibold">/{item.word.phonetic}/</span>
+                        )}
+                        <span className="text-text/90 italic">
+                          {item.word.definition || item.word.hint || "Vocabulary term"}
+                        </span>
+                      </div>
+
+                      {/* Diagnostic details grid */}
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-[10px]">
+                        <div className="p-1.5 rounded bg-sub/10 border border-sub/15">
+                          <span className="text-sub/70 block">ERRORS:</span>
+                          <span className={`font-bold ${item.errors > 0 ? "text-error" : "text-main"}`}>
+                            {item.errors}
+                          </span>
+                        </div>
+                        <div className="p-1.5 rounded bg-sub/10 border border-sub/15">
+                          <span className="text-sub/70 block">BACKSPACES:</span>
+                          <span className="text-text font-bold">{item.backspaces}</span>
+                        </div>
+                        <div className="p-1.5 rounded bg-sub/10 border border-sub/15">
+                          <span className="text-cyan-400 block">SM-2 EASE:</span>
+                          <span className="text-cyan-400 font-bold">
+                            {(item.word.easeFactor ?? 2.5).toFixed(1)}
+                          </span>
+                        </div>
+                        <div className="p-1.5 rounded bg-sub/10 border border-sub/15">
+                          <span className="text-sub/70 block">INTERVAL:</span>
+                          <span className="text-text font-bold">{item.word.interval ?? 1}d</span>
+                        </div>
+                      </div>
+                    </div>
                   )}
-                  <span>{item.accuracy}% acc</span>
-                  <span className="font-semibold text-text">{item.label}</span>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
 
