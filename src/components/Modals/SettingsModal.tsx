@@ -15,6 +15,8 @@ import {
   CircleOff,
   MousePointer,
   Zap,
+  Binary,
+  Waves,
 } from "lucide-react";
 import {
   useSettingsStore,
@@ -590,13 +592,25 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                 <label className="text-xs uppercase text-sub font-semibold block mb-2">
                   Ambient Backdrop Canvas
                 </label>
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
                   {[
                     {
                       id: "cyber_grid" as AmbientBackdrop,
                       label: "Cyber Horizon",
                       desc: "Synth grid & reactive circuits",
                       icon: Zap,
+                    },
+                    {
+                      id: "matrix_rain" as AmbientBackdrop,
+                      label: "Matrix Rain",
+                      desc: "Cascading glyph stream",
+                      icon: Binary,
+                    },
+                    {
+                      id: "sine_wave" as AmbientBackdrop,
+                      label: "Sine Mesh",
+                      desc: "Undulating harmonic ribbons",
+                      icon: Waves,
                     },
                     {
                       id: "constellation" as AmbientBackdrop,

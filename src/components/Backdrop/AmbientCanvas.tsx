@@ -195,6 +195,15 @@ export const AmbientCanvas: React.FC = () => {
       });
     }
 
+    // Matrix Rain setup
+    const matrixFontSize = isMobile ? 13 : 15;
+    const matrixColumnsCount = Math.floor(width / matrixFontSize);
+    const matrixChars = "0123456789ABCDEFｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈﾊﾋﾎﾏﾐﾑﾒﾓﾔﾕﾗﾘﾜ<>{}/*+=~";
+    const matrixDrops: number[] = [];
+    for (let i = 0; i < matrixColumnsCount; i++) {
+      matrixDrops[i] = Math.floor(Math.random() * -60);
+    }
+
     // Animation loop
     let animationFrameId: number | null = null;
     let isPaused = document.hidden;
@@ -443,6 +452,72 @@ export const AmbientCanvas: React.FC = () => {
           ctx.arc(p.x, p.y, currentRadius, 0, Math.PI * 2);
           ctx.fillStyle = `rgba(${pColor.r}, ${pColor.g}, ${pColor.b}, ${currentAlpha})`;
           ctx.fill();
+        }
+      }
+
+      // MODE 5: MATRIX DIGITAL RAIN
+      else if (ambientBackdrop === "matrix_rain") {
+        ctx.font = `${matrixFontSize}px monospace`;
+        const speedMult = 1 + pulseEnergy * 2.2;
+
+        for (let i = 0; i < matrixDrops.length; i++) {
+          const char = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+          const x = i * matrixFontSize;
+          const y = matrixDrops[i] * matrixFontSize;
+
+          if (y > 0 && y < height + 60) {
+            // Head character (bright glowing caret/white)
+            ctx.fillStyle = `rgba(${c.r}, ${c.g}, ${c.b}, ${Math.min(1, 0.85 + pulseEnergy * 0.15)})`;
+            ctx.fillText(char, x, y);
+
+            // Trailing character (theme main color)
+            ctx.fillStyle = `rgba(${m.r}, ${m.g}, ${m.b}, ${Math.min(0.65, 0.32 + pulseEnergy * 0.28)})`;
+            const trailChar = matrixChars[Math.floor(Math.random() * matrixChars.length)];
+            ctx.fillText(trailChar, x, y - matrixFontSize);
+          }
+
+          if (y > height && Math.random() > 0.975) {
+            matrixDrops[i] = 0;
+          } else {
+            matrixDrops[i] += 0.65 * speedMult;
+          }
+        }
+      }
+
+      // MODE 6: CYBER SINE WAVE MESH
+      else if (ambientBackdrop === "sine_wave") {
+        const waveLayers = isMobile ? 4 : 6;
+        const step = isMobile ? 24 : 16;
+        const centerY = height * 0.58;
+
+        for (let w = 0; w < waveLayers; w++) {
+          const layerRatio = w / waveLayers;
+          const amp = (32 + w * 18) * (1 + pulseEnergy * 0.85);
+          const freq = 0.003 - w * 0.0002;
+          const speed = 0.8 + w * 0.25;
+          const alpha = (0.12 + (1 - layerRatio) * 0.2) * (1 + pulseEnergy * 0.45);
+          const color = w % 2 === 0 ? m : c;
+
+          ctx.beginPath();
+          ctx.strokeStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${Math.min(0.75, alpha)})`;
+          ctx.lineWidth = 1.2;
+
+          for (let x = 0; x <= width + step; x += step) {
+            const y =
+              centerY +
+              Math.sin(x * freq + simTime * speed + w * 1.2) * amp +
+              Math.cos(x * (freq * 0.6) - simTime * 0.5) * (amp * 0.4);
+
+            if (x === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+
+            // Glowing vertex points on wave crests
+            if (x % (step * 4) === 0 && Math.abs(y - centerY) > amp * 0.7) {
+              ctx.fillStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${Math.min(0.85, alpha * 1.5)})`;
+              ctx.fillRect(x - 1.5, y - 1.5, 3, 3);
+            }
+          }
+          ctx.stroke();
         }
       }
 

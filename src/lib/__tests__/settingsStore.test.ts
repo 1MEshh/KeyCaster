@@ -45,3 +45,17 @@ test("useSettingsStore: handles toggleMute and preserves previous volume", () =>
   store.toggleMute();
   assert.equal(useSettingsStore.getState().soundVolume, 0.8);
 });
+
+test("useSettingsStore: handles matrix_rain and sine_wave ambientBackdrop updates", () => {
+  const store = useSettingsStore.getState();
+
+  store.setAmbientBackdrop("matrix_rain");
+  assert.equal(useSettingsStore.getState().ambientBackdrop, "matrix_rain");
+
+  store.setAmbientBackdrop("sine_wave");
+  assert.equal(useSettingsStore.getState().ambientBackdrop, "sine_wave");
+
+  store.setAmbientBackdrop("cyber_grid");
+  assert.equal(useSettingsStore.getState().ambientBackdrop, "cyber_grid");
+});
+
