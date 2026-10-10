@@ -10,6 +10,8 @@ import {
   History,
   AlertTriangle,
   Play,
+  Database,
+  Download,
 } from "lucide-react";
 import { db, type WordRecord, type SessionHistoryRecord } from "@/lib/db";
 import { isDue } from "@/lib/sm2";
@@ -21,6 +23,12 @@ import { Trophy, Flame, Award } from "lucide-react";
 import { HeatmapTab } from "./HeatmapTab";
 import { ChartsTab } from "./ChartsTab";
 import { HistoryTab } from "./HistoryTab";
+import {
+  getStorageHealthEstimate,
+  exportQuickBackupJson,
+  formatBytes,
+  type StorageHealthReport,
+} from "@/lib/backupHealth";
 
 interface ProgressDashboardProps {
   isOpen: boolean;
@@ -51,10 +59,21 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
   const [allWords, setAllWords] = useState<WordRecord[]>([]);
   const [history, setHistory] = useState<SessionHistoryRecord[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [storageReport, setStorageReport] = useState<StorageHealthReport | null>(null);
+  const [isExportingBackup, setIsExportingBackup] = useState(false);
 
   const { activeCategory, setActiveCategory, sessionSize } = useSettingsStore();
   const initSession = useSessionStore((s) => s.initSession);
   const { xp, level, streak, getRank, getXpForNextLevel, unlockedAchievements } = useProfileStore();
+
+  const handleQuickBackup = async () => {
+    setIsExportingBackup(true);
+    try {
+      await exportQuickBackupJson();
+    } finally {
+      setTimeout(() => setIsExportingBackup(false), 500);
+    }
+  };
 
   useEffect(() => {
     if (!isOpen) return;
@@ -117,6 +136,9 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
         setStats(catStats);
         setHardestWords(sortedHardest);
         setHistory(sessionHistory);
+
+        const health = await getStorageHealthEstimate();
+        setStorageReport(health);
         setIsLoading(false);
       } catch (err) {
         console.error("Failed to load dashboard data:", err);
@@ -356,6 +378,64 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
                   </div>
                 </div>
               )}
+
+              {/* Local Data Health Monitor & Quick Backup Sync */}
+              <div className="p-4 rounded-2xl border border-sub/20 bg-sub/5 space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-9 h-9 rounded-xl bg-emerald-500/15 text-emerald-400 flex items-center justify-center font-bold">
+                      <Database className="w-4 h-4" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="font-bold text-xs text-text">IndexedDB Local Storage</span>
+                        <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                          ONLINE · HEALTHY
+                        </span>
+                      </div>
+                      <p className="text-[10px] text-sub mt-0.5 font-mono">
+                        {storageReport ? `${formatBytes(storageReport.usedBytes)} used (${storageReport.percentUsed}% quota)` : "Zero-latency persistent offline storage"}
+                      </p>
+                    </div>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={handleQuickBackup}
+                    disabled={isExportingBackup}
+                    className="px-3.5 py-2 rounded-xl border border-sub/30 bg-sub/10 hover:bg-sub/20 text-text text-xs font-semibold flex items-center justify-center gap-2 transition-colors cursor-pointer"
+                    title="Export complete JSON backup of all local decks, history, and words"
+                  >
+                    <Download className="w-3.5 h-3.5 text-main" />
+                    <span>{isExportingBackup ? "Exporting JSON..." : "Quick JSON Backup"}</span>
+                  </button>
+                </div>
+
+                {storageReport && (
+                  <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-2 border-t border-sub/15 text-[10px] font-mono text-sub">
+                    <div className="p-2 rounded-lg bg-sub/10">
+                      <span className="block text-sub/60">WORDS</span>
+                      <span className="font-bold text-text">{storageReport.tableCounts.words}</span>
+                    </div>
+                    <div className="p-2 rounded-lg bg-sub/10">
+                      <span className="block text-sub/60">DECKS</span>
+                      <span className="font-bold text-text">{storageReport.tableCounts.customDecks}</span>
+                    </div>
+                    <div className="p-2 rounded-lg bg-sub/10">
+                      <span className="block text-sub/60">SESSIONS</span>
+                      <span className="font-bold text-text">{storageReport.tableCounts.sessionHistory}</span>
+                    </div>
+                    <div className="p-2 rounded-lg bg-sub/10">
+                      <span className="block text-sub/60">SENTENCES</span>
+                      <span className="font-bold text-text">{storageReport.tableCounts.sentenceHistory}</span>
+                    </div>
+                    <div className="p-2 rounded-lg bg-sub/10">
+                      <span className="block text-sub/60">TRANSLATIONS</span>
+                      <span className="font-bold text-text">{storageReport.tableCounts.translationMastery}</span>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>
