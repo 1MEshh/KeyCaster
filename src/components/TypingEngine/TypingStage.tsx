@@ -20,6 +20,7 @@ import { LiveStats } from "@/components/HUD/LiveStats";
 import { VirtualKeyboard } from "@/components/VirtualKeyboard/VirtualKeyboard";
 import { SessionEndActions } from "@/components/TypingEngine/SessionEndActions";
 import { CaretSparks } from "@/components/Cursor/CaretSparks";
+import { calculatePaceSplitDelta } from "@/lib/paceCarSplits";
 
 interface LetterStatus {
   char: string;
@@ -140,6 +141,8 @@ export const TypingStage: React.FC = () => {
   }, [ghostCharIndex, paceCarMode]);
 
   const paceDeltaChars = caretIndex - ghostCharIndex;
+  const elapsedSec = firstKeyTimeRef.current ? (Date.now() - firstKeyTimeRef.current) / 1000 : 0;
+  const splitResult = calculatePaceSplitDelta(elapsedSec, caretIndex, targetWpm);
 
   // Ref sync for event handlers to prevent closure staleness with 0 latency
   const stateRef = useRef({
@@ -592,15 +595,20 @@ export const TypingStage: React.FC = () => {
       {paceCarMode !== "off" && firstKeyTimeRef.current && (
         <div className="mb-6 flex items-center justify-center animate-fadeIn">
           <div
-            className={`text-xs font-mono px-3.5 py-1 rounded-full border flex items-center gap-2 backdrop-blur-md shadow-sm transition-all ${
-              paceDeltaChars >= 0
+            className={`text-xs font-mono px-3.5 py-1.5 rounded-full border flex items-center gap-2.5 backdrop-blur-md shadow-sm transition-all ${
+              splitResult.isAhead
                 ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.15)]"
-                : "bg-amber-500/10 text-amber-400 border-amber-500/30 shadow-[0_0_10px_rgba(245,158,11,0.15)]"
+                : "bg-rose-500/10 text-rose-400 border-rose-500/30 shadow-[0_0_10px_rgba(244,63,94,0.15)]"
             }`}
           >
             <span>🏎️</span>
-            <span className="font-semibold">
-              {paceDeltaChars >= 0 ? `+${paceDeltaChars} chars ahead` : `${paceDeltaChars} chars behind`}
+            <span className="font-bold flex items-center gap-1">
+              <span>{splitResult.formattedDelta}</span>
+              <span>{splitResult.isAhead ? "▲" : "▼"}</span>
+            </span>
+            <span className="text-sub/50">·</span>
+            <span className="font-semibold text-text">
+              {paceDeltaChars >= 0 ? `+${paceDeltaChars} chars` : `${paceDeltaChars} chars`}
             </span>
             <span className="text-[10px] opacity-70">
               ({targetWpm} WPM {paceCarMode === "pb" ? "PB" : "Target"})
