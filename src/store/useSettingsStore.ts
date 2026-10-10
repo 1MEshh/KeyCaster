@@ -77,6 +77,8 @@ export interface SettingsState {
   setShowKeyboard: (show: boolean) => void;
   setKeyboardLayout: (layout: KeyboardLayout) => void;
   setSoundVolume: (volume: number) => void;
+  previousSoundVolume?: number;
+  toggleMute: () => void;
   setSoundOnClick: (val: boolean) => void;
   setSoundOnError: (val: boolean) => void;
   setSwitchSound: (profile: SwitchSoundProfile) => void;
@@ -181,6 +183,7 @@ const DEFAULT_SETTINGS = {
   showKeyboard: true,
   keyboardLayout: "qwerty" as KeyboardLayout,
   soundVolume: 0.6,
+  previousSoundVolume: 0.6,
   soundOnClick: true,
   soundOnError: true,
   switchSound: "cherry_brown" as SwitchSoundProfile,
@@ -223,7 +226,24 @@ export const useSettingsStore = create<SettingsState>()(
       setCustomCursor: (customCursor) => set({ customCursor }),
       setShowKeyboard: (showKeyboard) => set({ showKeyboard }),
       setKeyboardLayout: (keyboardLayout) => set({ keyboardLayout }),
-      setSoundVolume: (soundVolume) => set({ soundVolume }),
+      setSoundVolume: (soundVolume) =>
+        set((state) => ({
+          soundVolume,
+          previousSoundVolume: soundVolume > 0 ? soundVolume : state.previousSoundVolume ?? 0.6,
+        })),
+      toggleMute: () =>
+        set((state) => {
+          if (state.soundVolume > 0) {
+            return {
+              previousSoundVolume: state.soundVolume,
+              soundVolume: 0,
+            };
+          }
+          const restored = state.previousSoundVolume && state.previousSoundVolume > 0
+            ? state.previousSoundVolume
+            : 0.6;
+          return { soundVolume: restored };
+        }),
       setSoundOnClick: (soundOnClick) => set({ soundOnClick }),
       setSoundOnError: (soundOnError) => set({ soundOnError }),
       setSwitchSound: (switchSound) => set({ switchSound }),

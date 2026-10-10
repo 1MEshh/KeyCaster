@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import {
   Volume2,
+  VolumeX,
   Settings,
   TrendingUp,
   Plus,
@@ -32,6 +33,7 @@ import { useSentenceStore } from "@/store/useSentenceStore";
 import { useGameModeStore, type GameModeType } from "@/store/useGameModeStore";
 import { useProfileStore } from "@/store/useProfileStore";
 import { db, type CustomDeckRecord } from "@/lib/db";
+import { playMechanicalClick, type SwitchSoundProfile } from "@/lib/audio";
 
 interface TopNavProps {
   onOpenSettings: () => void;
@@ -60,6 +62,15 @@ export const TopNav: React.FC<TopNavProps> = ({
     setActiveSection: storeSetActiveSection,
     isZenMode,
     toggleZenMode,
+    soundVolume,
+    setSoundVolume,
+    toggleMute,
+    switchSound,
+    setSwitchSound,
+    soundOnClick,
+    setSoundOnClick,
+    soundOnError,
+    setSoundOnError,
   } = useSettingsStore();
 
   const currentSection = propActiveSection || storeActiveSection || "srs_words";
@@ -73,22 +84,28 @@ export const TopNav: React.FC<TopNavProps> = ({
   const [isCategoryMenuOpen, setIsCategoryMenuOpen] = useState(false);
   const [isArcadeMenuOpen, setIsArcadeMenuOpen] = useState(false);
   const [isThemeMenuOpen, setIsThemeMenuOpen] = useState(false);
+  const [isSoundMenuOpen, setIsSoundMenuOpen] = useState(false);
 
   useEffect(() => {
     checkStreak();
   }, [checkStreak]);
 
   useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         setIsCategoryMenuOpen(false);
         setIsArcadeMenuOpen(false);
         setIsThemeMenuOpen(false);
+        setIsSoundMenuOpen(false);
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "m") {
+        e.preventDefault();
+        toggleMute();
       }
     };
-    window.addEventListener("keydown", handleEsc);
-    return () => window.removeEventListener("keydown", handleEsc);
-  }, []);
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [toggleMute]);
 
   useEffect(() => {
     const fetchCustomDecks = async () => {
@@ -466,6 +483,126 @@ export const TopNav: React.FC<TopNavProps> = ({
                     />
                   </button>
                 ))}
+              </div>
+            )}
+          </div>
+
+          {/* Quick Sound & Master Volume HUD Controller */}
+          <div className="relative">
+            <button
+              onClick={() => {
+                setIsSoundMenuOpen(!isSoundMenuOpen);
+                setIsThemeMenuOpen(false);
+                setIsCategoryMenuOpen(false);
+                setIsArcadeMenuOpen(false);
+              }}
+              className={`p-2 rounded-lg border transition-colors flex items-center gap-1.5 ${
+                soundVolume === 0
+                  ? "text-error border-error/30 bg-error/10 hover:bg-error/20"
+                  : "text-sub hover:text-text hover:bg-sub/10 border-sub/20"
+              }`}
+              title={`Audio HUD: ${soundVolume === 0 ? "Muted" : `${Math.round(soundVolume * 100)}%`} (Ctrl+M to toggle mute)`}
+            >
+              {soundVolume === 0 ? (
+                <VolumeX className="w-4 h-4 text-error" />
+              ) : (
+                <Volume2 className="w-4 h-4" />
+              )}
+              <span className="text-[10px] font-mono hidden md:inline font-semibold">
+                {soundVolume === 0 ? "MUTED" : `${Math.round(soundVolume * 100)}%`}
+              </span>
+            </button>
+
+            {isSoundMenuOpen && (
+              <div className="absolute right-0 top-full mt-2 w-72 rounded-2xl border border-sub/30 bg-bg shadow-2xl p-4 z-40 animate-fadeIn text-xs space-y-3.5">
+                {/* Header with Quick Mute */}
+                <div className="flex items-center justify-between pb-2 border-b border-sub/20">
+                  <div className="flex items-center gap-2">
+                    <Volume2 className="w-4 h-4 text-main" />
+                    <span className="font-bold text-text">Audio HUD</span>
+                  </div>
+                  <button
+                    onClick={toggleMute}
+                    className={`px-2 py-0.5 rounded text-[11px] font-mono font-bold transition-colors flex items-center gap-1 ${
+                      soundVolume === 0
+                        ? "bg-error/20 text-error border border-error/30 hover:bg-error/30"
+                        : "bg-sub/15 text-sub hover:text-text border border-sub/20"
+                    }`}
+                    title="Toggle Mute (Ctrl+M)"
+                  >
+                    <span>{soundVolume === 0 ? "Unmute" : "Mute"}</span>
+                    <kbd className="text-[9px] opacity-70">^M</kbd>
+                  </button>
+                </div>
+
+                {/* Volume Slider */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between text-sub font-mono text-[11px]">
+                    <span>Master Volume</span>
+                    <span className="text-text font-bold">{Math.round(soundVolume * 100)}%</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.05"
+                    value={soundVolume}
+                    onChange={(e) => setSoundVolume(parseFloat(e.target.value))}
+                    className="w-full accent-main cursor-pointer"
+                  />
+                </div>
+
+                {/* Switch Sound Profile Dropdown / Picker */}
+                <div className="space-y-1.5">
+                  <div className="flex items-center justify-between text-sub font-mono text-[11px]">
+                    <span>Switch Profile</span>
+                    <button
+                      type="button"
+                      onClick={() => playMechanicalClick(soundVolume > 0 ? soundVolume : 0.5, switchSound)}
+                      className="text-[10px] text-main hover:underline flex items-center gap-1 font-sans"
+                    >
+                      <span>Audition</span>
+                      <kbd className="px-1 rounded bg-main/15 text-main font-mono text-[9px]">click</kbd>
+                    </button>
+                  </div>
+                  <select
+                    value={switchSound}
+                    onChange={(e) => {
+                      const nextSound = e.target.value as SwitchSoundProfile;
+                      setSwitchSound(nextSound);
+                      playMechanicalClick(soundVolume > 0 ? soundVolume : 0.5, nextSound);
+                    }}
+                    className="w-full px-2.5 py-1.5 rounded-xl bg-sub/10 border border-sub/20 text-text font-mono text-xs focus:outline-none focus:border-main"
+                  >
+                    <option value="cherry_brown">Cherry MX Brown (Tactile)</option>
+                    <option value="cherry_blue">Cherry MX Blue (Clicky)</option>
+                    <option value="gateron_ink_black">Gateron Ink Black (Thock)</option>
+                    <option value="topre_capacitive">Topre (Capacitive)</option>
+                    <option value="typewriter">Typewriter (Vintage)</option>
+                  </select>
+                </div>
+
+                {/* Toggle Checkboxes */}
+                <div className="pt-2 border-t border-sub/15 space-y-2 text-[11px]">
+                  <label className="flex items-center justify-between text-sub cursor-pointer hover:text-text">
+                    <span>Keypress audio</span>
+                    <input
+                      type="checkbox"
+                      checked={soundOnClick}
+                      onChange={(e) => setSoundOnClick(e.target.checked)}
+                      className="rounded accent-main"
+                    />
+                  </label>
+                  <label className="flex items-center justify-between text-sub cursor-pointer hover:text-text">
+                    <span>Error thud</span>
+                    <input
+                      type="checkbox"
+                      checked={soundOnError}
+                      onChange={(e) => setSoundOnError(e.target.checked)}
+                      className="rounded accent-main"
+                    />
+                  </label>
+                </div>
               </div>
             )}
           </div>
