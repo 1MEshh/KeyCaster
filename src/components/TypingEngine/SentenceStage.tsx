@@ -92,6 +92,8 @@ export const SentenceStage: React.FC = () => {
     theme,
   } = useSettingsStore();
 
+  const isCyberpunk = theme === "cyberpunk";
+
   const setActiveKey = useKeyStore((s) => s.setActiveKey);
 
   // Focus & element refs
@@ -695,6 +697,21 @@ export const SentenceStage: React.FC = () => {
         </div>
       )}
 
+      {/* Cyberpunk 2077 Telemetry HUD Ribbon */}
+      {isCyberpunk && (
+        <div className="w-full max-w-2xl mb-3 flex items-center justify-between text-[10px] font-mono tracking-widest text-[#fcee09] border-b border-[#fcee09]/30 pb-1.5 select-none uppercase">
+          <div className="flex items-center gap-2">
+            <span className="inline-block w-2 h-2 bg-[#fcee09] animate-pulse" />
+            <span className="font-bold">// NETRUNNER v2.077 :: KIROSHI OPTICS [SYS_SYNC]</span>
+          </div>
+          <div className="flex items-center gap-3 text-sub">
+            <span className="text-[#00f0ff]">RAM [16/16 GB]</span>
+            <span className="text-emerald-400">NC-NET [OK]</span>
+            <span className="text-[#ff003c]">ICE [SECURE]</span>
+          </div>
+        </div>
+      )}
+
       {/* Live Stats Bar & Dynamic Tachometer */}
       <div className="w-full max-w-2xl mb-5">
         <LiveStats
@@ -712,9 +729,14 @@ export const SentenceStage: React.FC = () => {
       {/* Interactive Multi-word Typing Board */}
       <div
         ref={containerRef}
-        className="w-full relative min-h-[180px] p-8 rounded-3xl bg-sub/5 border border-sub/20 backdrop-blur-sm shadow-xl flex flex-col justify-center overflow-hidden cursor-text transition-all"
+        className={`w-full relative min-h-[180px] p-8 backdrop-blur-sm shadow-xl flex flex-col justify-center overflow-hidden cursor-text transition-all ${
+          isCyberpunk
+            ? "cyber-cut cyber-reticle-crosshair bg-[#08080c]/85 border border-[#fcee09]/40 shadow-[0_0_20px_rgba(252,238,9,0.12)]"
+            : "rounded-3xl bg-sub/5 border border-sub/20"
+        }`}
         style={{ fontSize: `${fontSize * 1.35}rem` }}
       >
+        {isCyberpunk && <div className="absolute inset-0 cyber-scanlines opacity-40 pointer-events-none" />}
         {/* PB Pace Car / Shadow Ghost Caret */}
         {paceCarMode !== "off" && stats.elapsedMs > 0 && !isSentenceComplete && ghostOffset > 0 && (
           <div

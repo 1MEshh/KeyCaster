@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { useSettingsStore } from "../../store/useSettingsStore";
+import { useSettingsStore, THEME_VARIABLES } from "../../store/useSettingsStore";
 
 test("useSettingsStore: manages Zen Mode toggle and state updates correctly", () => {
   const store = useSettingsStore.getState();
@@ -95,6 +95,14 @@ test("useSettingsStore: cycles pace car modes through sequential sequence", () =
 
   store.cyclePaceCarMode();
   assert.equal(useSettingsStore.getState().paceCarMode, "off");
+});
+
+test("useSettingsStore: authentic CDPR Cyberpunk 2077 color palette", () => {
+  assert.equal(THEME_VARIABLES.cyberpunk.main, "#fcee09"); // Electric Yellow
+  assert.equal(THEME_VARIABLES.cyberpunk.caret, "#00f0ff"); // Kiroshi Cyan
+  assert.equal(THEME_VARIABLES.cyberpunk.error, "#ff003c"); // Arasaka Threat Red
+  assert.equal(THEME_VARIABLES.cyberpunk.bg, "#08080c"); // Braindance Obsidian
+  assert.equal(THEME_VARIABLES.cyberpunk.sub, "#5a6878"); // Militech Gunmetal
 });
 
 

@@ -187,13 +187,27 @@ export const TopNav: React.FC<TopNavProps> = ({
       <div className="flex items-center justify-between w-full">
         {/* Brand Logo */}
         <div className="flex items-center gap-2.5 shrink-0">
-          <div className="w-8 h-8 rounded-lg bg-main/15 text-main flex items-center justify-center font-black shadow-sm">
+          <div
+            className={`w-8 h-8 flex items-center justify-center font-black shadow-sm transition-all ${
+              theme === "cyberpunk"
+                ? "bg-[#fcee09] text-[#08080c] cyber-cut-sm shadow-[0_0_12px_rgba(252,238,9,0.5)]"
+                : "rounded-lg bg-main/15 text-main"
+            }`}
+          >
             <Volume2 className="w-4 h-4" />
           </div>
           <div className="flex flex-col">
-            <span className="text-base font-extrabold tracking-tight text-text leading-tight">KeyCaster</span>
+            <span
+              className={`text-base font-extrabold tracking-tight leading-tight transition-all ${
+                theme === "cyberpunk"
+                  ? "text-[#fcee09] cyber-glitch-text font-black tracking-wider"
+                  : "text-text"
+              }`}
+            >
+              {theme === "cyberpunk" ? "KEYCASTER // 2077" : "KeyCaster"}
+            </span>
             <span className="text-[9px] text-sub uppercase tracking-wider font-semibold -mt-0.5">
-              3.3 Audio SRS
+              {theme === "cyberpunk" ? "NETRUNNER AUDIO_HUD" : "3.3 Audio SRS"}
             </span>
           </div>
         </div>

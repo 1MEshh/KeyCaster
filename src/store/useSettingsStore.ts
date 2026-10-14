@@ -121,13 +121,13 @@ export const THEME_VARIABLES: Record<
   }
 > = {
   cyberpunk: {
-    bg: "#05050a",
-    main: "#00f0ff",
-    caret: "#ffe600",
-    sub: "#64748b",
-    text: "#f8fafc",
-    error: "#ff0055",
-    errorExtra: "#990033",
+    bg: "#08080c",
+    main: "#fcee09",
+    caret: "#00f0ff",
+    sub: "#5a6878",
+    text: "#f6f7fb",
+    error: "#ff003c",
+    errorExtra: "#990025",
   },
   monochrome: {
     bg: "#09090b",
@@ -336,6 +336,7 @@ export function applyThemeCSS(theme: Theme): void {
   const root = document.documentElement;
   const colors = THEME_VARIABLES[theme] || THEME_VARIABLES.serika_dark;
 
+  root.setAttribute("data-theme", theme);
   root.style.setProperty("--bg", colors.bg);
   root.style.setProperty("--main", colors.main);
   root.style.setProperty("--caret", colors.caret);
