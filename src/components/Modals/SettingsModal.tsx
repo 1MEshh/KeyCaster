@@ -17,6 +17,7 @@ import {
   Zap,
   Binary,
   Waves,
+  Wind,
 } from "lucide-react";
 import {
   useSettingsStore,
@@ -611,6 +612,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                       label: "Sine Mesh",
                       desc: "Undulating harmonic ribbons",
                       icon: Waves,
+                    },
+                    {
+                      id: "aurora" as AmbientBackdrop,
+                      label: "Cyber Aurora",
+                      desc: "Luminous chromatic wave curtains",
+                      icon: Wind,
                     },
                     {
                       id: "constellation" as AmbientBackdrop,

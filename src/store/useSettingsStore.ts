@@ -27,6 +27,7 @@ export type AmbientBackdrop =
   | "particles"
   | "matrix_rain"
   | "sine_wave"
+  | "aurora"
   | "off";
 export type AppSection = "srs_words" | "sentences" | "arabic_dictation" | "arcade";
 
