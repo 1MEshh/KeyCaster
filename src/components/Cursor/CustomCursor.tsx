@@ -5,6 +5,8 @@ import { useSettingsStore } from "@/store/useSettingsStore";
 
 export const CustomCursor: React.FC = () => {
   const customCursor = useSettingsStore((s) => s.customCursor);
+  const theme = useSettingsStore((s) => s.theme);
+  const isCyberpunk = theme === "cyberpunk";
 
   const dotRef = useRef<HTMLDivElement | null>(null);
   const ringRef = useRef<HTMLDivElement | null>(null);
@@ -179,22 +181,59 @@ export const CustomCursor: React.FC = () => {
       {/* Precision Core Dot (Zero lag, no CSS transform transitions) */}
       <div
         ref={dotRef}
-        className={`absolute top-0 left-0 -ml-[3.5px] -mt-[3.5px] w-[7px] h-[7px] rounded-full bg-main shadow-[0_0_10px_var(--main)] transition-[opacity,scale] duration-100 ease-out ${
-          isClicking ? "scale-75" : isHovered ? "scale-125 bg-caret shadow-[0_0_14px_var(--caret)]" : "scale-100"
+        className={`absolute top-0 left-0 transition-[opacity,scale] duration-100 ease-out ${
+          isCyberpunk
+            ? `-ml-[4px] -mt-[4px] w-[8px] h-[8px] rotate-45 ${
+                isClicking
+                  ? "bg-[#ff003c] shadow-[0_0_12px_#ff003c] scale-125"
+                  : isHovered
+                  ? "bg-[#00f0ff] shadow-[0_0_12px_#00f0ff] scale-125"
+                  : "bg-[#fcee09] shadow-[0_0_10px_#fcee09]"
+              }`
+            : `-ml-[3.5px] -mt-[3.5px] w-[7px] h-[7px] rounded-full bg-main shadow-[0_0_10px_var(--main)] ${
+                isClicking
+                  ? "scale-75"
+                  : isHovered
+                  ? "scale-125 bg-caret shadow-[0_0_14px_var(--caret)]"
+                  : "scale-100"
+              }`
         }`}
       />
 
-      {/* Adaptive Magnetic Follow Ring (Clamped velocity spring, no CSS transform transition) */}
+      {/* Adaptive Follow Ring / Kiroshi Optics Reticle */}
       <div
         ref={ringRef}
-        className={`absolute top-0 left-0 rounded-full border transition-[width,height,margin,background-color,border-color,box-shadow] duration-150 ease-out ${
-          isHovered
-            ? "-ml-[20px] -mt-[20px] w-[40px] h-[40px] border-main bg-main/15 shadow-[0_0_16px_var(--main)]"
-            : isClicking
-            ? "-ml-[10px] -mt-[10px] w-[20px] h-[20px] border-main/90 bg-main/30 shadow-[0_0_8px_var(--main)]"
-            : "-ml-[13px] -mt-[13px] w-[26px] h-[26px] border-main/60 bg-main/5 shadow-[0_0_6px_var(--main)/25]"
-        }`}
-      />
+        className={`absolute top-0 left-0 transition-[width,height,margin,background-color,border-color,box-shadow] duration-150 ease-out ${
+          isCyberpunk
+            ? isHovered
+              ? "-ml-[22px] -mt-[22px] w-[44px] h-[44px] border border-[#00f0ff] bg-[#00f0ff]/10 shadow-[0_0_16px_rgba(0,240,255,0.4)]"
+              : isClicking
+              ? "-ml-[12px] -mt-[12px] w-[24px] h-[24px] border border-[#ff003c] bg-[#ff003c]/25 shadow-[0_0_14px_rgba(255,0,60,0.6)]"
+              : "-ml-[16px] -mt-[16px] w-[32px] h-[32px] border border-[#fcee09]/60 bg-[#fcee09]/5 shadow-[0_0_8px_rgba(252,238,9,0.3)]"
+            : `rounded-full border ${
+                isHovered
+                  ? "-ml-[20px] -mt-[20px] w-[40px] h-[40px] border-main bg-main/15 shadow-[0_0_16px_var(--main)]"
+                  : isClicking
+                  ? "-ml-[10px] -mt-[10px] w-[20px] h-[20px] border-main/90 bg-main/30 shadow-[0_0_8px_var(--main)]"
+                  : "-ml-[13px] -mt-[13px] w-[26px] h-[26px] border-main/60 bg-main/5 shadow-[0_0_6px_var(--main)/25]"
+              }`
+        } ${isCyberpunk ? "cyber-cut-sm relative" : ""}`}
+      >
+        {isCyberpunk && (
+          <>
+            {/* Corner reticle tick marks */}
+            <span className="absolute -top-1 -left-1 w-1.5 h-1.5 border-t border-l border-[#fcee09]" />
+            <span className="absolute -top-1 -right-1 w-1.5 h-1.5 border-t border-r border-[#fcee09]" />
+            <span className="absolute -bottom-1 -left-1 w-1.5 h-1.5 border-b border-l border-[#fcee09]" />
+            <span className="absolute -bottom-1 -right-1 w-1.5 h-1.5 border-b border-r border-[#fcee09]" />
+            {isHovered && (
+              <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[7px] font-mono tracking-widest text-[#00f0ff] uppercase whitespace-nowrap">
+                TARGET_LOCK
+              </span>
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 };

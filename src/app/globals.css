@@ -111,3 +111,133 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--main);
 }
+
+/* ==========================================================================
+   CD PROJEKT RED CYBERPUNK 2077 AUTHENTIC HUD STYLING
+   ========================================================================== */
+
+[data-theme="cyberpunk"] {
+  --cyber-yellow: #fcee09;
+  --cyber-cyan: #00f0ff;
+  --cyber-red: #ff003c;
+  --cyber-dark: #08080c;
+  --cyber-metal: #5a6878;
+}
+
+/* 45-degree Angled Chamfered Polygon Cuts */
+[data-theme="cyberpunk"] .cyber-cut {
+  clip-path: polygon(
+    0 0,
+    calc(100% - 14px) 0,
+    100% 14px,
+    100% 100%,
+    14px 100%,
+    0 calc(100% - 14px)
+  );
+}
+
+[data-theme="cyberpunk"] .cyber-cut-sm {
+  clip-path: polygon(
+    0 0,
+    calc(100% - 8px) 0,
+    100% 8px,
+    100% 100%,
+    8px 100%,
+    0 calc(100% - 8px)
+  );
+}
+
+[data-theme="cyberpunk"] .cyber-cut-top-right {
+  clip-path: polygon(
+    0 0,
+    calc(100% - 16px) 0,
+    100% 16px,
+    100% 100%,
+    0 100%
+  );
+}
+
+/* Buttons with CP2077 chamfers and electric yellow hover */
+[data-theme="cyberpunk"] button:not(.no-cyber-style) {
+  border-radius: 2px !important;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: all 0.15s cubic-bezier(0.2, 0, 0, 1);
+}
+
+[data-theme="cyberpunk"] button.bg-main {
+  color: #08080c !important;
+  font-weight: 800 !important;
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+  box-shadow: 0 0 12px rgba(252, 238, 9, 0.35);
+}
+
+[data-theme="cyberpunk"] button.bg-main:hover {
+  box-shadow: 0 0 20px rgba(252, 238, 9, 0.65);
+  transform: translateY(-1px);
+}
+
+/* Kiroshi Optics Scanline Raster Effect */
+[data-theme="cyberpunk"] .cyber-scanlines {
+  background-image: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.22) 0px,
+    rgba(0, 0, 0, 0.22) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+}
+
+/* Cyberpunk 2077 Diagonal Hazard Warning Tape */
+[data-theme="cyberpunk"] .cyber-hazard {
+  background: repeating-linear-gradient(
+    -45deg,
+    #fcee09,
+    #fcee09 8px,
+    #08080c 8px,
+    #08080c 16px
+  );
+}
+
+/* Chromatic Aberration & Glitch Text Effect */
+[data-theme="cyberpunk"] .cyber-glitch-text {
+  text-shadow: 1.5px 0 0 rgba(255, 0, 60, 0.75), -1.5px 0 0 rgba(0, 240, 255, 0.75);
+}
+
+/* Active Error Alert Pulse */
+[data-theme="cyberpunk"] .text-error,
+[data-theme="cyberpunk"] .bg-error\/20 {
+  text-shadow: 0 0 8px rgba(255, 0, 60, 0.8) !important;
+}
+
+/* CP2077 HUD Corner Reticle Crosshairs */
+[data-theme="cyberpunk"] .cyber-reticle-crosshair {
+  position: relative;
+}
+
+[data-theme="cyberpunk"] .cyber-reticle-crosshair::before,
+[data-theme="cyberpunk"] .cyber-reticle-crosshair::after {
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  border-color: #fcee09;
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+[data-theme="cyberpunk"] .cyber-reticle-crosshair::before {
+  top: 4px;
+  left: 4px;
+  border-top: 2px solid #fcee09;
+  border-left: 2px solid #fcee09;
+}
+
+[data-theme="cyberpunk"] .cyber-reticle-crosshair::after {
+  bottom: 4px;
+  right: 4px;
+  border-bottom: 2px solid #fcee09;
+  border-right: 2px solid #fcee09;
+}
+
