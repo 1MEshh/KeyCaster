@@ -15,11 +15,14 @@ test("Switch Audio: gracefully handles execution without audio context (SSR / he
     "gateron_ink_black",
     "topre_capacitive",
     "typewriter",
+    "holy_panda",
+    "cream_linear",
   ];
 
   for (const profile of switchProfiles) {
     assert.doesNotThrow(() => {
       playMechanicalClick(0.5, profile);
+      playMechanicalClick(0.5, profile, "k"); // test keyChar jitter
     }, `Switch profile '${profile}' threw error in headless environment`);
   }
 });

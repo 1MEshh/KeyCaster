@@ -578,6 +578,8 @@ export const TopNav: React.FC<TopNavProps> = ({
                     <option value="cherry_brown">Cherry MX Brown (Tactile)</option>
                     <option value="cherry_blue">Cherry MX Blue (Clicky)</option>
                     <option value="gateron_ink_black">Gateron Ink Black (Thock)</option>
+                    <option value="holy_panda">Holy Panda (Tactile Pop)</option>
+                    <option value="cream_linear">Cream Linear (Silky POM)</option>
                     <option value="topre_capacitive">Topre (Capacitive)</option>
                     <option value="typewriter">Typewriter (Vintage)</option>
                   </select>

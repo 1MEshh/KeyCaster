@@ -292,6 +292,32 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           playMechanicalClick(soundVolume, "cherry_brown");
         },
       },
+      {
+        id: "audio-holy-panda",
+        category: "Audio",
+        title: "Switch: Holy Panda",
+        subtitle: "Sharp tactile bump with crisp leaf snap",
+        icon: <Volume2 className="w-4 h-4 text-orange-400" />,
+        keywords: ["holy panda", "tactile", "switch", "snap", "mechanical"],
+        active: switchSound === "holy_panda",
+        action: () => {
+          setSwitchSound("holy_panda");
+          playMechanicalClick(soundVolume, "holy_panda");
+        },
+      },
+      {
+        id: "audio-cream-linear",
+        category: "Audio",
+        title: "Switch: Cream Linear",
+        subtitle: "Silky smooth POM housing pop with low bottom-out resonance",
+        icon: <Volume2 className="w-4 h-4 text-yellow-200" />,
+        keywords: ["cream", "linear", "novelkeys", "silky", "switch", "smooth"],
+        active: switchSound === "cream_linear",
+        action: () => {
+          setSwitchSound("cream_linear");
+          playMechanicalClick(soundVolume, "cream_linear");
+        },
+      },
 
       // Toggles & Settings
       {
