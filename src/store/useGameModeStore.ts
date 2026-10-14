@@ -1,5 +1,7 @@
 import { create } from "zustand";
 import categoriesData from "@/data/categories.json";
+import { db } from "@/lib/db";
+import { useProfileStore } from "@/store/useProfileStore";
 
 export type GameModeType = "srs" | "time_attack" | "sudden_death" | "endless";
 
@@ -45,6 +47,36 @@ function getRandomWordPool(): string[] {
     [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
   }
   return shuffled;
+}
+
+function recordArcadeCompletion(state: GameModeState, endTime: number) {
+  const { mode, startTime, wordsCompleted, errors, totalKeystrokes, correctKeystrokes } = state;
+  const start = startTime || endTime;
+  const totalSecs = Math.max(1, Math.round((endTime - start) / 1000));
+  const finalWpm = Math.round((correctKeystrokes / 5) / (totalSecs / 60));
+  const accuracy = totalKeystrokes > 0 ? Math.round((correctKeystrokes / totalKeystrokes) * 100) : 100;
+
+  if (wordsCompleted > 0 || totalKeystrokes > 5) {
+    db.sessionHistory.add({
+      timestamp: new Date().toISOString(),
+      wpm: finalWpm,
+      rawWpm: finalWpm,
+      accuracy,
+      consistency: 85,
+      totalWords: wordsCompleted,
+      errors,
+      category: `arcade_${mode}`,
+      duration: totalSecs,
+    }).catch(() => {});
+
+    useProfileStore.getState().recordSessionCompletion({
+      wpm: finalWpm,
+      accuracy,
+      totalWords: wordsCompleted,
+      category: `arcade_${mode}`,
+      blindMode: false,
+    });
+  }
 }
 
 export const useGameModeStore = create<GameModeState>((set, get) => ({
@@ -109,7 +141,10 @@ export const useGameModeStore = create<GameModeState>((set, get) => ({
     if (!isActive || isGameOver || mode !== "time_attack") return;
 
     if (timeLeft <= 1) {
-      set({ timeLeft: 0, isGameOver: true, endTime: Date.now() });
+      const now = Date.now();
+      const st = get();
+      recordArcadeCompletion(st, now);
+      set({ timeLeft: 0, isGameOver: true, endTime: now });
     } else {
       set({ timeLeft: timeLeft - 1 });
     }
@@ -151,10 +186,13 @@ export const useGameModeStore = create<GameModeState>((set, get) => ({
   recordMistake: () => {
     const { mode, errors } = get();
     if (mode === "sudden_death") {
+      const now = Date.now();
+      const st = { ...get(), errors: errors + 1 };
+      recordArcadeCompletion(st, now);
       set({
         errors: errors + 1,
         isGameOver: true,
-        endTime: Date.now(),
+        endTime: now,
       });
     } else {
       set({ errors: errors + 1, currentStreak: 0 });
@@ -169,6 +207,11 @@ export const useGameModeStore = create<GameModeState>((set, get) => ({
   },
 
   endGame: () => {
-    set({ isGameOver: true, endTime: Date.now() });
+    const { isGameOver } = get();
+    if (!isGameOver) {
+      const now = Date.now();
+      recordArcadeCompletion(get(), now);
+      set({ isGameOver: true, endTime: now });
+    }
   },
 }));
