@@ -83,6 +83,7 @@ export interface SettingsState {
   setPhraseMode: (phraseMode: boolean) => void;
   setStopOnError: (stop: StopOnError) => void;
   setPaceCarMode: (paceCarMode: PaceCarMode) => void;
+  cyclePaceCarMode: () => void;
   setTheme: (theme: Theme) => void;
   setFontFamily: (font: FontFamily) => void;
   setFontSize: (size: number) => void;
@@ -245,6 +246,13 @@ export const useSettingsStore = create<SettingsState>()(
       setPhraseMode: (phraseMode) => set({ phraseMode }),
       setStopOnError: (stopOnError) => set({ stopOnError }),
       setPaceCarMode: (paceCarMode) => set({ paceCarMode }),
+      cyclePaceCarMode: () => {
+        const modes: PaceCarMode[] = ["off", "pb", "target_60", "target_80", "target_100", "target_120"];
+        set((state) => {
+          const nextIdx = (modes.indexOf(state.paceCarMode) + 1) % modes.length;
+          return { paceCarMode: modes[nextIdx] };
+        });
+      },
       setTheme: (theme) => {
         set({ theme });
         applyThemeCSS(theme);

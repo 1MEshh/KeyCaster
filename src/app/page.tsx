@@ -42,6 +42,7 @@ export default function Home() {
     isZenMode,
     setIsZenMode,
     toggleZenMode,
+    cyclePaceCarMode,
   } = useSettingsStore();
 
   const {
@@ -224,6 +225,13 @@ export default function Home() {
         return;
       }
 
+      // Alt+P -> Cycle Pace Car mode (off -> pb -> target_60 -> target_80 -> target_100 -> target_120 -> off)
+      if (e.altKey && (e.key === "p" || e.key === "P")) {
+        e.preventDefault();
+        cyclePaceCarMode();
+        return;
+      }
+
       // Ctrl+Enter -> New session when complete or reload
       if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
         e.preventDefault();
@@ -249,6 +257,7 @@ export default function Home() {
     isZenMode,
     setIsZenMode,
     toggleZenMode,
+    cyclePaceCarMode,
     isSettingsOpen,
     isDashboardOpen,
     isCustomDeckOpen,

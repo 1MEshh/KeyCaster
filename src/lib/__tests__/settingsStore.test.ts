@@ -72,3 +72,29 @@ test("useSettingsStore: supports matrix_crt and tokyo_night themes", () => {
   assert.equal(useSettingsStore.getState().theme, "tokyo_night");
 });
 
+test("useSettingsStore: cycles pace car modes through sequential sequence", () => {
+  const store = useSettingsStore.getState();
+
+  store.setPaceCarMode("off");
+  assert.equal(useSettingsStore.getState().paceCarMode, "off");
+
+  store.cyclePaceCarMode();
+  assert.equal(useSettingsStore.getState().paceCarMode, "pb");
+
+  store.cyclePaceCarMode();
+  assert.equal(useSettingsStore.getState().paceCarMode, "target_60");
+
+  store.cyclePaceCarMode();
+  assert.equal(useSettingsStore.getState().paceCarMode, "target_80");
+
+  store.cyclePaceCarMode();
+  assert.equal(useSettingsStore.getState().paceCarMode, "target_100");
+
+  store.cyclePaceCarMode();
+  assert.equal(useSettingsStore.getState().paceCarMode, "target_120");
+
+  store.cyclePaceCarMode();
+  assert.equal(useSettingsStore.getState().paceCarMode, "off");
+});
+
+
