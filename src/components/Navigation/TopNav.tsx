@@ -171,13 +171,14 @@ export const TopNav: React.FC<TopNavProps> = ({
   return (
     <header className="w-full max-w-6xl mx-auto flex flex-col gap-2 py-3 px-4 sm:px-6 select-none font-mono relative z-20">
       {/* Click-outside backdrop to dismiss any open dropdown */}
-      {(isCategoryMenuOpen || isArcadeMenuOpen || isThemeMenuOpen) && (
+      {(isCategoryMenuOpen || isArcadeMenuOpen || isThemeMenuOpen || isSoundMenuOpen) && (
         <div
           className="fixed inset-0 z-30 bg-transparent"
           onClick={() => {
             setIsCategoryMenuOpen(false);
             setIsArcadeMenuOpen(false);
             setIsThemeMenuOpen(false);
+            setIsSoundMenuOpen(false);
           }}
         />
       )}
@@ -192,7 +193,7 @@ export const TopNav: React.FC<TopNavProps> = ({
           <div className="flex flex-col">
             <span className="text-base font-extrabold tracking-tight text-text leading-tight">KeyCaster</span>
             <span className="text-[9px] text-sub uppercase tracking-wider font-semibold -mt-0.5">
-              3.0 Audio SRS
+              3.3 Audio SRS
             </span>
           </div>
         </div>
