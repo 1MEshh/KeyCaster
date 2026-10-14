@@ -19,6 +19,7 @@ import {
   Check,
   Binary,
   Waves,
+  Wind,
   Download,
   HardDrive,
 } from "lucide-react";
@@ -409,6 +410,16 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         keywords: ["backdrop", "sine wave", "mesh", "ribbon", "waves", "harmonic"],
         active: ambientBackdrop === "sine_wave",
         action: () => setAmbientBackdrop("sine_wave"),
+      },
+      {
+        id: "backdrop-aurora",
+        category: "Toggles",
+        title: "Backdrop: Cyber Aurora Borealis",
+        subtitle: "Luminous undulating chromatic waves with multi-harmonic energy drift",
+        icon: <Wind className="w-4 h-4 text-emerald-400" />,
+        keywords: ["backdrop", "aurora", "borealis", "northern lights", "chromatic", "waves"],
+        active: ambientBackdrop === "aurora",
+        action: () => setAmbientBackdrop("aurora"),
       },
 
       // Actions & Modals

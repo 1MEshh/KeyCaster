@@ -55,6 +55,9 @@ test("useSettingsStore: handles matrix_rain and sine_wave ambientBackdrop update
   store.setAmbientBackdrop("sine_wave");
   assert.equal(useSettingsStore.getState().ambientBackdrop, "sine_wave");
 
+  store.setAmbientBackdrop("aurora");
+  assert.equal(useSettingsStore.getState().ambientBackdrop, "aurora");
+
   store.setAmbientBackdrop("cyber_grid");
   assert.equal(useSettingsStore.getState().ambientBackdrop, "cyber_grid");
 });

@@ -521,6 +521,72 @@ export const AmbientCanvas: React.FC = () => {
         }
       }
 
+      // MODE 7: CYBER AURORA BOREALIS (CHROMATIC UNDULATING WAVES)
+      else if (ambientBackdrop === "aurora") {
+        const curtains = isMobile ? 3 : 4;
+        const step = isMobile ? 20 : 12;
+        const baseHeight = height * 0.42;
+
+        for (let cIdx = 0; cIdx < curtains; cIdx++) {
+          const cRatio = cIdx / curtains;
+          const amp = (45 + cIdx * 25) * (1 + pulseEnergy * 0.9);
+          const freq = 0.0022 + cIdx * 0.0004;
+          const speed = 0.5 + cIdx * 0.22;
+          const phase = cIdx * 1.6;
+          const color = cIdx % 2 === 0 ? m : c;
+          const curAlpha = Math.min(0.38, (0.12 + (1 - cRatio) * 0.14) * (1 + pulseEnergy * 0.5));
+
+          const topY = baseHeight - 120 + cIdx * 40;
+          const bottomY = topY + 280 + cIdx * 45;
+
+          const grad = ctx.createLinearGradient(0, topY, 0, bottomY);
+          grad.addColorStop(0, `rgba(${color.r}, ${color.g}, ${color.b}, 0)`);
+          grad.addColorStop(0.35, `rgba(${color.r}, ${color.g}, ${color.b}, ${curAlpha})`);
+          grad.addColorStop(0.7, `rgba(${color.r}, ${color.g}, ${color.b}, ${curAlpha * 0.5})`);
+          grad.addColorStop(1, `rgba(${color.r}, ${color.g}, ${color.b}, 0)`);
+
+          ctx.beginPath();
+          ctx.fillStyle = grad;
+
+          // Upper boundary wave
+          for (let x = 0; x <= width + step; x += step) {
+            const waveY =
+              topY +
+              Math.sin(x * freq + simTime * speed + phase) * amp +
+              Math.cos(x * (freq * 0.7) - simTime * 0.4) * (amp * 0.4);
+
+            if (x === 0) ctx.moveTo(x, waveY);
+            else ctx.lineTo(x, waveY);
+          }
+
+          // Lower boundary wave (closing the polygon)
+          for (let x = width; x >= -step; x -= step) {
+            const waveBottomY =
+              bottomY +
+              Math.sin(x * (freq * 0.8) + simTime * (speed * 0.8) + phase + 1) * (amp * 0.6);
+            ctx.lineTo(x, waveBottomY);
+          }
+
+          ctx.closePath();
+          ctx.fill();
+
+          // Luminous crest line
+          ctx.beginPath();
+          ctx.strokeStyle = `rgba(${color.r}, ${color.g}, ${color.b}, ${Math.min(0.8, curAlpha * 2)})`;
+          ctx.lineWidth = 1.4;
+          for (let x = 0; x <= width + step; x += step) {
+            const waveY =
+              topY +
+              Math.sin(x * freq + simTime * speed + phase) * amp +
+              Math.cos(x * (freq * 0.7) - simTime * 0.4) * (amp * 0.4);
+
+            if (x === 0) ctx.moveTo(x, waveY);
+            else ctx.lineTo(x, waveY);
+          }
+          ctx.stroke();
+        }
+      }
+
       // Render expanding micro-ripples across all modes
       for (let i = ripples.length - 1; i >= 0; i--) {
         const rip = ripples[i];
