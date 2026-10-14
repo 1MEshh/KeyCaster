@@ -1,60 +1,61 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { sanitizeCustomDeck } from "../sanitize";
-import { type CustomDeckRecord, type WordRecord } from "../db";
+import {
+  STARTER_DECKS,
+  exportDeckToJson,
+  exportDeckToTxt,
+  parseImportedDeck,
+} from "@/lib/starterDecks";
+import { sanitizeCustomDeck } from "@/lib/sanitize";
 
-test("customDecks: sanitizeCustomDeck accurately extracts valid unique words and cleans deck name", () => {
-  const result = sanitizeCustomDeck("  <b>Cyberpunk Vocab</b>  ", "matrix, netrunner, cipher, matrix, ICE, AI");
-  assert.equal(result.name, "Cyberpunk Vocab");
-  assert.equal(result.words.length, 5); // Deduplicated matrix
-  assert.deepEqual(result.words, ["matrix", "netrunner", "cipher", "ice", "ai"]);
+test("Starter Decks: provides valid starter decks with non-empty words conforming to regex", () => {
+  assert.ok(STARTER_DECKS.length >= 4);
+
+  for (const deck of STARTER_DECKS) {
+    assert.ok(deck.name.length > 0);
+    assert.ok(deck.words.length >= 10);
+
+    // Verify each word in starter deck passes sanitization regex
+    for (const word of deck.words) {
+      assert.ok(/^[a-z]+([ -][a-z]+)*$/i.test(word));
+    }
+
+    // Verify deck can be sanitized without errors
+    const sanitized = sanitizeCustomDeck(deck.name, deck.words.join("\n"));
+    assert.strictEqual(sanitized.words.length, deck.words.length);
+  }
 });
 
-test("customDecks: reconciliation logic pairs categoryKey with word category", () => {
-  const deckId = 42;
-  const categoryKey = `custom_${deckId}`;
+test("Starter Decks: exports deck to valid JSON string and roundtrips via parseImportedDeck", () => {
+  const deckName = "Test Custom Deck";
+  const words = ["ephemeral", "ubiquitous", "serendipity"];
+  const jsonStr = exportDeckToJson(deckName, words, "A test description");
 
-  const deck: CustomDeckRecord = {
-    id: deckId,
-    categoryKey,
-    name: "Medical Terms",
-    description: "Custom medical vocabulary",
-    words: ["cardiac", "pulmonary", "hepatic"],
-    createdAt: "2026-10-10",
-  };
+  assert.ok(jsonStr.includes('"format": "keycaster_deck_v1"'));
+  assert.ok(jsonStr.includes(deckName));
 
-  const words: WordRecord[] = deck.words.map((w) => ({
-    word: w,
-    category: deck.categoryKey || `custom_${deck.id}`,
-    easeFactor: 2.5,
-    interval: 0,
-    repetitions: 0,
-    nextReviewDate: "2026-10-10",
-    totalMistakes: 0,
-    totalReviews: 0,
-  }));
-
-  // Assert words match the category key
-  assert.equal(words[0].category, "custom_42");
-  assert.equal(words[1].category, "custom_42");
-  assert.equal(words[2].category, "custom_42");
-
-  // Querying by deck.categoryKey finds all words
-  const queriedWords = words.filter((w) => w.category === deck.categoryKey);
-  assert.equal(queriedWords.length, 3);
+  const parsed = parseImportedDeck(jsonStr);
+  assert.strictEqual(parsed.name, deckName);
+  assert.deepStrictEqual(parsed.words, words);
 });
 
-test("customDecks: deck deletion removes all matching category words", () => {
-  let allWords: WordRecord[] = [
-    { word: "daily1", category: "daily", easeFactor: 2.5, interval: 0, repetitions: 0, nextReviewDate: "2026-10-10", totalMistakes: 0, totalReviews: 0 },
-    { word: "cust1", category: "custom_7", easeFactor: 2.5, interval: 0, repetitions: 0, nextReviewDate: "2026-10-10", totalMistakes: 0, totalReviews: 0 },
-    { word: "cust2", category: "custom_7", easeFactor: 2.5, interval: 0, repetitions: 0, nextReviewDate: "2026-10-10", totalMistakes: 0, totalReviews: 0 },
-  ];
+test("Starter Decks: exports deck to TXT and parses back into clean word array", () => {
+  const words = ["rhythm", "accommodate", "bureaucracy"];
+  const txtStr = exportDeckToTxt(words);
 
-  // Simulate deletion of custom_7
-  const deleteCategory = "custom_7";
-  allWords = allWords.filter((w) => w.category !== deleteCategory);
+  assert.strictEqual(txtStr, "rhythm\naccommodate\nbureaucracy");
 
-  assert.equal(allWords.length, 1);
-  assert.equal(allWords[0].word, "daily1");
+  const parsed = parseImportedDeck(txtStr);
+  assert.strictEqual(parsed.name, undefined);
+  assert.deepStrictEqual(parsed.words, words);
+});
+
+test("Starter Decks: handles messy TXT with commas, whitespace, and invalid characters gracefully", () => {
+  const messy = "  rhythm,  LIAISON \n\n 123badword,  bureaucracy  ";
+  const parsed = parseImportedDeck(messy);
+  assert.deepStrictEqual(parsed.words, ["rhythm", "liaison", "bureaucracy"]);
+});
+
+test("Starter Decks: throws an error when attempting to parse empty content", () => {
+  assert.throws(() => parseImportedDeck("   \n  "), /File is empty\./);
 });
