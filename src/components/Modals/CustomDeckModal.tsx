@@ -1,11 +1,18 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
-import { X, Plus, AlertCircle, Check, Layers, Trash2, Play, BookOpen } from "lucide-react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
+import { X, Plus, AlertCircle, Check, Layers, Trash2, Play, BookOpen, Download, Upload, Sparkles } from "lucide-react";
 import { db, type WordRecord, type CustomDeckRecord } from "@/lib/db";
 import { useSettingsStore } from "@/store/useSettingsStore";
 import { useSessionStore } from "@/store/useSessionStore";
 import { sanitizeCustomDeck, MAX_DECK_NAME_LENGTH, MAX_WORDS_PER_DECK } from "@/lib/sanitize";
+import {
+  STARTER_DECKS,
+  exportDeckToJson,
+  parseImportedDeck,
+  downloadTextFile,
+  type StarterDeck,
+} from "@/lib/starterDecks";
 
 interface CustomDeckModalProps {
   isOpen: boolean;
@@ -31,6 +38,44 @@ export const CustomDeckModal: React.FC<CustomDeckModalProps> = ({ isOpen, onClos
       // Non-blocking
     }
   }, []);
+
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const content = event.target?.result as string;
+        const parsed = parseImportedDeck(content);
+        if (parsed.name && !deckName) {
+          setDeckName(parsed.name);
+        }
+        if (parsed.words.length > 0) {
+          setRawWords(parsed.words.join("\n"));
+        }
+        setErrorMsg("");
+      } catch (err: unknown) {
+        setErrorMsg(err instanceof Error ? err.message : "Failed to parse imported file.");
+      }
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  };
+
+  const handleLoadStarterDeck = (starter: StarterDeck) => {
+    setDeckName(starter.name);
+    setRawWords(starter.words.join("\n"));
+    setErrorMsg("");
+  };
+
+  const handleExportDeck = (deck: CustomDeckRecord) => {
+    const safeName = (deck.name || "deck").toLowerCase().replace(/[^a-z0-9]+/g, "_");
+    const jsonContent = exportDeckToJson(deck.name, deck.words, deck.description);
+    downloadTextFile(`${safeName}_deck.json`, jsonContent, "application/json");
+  };
 
   useEffect(() => {
     if (isOpen) {
@@ -183,6 +228,55 @@ export const CustomDeckModal: React.FC<CustomDeckModalProps> = ({ isOpen, onClos
         {/* TAB 1: CREATE DECK */}
         {activeTab === "create" && (
           <>
+            {/* Starter Packs Carousel / Quick Load */}
+            <div className="space-y-2 p-3 rounded-xl bg-sub/5 border border-sub/15">
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-sub font-semibold flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-main" />
+                  <span>Curated Starter Packs</span>
+                </span>
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  className="text-xs text-main hover:underline flex items-center gap-1 font-semibold"
+                  title="Import words from .json or .txt"
+                >
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>Import JSON / TXT</span>
+                </button>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept=".json,.txt,text/plain,application/json"
+                  className="hidden"
+                  onChange={handleFileUpload}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                {STARTER_DECKS.map((starter) => (
+                  <button
+                    key={starter.id}
+                    type="button"
+                    onClick={() => handleLoadStarterDeck(starter)}
+                    className="p-2 rounded-lg border border-sub/20 bg-bg hover:border-main/50 hover:bg-main/5 text-left transition-all group flex flex-col justify-between"
+                  >
+                    <div className="flex items-center justify-between w-full">
+                      <span className="text-[11px] font-bold text-text group-hover:text-main truncate">
+                        {starter.name}
+                      </span>
+                      <span className="text-[9px] px-1.5 py-0.2 rounded bg-sub/10 text-sub shrink-0 ml-1">
+                        {starter.words.length}w
+                      </span>
+                    </div>
+                    <p className="text-[10px] text-sub truncate mt-1 opacity-75">
+                      {starter.description}
+                    </p>
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <div>
               <div className="flex justify-between items-center mb-1.5">
                 <label className="text-xs uppercase text-sub font-semibold">
@@ -303,6 +397,15 @@ export const CustomDeckModal: React.FC<CustomDeckModalProps> = ({ isOpen, onClos
                         >
                           <Play className="w-3 h-3 fill-current" />
                           <span>Study</span>
+                        </button>
+
+                        <button
+                          type="button"
+                          onClick={() => handleExportDeck(deck)}
+                          className="p-1.5 rounded-lg border border-sub/20 text-sub hover:text-main hover:border-main/40 hover:bg-main/10 transition-colors"
+                          title="Export deck as JSON"
+                        >
+                          <Download className="w-3.5 h-3.5" />
                         </button>
 
                         <button
