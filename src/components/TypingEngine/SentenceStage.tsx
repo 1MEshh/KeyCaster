@@ -24,6 +24,7 @@ import {
   exportScoreCardCanvas,
   downloadDataUrl,
 } from "@/lib/scoreCardExporter";
+import { calculatePaceSplitDelta, findCharPositionInSentence } from "@/lib/paceCarSplits";
 import { useProfileStore } from "@/store/useProfileStore";
 import { useKeyStore } from "@/store/useKeyStore";
 import {
@@ -121,26 +122,64 @@ export const SentenceStage: React.FC = () => {
   }, [paceCarMode, pbWpm]);
 
   const targetSentenceText = currentSentence ? getTargetText(currentSentence) : "";
-  const sentencePaceDelta = useMemo(() => {
-    if (paceCarMode === "off" || !stats.elapsedMs || stats.elapsedMs <= 0) return 0;
-    const charPace = (targetWpm * 5) / 60;
-    const expectedChars = Math.min(
-      targetSentenceText.length,
-      Math.floor((stats.elapsedMs / 1000) * charPace)
-    );
-    const typedChars =
+  const [ghostOffset, setGhostOffset] = useState<number>(0);
+  const [ghostPos, setGhostPos] = useState<CaretCoordinates>({
+    left: 0,
+    top: 0,
+    width: 2,
+    height: 24,
+  });
+
+  const typedCharsCount = useMemo(() => {
+    return (
       words.slice(0, currentWordIndex).reduce((acc, w) => acc + w.word.length + 1, 0) +
-      currentLetterIndex;
-    return typedChars - expectedChars;
-  }, [
-    paceCarMode,
-    stats.elapsedMs,
-    targetWpm,
-    targetSentenceText.length,
-    words,
-    currentWordIndex,
-    currentLetterIndex,
-  ]);
+      currentLetterIndex
+    );
+  }, [words, currentWordIndex, currentLetterIndex]);
+
+  const sentencePaceDelta = typedCharsCount - ghostOffset;
+
+  const splitResult = useMemo(() => {
+    const elapsedSec = (stats.elapsedMs || 0) / 1000;
+    return calculatePaceSplitDelta(elapsedSec, typedCharsCount, targetWpm);
+  }, [stats.elapsedMs, typedCharsCount, targetWpm]);
+
+  // Update ghost character offset every 100ms when typing has started
+  useEffect(() => {
+    if (paceCarMode === "off" || !stats.elapsedMs || stats.elapsedMs <= 0 || isSentenceComplete) {
+      setGhostOffset(0);
+      return;
+    }
+
+    const interval = setInterval(() => {
+      if (!stats.elapsedMs || stats.elapsedMs <= 0 || !targetSentenceText) return;
+      const elapsedSec = stats.elapsedMs / 1000;
+      const charPace = (targetWpm * 5) / 60;
+      const expected = Math.min(targetSentenceText.length, Math.floor(elapsedSec * charPace));
+      setGhostOffset(expected);
+    }, 100);
+
+    return () => clearInterval(interval);
+  }, [paceCarMode, targetWpm, stats.elapsedMs, targetSentenceText, isSentenceComplete]);
+
+  // Sync ghost cursor coordinates to expected char element
+  useEffect(() => {
+    if (paceCarMode === "off" || !containerRef.current || isSentenceComplete || ghostOffset === 0) return;
+    const coord = findCharPositionInSentence(words, ghostOffset);
+    if (!coord) return;
+
+    const el = letterRefs.current.get(`${coord.wordIndex}-${coord.letterIndex}`);
+    if (el && containerRef.current) {
+      const containerRect = containerRef.current.getBoundingClientRect();
+      const elRect = el.getBoundingClientRect();
+      setGhostPos({
+        left: elRect.left - containerRect.left,
+        top: elRect.top - containerRect.top,
+        width: elRect.width,
+        height: elRect.height,
+      });
+    }
+  }, [ghostOffset, paceCarMode, words, isSentenceComplete]);
 
   // Audio synthesis: speak full target sentence
   const speakFullSentence = useCallback(
@@ -630,6 +669,32 @@ export const SentenceStage: React.FC = () => {
         </div>
       </div>
 
+      {/* PB Pace Car / Speedrun Split Chip */}
+      {paceCarMode !== "off" && stats.elapsedMs > 0 && !isSentenceComplete && (
+        <div className="mb-4 flex items-center justify-center animate-fadeIn">
+          <div
+            className={`text-xs font-mono px-3.5 py-1.5 rounded-full border flex items-center gap-2.5 backdrop-blur-md shadow-sm transition-all ${
+              splitResult.isAhead
+                ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30 shadow-[0_0_10px_rgba(16,185,129,0.15)]"
+                : "bg-rose-500/10 text-rose-400 border-rose-500/30 shadow-[0_0_10px_rgba(244,63,94,0.15)]"
+            }`}
+          >
+            <span>🏎️</span>
+            <span className="font-bold flex items-center gap-1">
+              <span>{splitResult.formattedDelta}</span>
+              <span>{splitResult.isAhead ? "▲" : "▼"}</span>
+            </span>
+            <span className="text-sub/50">·</span>
+            <span className="font-semibold text-text">
+              {sentencePaceDelta >= 0 ? `+${sentencePaceDelta} chars` : `${sentencePaceDelta} chars`}
+            </span>
+            <span className="text-[10px] opacity-70">
+              ({targetWpm} WPM {paceCarMode === "pb" ? "PB" : "Target"})
+            </span>
+          </div>
+        </div>
+      )}
+
       {/* Live Stats Bar & Dynamic Tachometer */}
       <div className="w-full max-w-2xl mb-5">
         <LiveStats
@@ -650,6 +715,23 @@ export const SentenceStage: React.FC = () => {
         className="w-full relative min-h-[180px] p-8 rounded-3xl bg-sub/5 border border-sub/20 backdrop-blur-sm shadow-xl flex flex-col justify-center overflow-hidden cursor-text transition-all"
         style={{ fontSize: `${fontSize * 1.35}rem` }}
       >
+        {/* PB Pace Car / Shadow Ghost Caret */}
+        {paceCarMode !== "off" && stats.elapsedMs > 0 && !isSentenceComplete && ghostOffset > 0 && (
+          <div
+            className="absolute pointer-events-none transition-all duration-150 border-r-2 border-dashed border-cyan-400/80 z-10 -ml-[1px]"
+            style={{
+              left: `${ghostPos.left}px`,
+              top: `${ghostPos.top}px`,
+              width: `${ghostPos.width}px`,
+              height: `${ghostPos.height}px`,
+            }}
+          >
+            <span className="absolute -top-4 -left-1 text-[8px] font-mono px-1 py-0.2 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 whitespace-nowrap shadow-sm">
+              🏎️ {targetWpm}
+            </span>
+          </div>
+        )}
+
         {/* Multi-line Caret Cursor */}
         {!isSentenceComplete && (
           <div
