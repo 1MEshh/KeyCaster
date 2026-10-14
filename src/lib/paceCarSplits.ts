@@ -47,3 +47,49 @@ export function calculatePaceSplitDelta(
     charPacePerSec,
   };
 }
+
+export interface SentenceCharCoord {
+  wordIndex: number;
+  letterIndex: number;
+}
+
+/**
+ * Maps a flat character offset across a multi-word sentence to the corresponding (wordIndex, letterIndex).
+ */
+export function findCharPositionInSentence(
+  words: { letters: { char: string }[] }[],
+  charOffset: number
+): SentenceCharCoord | null {
+  if (!words.length || charOffset < 0) return null;
+
+  let currentOffset = 0;
+  for (let w = 0; w < words.length; w++) {
+    const letters = words[w].letters;
+    if (charOffset < currentOffset + letters.length) {
+      return {
+        wordIndex: w,
+        letterIndex: charOffset - currentOffset,
+      };
+    }
+    currentOffset += letters.length;
+
+    // Account for word separator space
+    if (w < words.length - 1) {
+      if (charOffset === currentOffset) {
+        return {
+          wordIndex: w,
+          letterIndex: Math.max(0, letters.length - 1),
+        };
+      }
+      currentOffset += 1;
+    }
+  }
+
+  const lastWordIdx = words.length - 1;
+  const lastLetterIdx = Math.max(0, words[lastWordIdx].letters.length - 1);
+  return {
+    wordIndex: lastWordIdx,
+    letterIndex: lastLetterIdx,
+  };
+}
+
