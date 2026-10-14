@@ -12,10 +12,18 @@ import {
   CheckCircle2,
   BookOpen,
   Headphones,
+  Download,
+  Copy,
+  Check,
 } from "lucide-react";
 import confetti from "canvas-confetti";
 import { useSentenceStore } from "@/store/useSentenceStore";
-import { useSettingsStore, SMOOTH_CARET_DURATIONS } from "@/store/useSettingsStore";
+import { useSettingsStore, THEME_VARIABLES, SMOOTH_CARET_DURATIONS } from "@/store/useSettingsStore";
+import {
+  formatSessionSummaryText,
+  exportScoreCardCanvas,
+  downloadDataUrl,
+} from "@/lib/scoreCardExporter";
 import { useProfileStore } from "@/store/useProfileStore";
 import { useKeyStore } from "@/store/useKeyStore";
 import {
@@ -80,6 +88,7 @@ export const SentenceStage: React.FC = () => {
     paceCarMode,
     speechRate,
     ttsVoiceURI,
+    theme,
   } = useSettingsStore();
 
   const setActiveKey = useKeyStore((s) => s.setActiveKey);
@@ -97,6 +106,8 @@ export const SentenceStage: React.FC = () => {
     height: 24,
   });
   const [isFocused, setIsFocused] = useState<boolean>(true);
+  const [copied, setCopied] = useState<boolean>(false);
+  const [isExporting, setIsExporting] = useState<boolean>(false);
 
   // Pace Car / Shadow Typist Calculation
   const pbWpm = useProfileStore((s) => s.personalBestWpm) || 70;
@@ -364,6 +375,52 @@ export const SentenceStage: React.FC = () => {
       return acc + text.split(/\s+/).length;
     }, 0);
 
+    const handleCopySummary = async () => {
+      try {
+        const text = formatSessionSummaryText({
+          deckName: `Sentences (${activeCategory})`,
+          wpm: stats.wpm,
+          rawWpm: stats.wpm,
+          accuracy: stats.accuracy,
+          consistency: 90,
+          durationSec: Math.max(1, Math.round(stats.elapsedMs / 1000)),
+          totalWords: totalWordsCount,
+          passedWords: sentenceQueue.length,
+          failedWords: 0,
+        });
+        await navigator.clipboard.writeText(text);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      } catch {
+        // Fallback
+      }
+    };
+
+    const handleExportCard = () => {
+      setIsExporting(true);
+      try {
+        const themeColors = THEME_VARIABLES[theme] || THEME_VARIABLES.cyberpunk;
+        const dataUrl = exportScoreCardCanvas({
+          deckName: `Sentences: ${activeCategory}`,
+          wpm: stats.wpm,
+          rawWpm: stats.wpm,
+          accuracy: stats.accuracy,
+          consistency: 90,
+          durationSec: Math.max(1, Math.round(stats.elapsedMs / 1000)),
+          totalWords: totalWordsCount,
+          passedWords: sentenceQueue.length,
+          failedWords: 0,
+          themeMainColor: themeColors.main,
+          themeBgColor: themeColors.bg,
+        });
+        if (dataUrl) {
+          downloadDataUrl(dataUrl, `keycaster-sentences-${activeCategory}-${Date.now()}.png`);
+        }
+      } finally {
+        setTimeout(() => setIsExporting(false), 600);
+      }
+    };
+
     return (
       <div className="w-full max-w-3xl flex flex-col items-center justify-center py-10 px-4 animate-fadeIn">
         <div className="w-full bg-sub/10 border border-sub/20 rounded-3xl p-8 backdrop-blur-md shadow-2xl flex flex-col items-center text-center space-y-6">
@@ -394,8 +451,38 @@ export const SentenceStage: React.FC = () => {
             </div>
           </div>
 
+          {/* Share & Export Scorecard Controls */}
+          <div className="flex items-center justify-center gap-3 w-full max-w-sm pt-2">
+            <button
+              onClick={handleExportCard}
+              disabled={isExporting}
+              className="flex-1 py-2 px-3 rounded-xl border border-main/40 bg-main/10 hover:bg-main/20 text-main text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-sm"
+              title="Download high-resolution 1200x675 score card PNG"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>{isExporting ? "Exporting..." : "Export Card"}</span>
+            </button>
+            <button
+              onClick={handleCopySummary}
+              className="flex-1 py-2 px-3 rounded-xl border border-sub/30 bg-sub/10 hover:bg-sub/20 text-text text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-sm"
+              title="Copy session summary text for Discord/X"
+            >
+              {copied ? (
+                <>
+                  <Check className="w-3.5 h-3.5 text-emerald-400" />
+                  <span className="text-emerald-400">Copied!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-3.5 h-3.5" />
+                  <span>Copy Summary</span>
+                </>
+              )}
+            </button>
+          </div>
+
           {/* Actions */}
-          <div className="flex flex-col sm:flex-row items-center gap-3 pt-4 w-full max-w-sm">
+          <div className="flex flex-col sm:flex-row items-center gap-3 pt-2 w-full max-w-sm">
             <button
               onClick={() => initSentenceSession(practiceType, activeCategory, activeDifficulty)}
               className="w-full py-3 px-5 rounded-xl bg-main text-bg font-bold flex items-center justify-center gap-2 hover:opacity-95 transition-opacity shadow-lg shadow-main/20"
