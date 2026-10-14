@@ -390,18 +390,22 @@ export const GameModeStage: React.FC = () => {
             </div>
 
             {/* Score Grid */}
-            <div className="grid grid-cols-3 gap-3 p-3 rounded-xl bg-sub/5 border border-sub/20 text-xs">
+            <div className="grid grid-cols-4 gap-2 p-3 rounded-xl bg-sub/5 border border-sub/20 text-xs">
               <div>
                 <div className="text-[10px] text-sub uppercase">Score</div>
-                <div className="text-lg font-bold text-main">{score}</div>
+                <div className="text-base font-bold text-main">{score}</div>
               </div>
               <div>
                 <div className="text-[10px] text-sub uppercase">Speed</div>
-                <div className="text-lg font-bold text-text">{finalWpm} <span className="text-[10px] text-sub font-normal">wpm</span></div>
+                <div className="text-base font-bold text-text">{finalWpm} <span className="text-[9px] text-sub font-normal">wpm</span></div>
               </div>
               <div>
                 <div className="text-[10px] text-sub uppercase">Accuracy</div>
-                <div className="text-lg font-bold text-text">{accuracy}%</div>
+                <div className="text-base font-bold text-text">{accuracy}%</div>
+              </div>
+              <div>
+                <div className="text-[10px] text-sub uppercase">Streak</div>
+                <div className="text-base font-bold text-amber-400">{highestStreak}x</div>
               </div>
             </div>
 
