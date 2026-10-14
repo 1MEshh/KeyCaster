@@ -59,3 +59,13 @@ test("useSettingsStore: handles matrix_rain and sine_wave ambientBackdrop update
   assert.equal(useSettingsStore.getState().ambientBackdrop, "cyber_grid");
 });
 
+test("useSettingsStore: supports matrix_crt and tokyo_night themes", () => {
+  const store = useSettingsStore.getState();
+
+  store.setTheme("matrix_crt");
+  assert.equal(useSettingsStore.getState().theme, "matrix_crt");
+
+  store.setTheme("tokyo_night");
+  assert.equal(useSettingsStore.getState().theme, "tokyo_night");
+});
+
