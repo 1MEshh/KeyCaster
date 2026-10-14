@@ -358,22 +358,48 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
               {/* Hardest Words List */}
               {hardestWords.length > 0 && (
                 <div>
-                  <div className="flex items-center gap-2 mb-2 text-sub font-semibold uppercase text-[11px]">
-                    <AlertTriangle className="w-4 h-4 text-error" />
-                    <span>Words Needing Attention (Highest Mistake Rate)</span>
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2.5">
+                    <div className="flex items-center gap-2 text-sub font-semibold uppercase text-[11px]">
+                      <AlertTriangle className="w-4 h-4 text-error" />
+                      <span>Words Needing Attention ({hardestWords.length})</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        useSessionStore.getState().startTargetedPractice(hardestWords);
+                        useSettingsStore.getState().setActiveSection("srs_words");
+                        onClose();
+                      }}
+                      className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-error/15 border border-error/30 text-error hover:bg-error/25 text-xs font-semibold transition-all shadow-sm w-fit"
+                      title="Launch a focused SRS session with these words"
+                    >
+                      <Play className="w-3 h-3 fill-current" />
+                      <span>Practice Hardest Words</span>
+                    </button>
                   </div>
                   <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
                     {hardestWords.map((hw) => (
-                      <div
-                        key={hw.id}
-                        className="p-2.5 rounded-lg border border-error/25 bg-error/5 flex flex-col justify-between"
+                      <button
+                        key={hw.id || hw.word}
+                        type="button"
+                        onClick={() => {
+                          const reordered = [hw, ...hardestWords.filter((w) => w.id !== hw.id)];
+                          useSessionStore.getState().startTargetedPractice(reordered);
+                          useSettingsStore.getState().setActiveSection("srs_words");
+                          onClose();
+                        }}
+                        className="p-2.5 rounded-lg border border-error/25 bg-error/5 hover:border-error/50 hover:bg-error/10 flex flex-col justify-between text-left transition-all group cursor-pointer"
+                        title={`Click to drill '${hw.word}'`}
                       >
-                        <div className="font-bold text-text text-sm truncate">{hw.word}</div>
+                        <div className="flex items-center justify-between">
+                          <span className="font-bold text-text text-sm truncate group-hover:text-error transition-colors">{hw.word}</span>
+                          <Play className="w-3 h-3 text-error/30 group-hover:text-error fill-current transition-colors shrink-0 ml-1" />
+                        </div>
                         <div className="text-[10px] text-sub mt-1 flex justify-between">
                           <span>{hw.totalMistakes} mistakes</span>
                           <span className="text-main">{hw.interval}d interval</span>
                         </div>
-                      </div>
+                      </button>
                     ))}
                   </div>
                 </div>
