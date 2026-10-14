@@ -45,6 +45,7 @@ export interface SessionState {
   }) => Promise<{ gradeResult: GradingResult; isNextAvailable: boolean }>;
   skipCurrentWord: () => Promise<void>;
   startRetryMistakes: () => void;
+  startTargetedPractice: (words: WordRecord[]) => void;
   restartSession: () => void;
 }
 
@@ -298,6 +299,23 @@ export const useSessionStore = create<SessionState>((set, get) => ({
         isSessionComplete: false,
       });
     }
+  },
+
+  startTargetedPractice: (words: WordRecord[]) => {
+    if (!words || words.length === 0) return;
+    set({
+      mainQueue: words,
+      retryQueue: [],
+      currentIndex: 0,
+      currentWord: words[0],
+      isRetryAttempt: false,
+      completedWords: [],
+      startTime: Date.now(),
+      endTime: null,
+      isSessionActive: true,
+      isSessionComplete: false,
+      isLoading: false,
+    });
   },
 
   restartSession: () => {
