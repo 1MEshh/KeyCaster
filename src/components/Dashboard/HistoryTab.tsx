@@ -2,7 +2,8 @@
 
 import React from "react";
 import { type SessionHistoryRecord } from "@/lib/db";
-import { History, Calendar, Clock, Zap, Target, AlertTriangle } from "lucide-react";
+import { History, Calendar, Clock, Zap, Target, AlertTriangle, Download } from "lucide-react";
+import { downloadSessionHistoryCsv } from "@/lib/csvExporter";
 
 interface HistoryTabProps {
   history: SessionHistoryRecord[];
@@ -18,8 +19,21 @@ export const HistoryTab: React.FC<HistoryTabProps> = ({ history }) => {
             Complete record of your past sessions stored locally in IndexedDB.
           </p>
         </div>
-        <div className="text-xs text-sub font-semibold">
-          {history.length} {history.length === 1 ? "session" : "sessions"} logged
+        <div className="flex items-center gap-3">
+          <div className="text-xs text-sub font-semibold">
+            {history.length} {history.length === 1 ? "session" : "sessions"} logged
+          </div>
+          {history.length > 0 && (
+            <button
+              type="button"
+              onClick={() => downloadSessionHistoryCsv(history)}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-sub/20 bg-sub/10 hover:border-main/50 hover:bg-main/10 text-text hover:text-main text-xs font-semibold transition-all shadow-xs"
+              title="Download session history as CSV spreadsheet"
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span>Export CSV</span>
+            </button>
+          )}
         </div>
       </div>
 

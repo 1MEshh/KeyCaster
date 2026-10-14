@@ -2,7 +2,8 @@
 
 import React, { useMemo } from "react";
 import { type WordRecord } from "@/lib/db";
-import { AlertCircle, CheckCircle2 } from "lucide-react";
+import { AlertCircle, CheckCircle2, Activity } from "lucide-react";
+import { calculateFingerErgonomics, type FingerZoneStats } from "@/lib/csvExporter";
 
 interface HeatmapTabProps {
   words: WordRecord[];
@@ -47,6 +48,10 @@ export const HeatmapTab: React.FC<HeatmapTabProps> = ({ words }) => {
       .sort((a, b) => b[1] - a[1])
       .slice(0, 5);
   }, [letterStats]);
+
+  const ergonomics = useMemo(() => {
+    return calculateFingerErgonomics(letterStats.errorMap);
+  }, [letterStats.errorMap]);
 
   const getKeyColor = (char: string) => {
     const errors = letterStats.errorMap[char] || 0;
@@ -159,6 +164,73 @@ export const HeatmapTab: React.FC<HeatmapTabProps> = ({ words }) => {
               ? `Your accuracy dips most around the letter "${sortedWeakest[0][0].toUpperCase()}". Practice words with this key in Blind Mode to reinforce muscle memory.`
               : "Keep practicing consistently to maintain high accuracy and build automatic finger reflexes."}
           </p>
+        </div>
+      </div>
+
+      {/* Finger Ergonomics & Load Distribution */}
+      <div className="p-4 rounded-xl border border-sub/20 bg-sub/5 space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-xs font-bold text-text">
+            <Activity className="w-4 h-4 text-main" />
+            <span>Finger Ergonomics Breakdown</span>
+          </div>
+          <span className="text-[10px] text-sub">Touch Typing Zone Attribution</span>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2.5">
+          {ergonomics.map((item) => {
+            const hasErrors = item.mistakes > 0;
+            return (
+              <div
+                key={item.zone.name}
+                className={`p-2.5 rounded-lg border text-xs transition-all ${
+                  item.percentage > 25
+                    ? "bg-red-500/10 border-red-500/30"
+                    : item.percentage > 10
+                    ? "bg-amber-500/10 border-amber-500/30"
+                    : "bg-sub/10 border-sub/15"
+                }`}
+              >
+                <div className="flex items-center justify-between mb-1">
+                  <span className="font-semibold text-text text-[11px] truncate">
+                    {item.zone.name}
+                  </span>
+                  <span
+                    className={`text-[10px] font-bold ${
+                      item.percentage > 25
+                        ? "text-red-400"
+                        : item.percentage > 10
+                        ? "text-amber-400"
+                        : "text-sub"
+                    }`}
+                  >
+                    {item.percentage}%
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between text-[10px] text-sub mb-1.5">
+                  <span className="uppercase tracking-wider opacity-70">
+                    [{item.zone.keys.join(" ")}]
+                  </span>
+                  <span>{item.mistakes} errors</span>
+                </div>
+
+                {/* Micro Progress Bar */}
+                <div className="w-full h-1 rounded-full bg-sub/20 overflow-hidden">
+                  <div
+                    className={`h-full rounded-full transition-all duration-300 ${
+                      item.percentage > 25
+                        ? "bg-red-400"
+                        : item.percentage > 10
+                        ? "bg-amber-400"
+                        : "bg-main"
+                    }`}
+                    style={{ width: `${Math.min(100, Math.max(item.percentage, hasErrors ? 6 : 0))}%` }}
+                  />
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>
