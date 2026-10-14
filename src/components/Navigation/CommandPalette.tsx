@@ -22,13 +22,18 @@ import {
   Wind,
   Download,
   HardDrive,
+  Timer,
+  Flame,
+  FileSpreadsheet,
 } from "lucide-react";
-import { useSettingsStore, type Theme, type AppSection, type AmbientBackdrop } from "@/store/useSettingsStore";
+import { useSettingsStore, type Theme, type AppSection, type AmbientBackdrop, type PaceCarMode } from "@/store/useSettingsStore";
 import { useSessionStore } from "@/store/useSessionStore";
 import { useSentenceStore } from "@/store/useSentenceStore";
 import { useGameModeStore } from "@/store/useGameModeStore";
 import { playMechanicalClick, type SwitchSoundProfile } from "@/lib/audio";
 import { exportQuickBackupJson } from "@/lib/backupHealth";
+import { downloadSessionHistoryCsv } from "@/lib/csvExporter";
+import { db } from "@/lib/db";
 
 interface CommandItem {
   id: string;
@@ -75,6 +80,8 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     setShowKeyboard,
     ambientBackdrop,
     setAmbientBackdrop,
+    paceCarMode,
+    setPaceCarMode,
     activeSection,
     setActiveSection,
     activeCategory,
@@ -83,7 +90,7 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
     setIsZenMode,
   } = useSettingsStore();
 
-  const { initSession } = useSessionStore();
+  const { initSession, startTargetedPractice } = useSessionStore();
   const { initSentenceSession } = useSentenceStore();
   const { startMode } = useGameModeStore();
 
@@ -422,7 +429,107 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         action: () => setAmbientBackdrop("aurora"),
       },
 
+      // Pace Car Ghost Caret
+      {
+        id: "pacecar-off",
+        category: "Toggles",
+        title: "Pace Car: Disabled",
+        subtitle: "Turn off ghost cursor and speedrun split delta indicator",
+        icon: <Timer className="w-4 h-4 text-sub" />,
+        keywords: ["pace car", "ghost", "disabled", "off", "speedrun"],
+        active: paceCarMode === "off",
+        action: () => setPaceCarMode("off"),
+      },
+      {
+        id: "pacecar-pb",
+        category: "Toggles",
+        title: "Pace Car: Personal Best (PB)",
+        subtitle: "Race dynamically against your historical PB WPM",
+        icon: <Timer className="w-4 h-4 text-amber-400" />,
+        keywords: ["pace car", "ghost", "pb", "personal best", "speedrun"],
+        active: paceCarMode === "pb",
+        action: () => setPaceCarMode("pb"),
+      },
+      {
+        id: "pacecar-60",
+        category: "Toggles",
+        title: "Pace Car: 60 WPM Target",
+        subtitle: "Steady conversational touch-typing pace benchmark",
+        icon: <Timer className="w-4 h-4 text-blue-400" />,
+        keywords: ["pace car", "ghost", "60", "target", "wpm"],
+        active: paceCarMode === "target_60",
+        action: () => setPaceCarMode("target_60"),
+      },
+      {
+        id: "pacecar-80",
+        category: "Toggles",
+        title: "Pace Car: 80 WPM Target",
+        subtitle: "Professional high-speed rhythm benchmark",
+        icon: <Timer className="w-4 h-4 text-emerald-400" />,
+        keywords: ["pace car", "ghost", "80", "target", "wpm"],
+        active: paceCarMode === "target_80",
+        action: () => setPaceCarMode("target_80"),
+      },
+      {
+        id: "pacecar-100",
+        category: "Toggles",
+        title: "Pace Car: 100 WPM Target",
+        subtitle: "Advanced competitive typist pace benchmark",
+        icon: <Timer className="w-4 h-4 text-purple-400" />,
+        keywords: ["pace car", "ghost", "100", "target", "wpm"],
+        active: paceCarMode === "target_100",
+        action: () => setPaceCarMode("target_100"),
+      },
+      {
+        id: "pacecar-120",
+        category: "Toggles",
+        title: "Pace Car: 120 WPM Target",
+        subtitle: "Grandmaster burst velocity pace benchmark",
+        icon: <Timer className="w-4 h-4 text-rose-400" />,
+        keywords: ["pace car", "ghost", "120", "target", "wpm"],
+        active: paceCarMode === "target_120",
+        action: () => setPaceCarMode("target_120"),
+      },
+
       // Actions & Modals
+      {
+        id: "action-hardest-drill",
+        category: "Actions",
+        title: "Practice Hardest Words Drill",
+        subtitle: "Launch targeted review session for your most missed words",
+        icon: <Flame className="w-4 h-4 text-amber-400" />,
+        keywords: ["hardest words", "drill", "practice", "mistakes", "errors", "targeted"],
+        action: async () => {
+          try {
+            const words = await db.words.where("totalMistakes").above(0).toArray();
+            if (words.length > 0) {
+              const sorted = words.sort((a, b) => b.totalMistakes - a.totalMistakes).slice(0, 10);
+              startTargetedPractice(sorted);
+              setActiveSection("srs_words");
+              onClose();
+            }
+          } catch {
+            // non-blocking
+          }
+        },
+      },
+      {
+        id: "action-csv-export",
+        category: "Actions",
+        title: "Export Session History (CSV)",
+        subtitle: "Download complete RFC 4180 CSV spreadsheet of past sessions",
+        icon: <FileSpreadsheet className="w-4 h-4 text-emerald-400" />,
+        keywords: ["csv", "export", "spreadsheet", "sessions", "history", "analytics"],
+        action: async () => {
+          try {
+            const history = await db.sessionHistory.toArray();
+            downloadSessionHistoryCsv(history);
+            onClose();
+          } catch {
+            // non-blocking
+          }
+        },
+      },
       {
         id: "action-settings",
         category: "Actions",
