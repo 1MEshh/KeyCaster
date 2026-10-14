@@ -50,7 +50,9 @@ export type SwitchSoundProfile =
   | "cherry_blue"
   | "gateron_ink_black"
   | "topre_capacitive"
-  | "typewriter";
+  | "typewriter"
+  | "holy_panda"
+  | "cream_linear";
 
 /**
  * Procedural Mechanical Switch Synthesizer
@@ -63,7 +65,8 @@ export type SwitchSoundProfile =
  */
 export function playMechanicalClick(
   volume = 0.5,
-  switchType: SwitchSoundProfile = "cherry_brown"
+  switchType: SwitchSoundProfile = "cherry_brown",
+  keyChar?: string
 ): void {
   try {
     const ctx = getAudioContext();
@@ -71,6 +74,11 @@ export function playMechanicalClick(
 
     const now = ctx.currentTime;
     const masterGain = ctx.createGain();
+
+    // Organic procedural micro-jitter (±3.5%) to prevent mechanical repetition fatigue
+    const jitter = keyChar
+      ? 1 + (((keyChar.charCodeAt(0) % 9) - 4) * 0.009)
+      : 1 + ((Math.random() - 0.5) * 0.05);
 
     if (switchType === "cherry_blue") {
       // Crisp clicky switch: high-pitched leaf snap + sharp transient clack
@@ -80,8 +88,8 @@ export function playMechanicalClick(
       const osc = ctx.createOscillator();
       const oscGain = ctx.createGain();
       osc.type = "sine";
-      osc.frequency.setValueAtTime(4200, now);
-      osc.frequency.exponentialRampToValueAtTime(1400, now + 0.025);
+      osc.frequency.setValueAtTime(4200 * jitter, now);
+      osc.frequency.exponentialRampToValueAtTime(1400 * jitter, now + 0.025);
 
       oscGain.gain.setValueAtTime(0.9, now);
       oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.025);
@@ -94,8 +102,8 @@ export function playMechanicalClick(
       const rebound = ctx.createOscillator();
       const reboundGain = ctx.createGain();
       rebound.type = "triangle";
-      rebound.frequency.setValueAtTime(3200, now + 0.008);
-      rebound.frequency.exponentialRampToValueAtTime(1800, now + 0.028);
+      rebound.frequency.setValueAtTime(3200 * jitter, now + 0.008);
+      rebound.frequency.exponentialRampToValueAtTime(1800 * jitter, now + 0.028);
 
       reboundGain.gain.setValueAtTime(0, now);
       reboundGain.gain.setValueAtTime(0.6, now + 0.008);
@@ -110,7 +118,7 @@ export function playMechanicalClick(
       noise.buffer = getNoiseBuffer(ctx);
       const filter = ctx.createBiquadFilter();
       filter.type = "highpass";
-      filter.frequency.setValueAtTime(3200, now);
+      filter.frequency.setValueAtTime(3200 * jitter, now);
 
       const noiseGain = ctx.createGain();
       noiseGain.gain.setValueAtTime(0.5, now);
@@ -128,8 +136,8 @@ export function playMechanicalClick(
       const osc = ctx.createOscillator();
       const oscGain = ctx.createGain();
       osc.type = "sine";
-      osc.frequency.setValueAtTime(420, now);
-      osc.frequency.exponentialRampToValueAtTime(130, now + 0.065);
+      osc.frequency.setValueAtTime(420 * jitter, now);
+      osc.frequency.exponentialRampToValueAtTime(130 * jitter, now + 0.065);
 
       oscGain.gain.setValueAtTime(1.0, now);
       oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.065);
@@ -143,7 +151,7 @@ export function playMechanicalClick(
       noise.buffer = getNoiseBuffer(ctx);
       const filter = ctx.createBiquadFilter();
       filter.type = "lowpass";
-      filter.frequency.setValueAtTime(700, now);
+      filter.frequency.setValueAtTime(700 * jitter, now);
       filter.Q.setValueAtTime(2.5, now);
 
       const noiseGain = ctx.createGain();
@@ -162,8 +170,8 @@ export function playMechanicalClick(
       const osc = ctx.createOscillator();
       const oscGain = ctx.createGain();
       osc.type = "sine";
-      osc.frequency.setValueAtTime(850, now);
-      osc.frequency.exponentialRampToValueAtTime(260, now + 0.04);
+      osc.frequency.setValueAtTime(850 * jitter, now);
+      osc.frequency.exponentialRampToValueAtTime(260 * jitter, now + 0.04);
 
       oscGain.gain.setValueAtTime(0.7, now);
       oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
@@ -177,7 +185,7 @@ export function playMechanicalClick(
       noise.buffer = getNoiseBuffer(ctx);
       const filter = ctx.createBiquadFilter();
       filter.type = "bandpass";
-      filter.frequency.setValueAtTime(1400, now);
+      filter.frequency.setValueAtTime(1400 * jitter, now);
       filter.Q.setValueAtTime(1.8, now);
 
       const noiseGain = ctx.createGain();
@@ -196,8 +204,8 @@ export function playMechanicalClick(
       const osc = ctx.createOscillator();
       const oscGain = ctx.createGain();
       osc.type = "triangle";
-      osc.frequency.setValueAtTime(2800, now);
-      osc.frequency.exponentialRampToValueAtTime(850, now + 0.035);
+      osc.frequency.setValueAtTime(2800 * jitter, now);
+      osc.frequency.exponentialRampToValueAtTime(850 * jitter, now + 0.035);
 
       oscGain.gain.setValueAtTime(0.85, now);
       oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
@@ -210,7 +218,7 @@ export function playMechanicalClick(
       const ping = ctx.createOscillator();
       const pingGain = ctx.createGain();
       ping.type = "sine";
-      ping.frequency.setValueAtTime(1950, now);
+      ping.frequency.setValueAtTime(1950 * jitter, now);
       pingGain.gain.setValueAtTime(0.3, now);
       pingGain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
       ping.connect(pingGain);
@@ -223,11 +231,92 @@ export function playMechanicalClick(
       noise.buffer = getNoiseBuffer(ctx);
       const filter = ctx.createBiquadFilter();
       filter.type = "bandpass";
-      filter.frequency.setValueAtTime(2200, now);
+      filter.frequency.setValueAtTime(2200 * jitter, now);
       filter.Q.setValueAtTime(1.5, now);
 
       const noiseGain = ctx.createGain();
       noiseGain.gain.setValueAtTime(0.65, now);
+      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+      noise.connect(filter);
+      filter.connect(noiseGain);
+      noiseGain.connect(masterGain);
+      noise.start(now);
+      noise.stop(now + 0.04);
+    } else if (switchType === "holy_panda") {
+      // Tactile sharp rounded bump + crisp bottom-out
+      masterGain.gain.setValueAtTime(volume * 0.48, now);
+      masterGain.connect(ctx.destination);
+
+      const osc = ctx.createOscillator();
+      const oscGain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(1950 * jitter, now);
+      osc.frequency.exponentialRampToValueAtTime(620 * jitter, now + 0.038);
+
+      oscGain.gain.setValueAtTime(0.85, now);
+      oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.038);
+      osc.connect(oscGain);
+      oscGain.connect(masterGain);
+      osc.start(now);
+      osc.stop(now + 0.045);
+
+      // Tactile leaf snap rebound (+6ms)
+      const snap = ctx.createOscillator();
+      const snapGain = ctx.createGain();
+      snap.type = "triangle";
+      snap.frequency.setValueAtTime(1350 * jitter, now + 0.006);
+      snap.frequency.exponentialRampToValueAtTime(450 * jitter, now + 0.025);
+
+      snapGain.gain.setValueAtTime(0, now);
+      snapGain.gain.setValueAtTime(0.5, now + 0.006);
+      snapGain.gain.exponentialRampToValueAtTime(0.001, now + 0.025);
+      snap.connect(snapGain);
+      snapGain.connect(masterGain);
+      snap.start(now + 0.006);
+      snap.stop(now + 0.03);
+
+      const noise = ctx.createBufferSource();
+      noise.buffer = getNoiseBuffer(ctx);
+      const filter = ctx.createBiquadFilter();
+      filter.type = "bandpass";
+      filter.frequency.setValueAtTime(2600 * jitter, now);
+      filter.Q.setValueAtTime(2.2, now);
+
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.65, now);
+      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.028);
+      noise.connect(filter);
+      filter.connect(noiseGain);
+      noiseGain.connect(masterGain);
+      noise.start(now);
+      noise.stop(now + 0.035);
+    } else if (switchType === "cream_linear") {
+      // Ultra-smooth silky POM plastic pop with low bottom-out resonance
+      masterGain.gain.setValueAtTime(volume * 0.44, now);
+      masterGain.connect(ctx.destination);
+
+      const osc = ctx.createOscillator();
+      const oscGain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(750 * jitter, now);
+      osc.frequency.exponentialRampToValueAtTime(240 * jitter, now + 0.05);
+
+      oscGain.gain.setValueAtTime(0.9, now);
+      oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+      osc.connect(oscGain);
+      oscGain.connect(masterGain);
+      osc.start(now);
+      osc.stop(now + 0.055);
+
+      const noise = ctx.createBufferSource();
+      noise.buffer = getNoiseBuffer(ctx);
+      const filter = ctx.createBiquadFilter();
+      filter.type = "bandpass";
+      filter.frequency.setValueAtTime(1450 * jitter, now);
+      filter.Q.setValueAtTime(1.8, now);
+
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.6, now);
       noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
       noise.connect(filter);
       filter.connect(noiseGain);
@@ -242,8 +331,8 @@ export function playMechanicalClick(
       const osc = ctx.createOscillator();
       const oscGain = ctx.createGain();
       osc.type = "sine";
-      osc.frequency.setValueAtTime(2200, now);
-      osc.frequency.exponentialRampToValueAtTime(700, now + 0.045);
+      osc.frequency.setValueAtTime(2200 * jitter, now);
+      osc.frequency.exponentialRampToValueAtTime(700 * jitter, now + 0.045);
 
       oscGain.gain.setValueAtTime(0.8, now);
       oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.045);
@@ -256,7 +345,7 @@ export function playMechanicalClick(
       noise.buffer = getNoiseBuffer(ctx);
       const filter = ctx.createBiquadFilter();
       filter.type = "bandpass";
-      filter.frequency.setValueAtTime(2800, now);
+      filter.frequency.setValueAtTime(2800 * jitter, now);
       filter.Q.setValueAtTime(2.0, now);
 
       const noiseGain = ctx.createGain();

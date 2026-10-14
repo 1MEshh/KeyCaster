@@ -794,6 +794,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                     { id: "cherry_brown", name: "Cherry MX Brown", desc: "Tactile bump & balanced snap (Default)" },
                     { id: "cherry_blue", name: "Cherry MX Blue", desc: "Crisp clicky dual-stage snap" },
                     { id: "gateron_ink_black", name: "Gateron Ink Black", desc: "Deep creamy lubed thock" },
+                    { id: "holy_panda", name: "Holy Panda", desc: "Sharp tactile bump & crisp snap" },
+                    { id: "cream_linear", name: "Cream Linear", desc: "Silky smooth POM housing pop" },
                     { id: "topre_capacitive", name: "Topre Capacitive", desc: "Smooth dome pop & muted thunk" },
                     { id: "typewriter", name: "Vintage Typewriter", desc: "Metallic strike & chassis ring" },
                   ].map((sw) => {
