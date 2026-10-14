@@ -7,7 +7,15 @@ export type CaretStyle = "default" | "block" | "underline" | "outline";
 export type SmoothCaretSpeed = "off" | "fast" | "medium" | "slow";
 export type ConfidenceMode = "off" | "on" | "max";
 export type StopOnError = "off" | "letter" | "word";
-export type Theme = "monochrome" | "nord" | "dracula" | "serika_dark" | "midnight" | "cyberpunk";
+export type Theme =
+  | "monochrome"
+  | "nord"
+  | "dracula"
+  | "serika_dark"
+  | "midnight"
+  | "cyberpunk"
+  | "matrix_crt"
+  | "tokyo_night";
 export type FontFamily = "Thmanyah Sans" | "JetBrains Mono" | "Roboto Mono" | "Fira Code";
 export type LiveStatsMode = "off" | "text" | "mini" | "tachometer";
 export type PaceCarMode = "off" | "pb" | "target_60" | "target_80" | "target_100" | "target_120";
@@ -163,6 +171,24 @@ export const THEME_VARIABLES: Record<
     text: "#f1f5f9",
     error: "#f43f5e",
     errorExtra: "#fb7185",
+  },
+  matrix_crt: {
+    bg: "#020902",
+    main: "#00ff66",
+    caret: "#00ff66",
+    sub: "#163b1a",
+    text: "#a3f7bf",
+    error: "#ff3366",
+    errorExtra: "#990022",
+  },
+  tokyo_night: {
+    bg: "#1a1b26",
+    main: "#7aa2f7",
+    caret: "#bb9af7",
+    sub: "#565f89",
+    text: "#c0caf5",
+    error: "#f7768e",
+    errorExtra: "#db4b4b",
   },
 };
 
