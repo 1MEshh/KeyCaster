@@ -389,6 +389,16 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         action: () => setCustomCursor(!customCursor),
       },
       {
+        id: "backdrop-kiroshi-netrunner",
+        category: "Toggles",
+        title: "Backdrop: Kiroshi Netrunner 3D (Cyberpunk 2077)",
+        subtitle: "Authentic Night City 3D horizon, hex telemetry streams & ICE alerts",
+        icon: <Zap className="w-4 h-4 text-[#fcee09]" />,
+        keywords: ["backdrop", "cyberpunk", "kiroshi", "netrunner", "2077", "arasaka", "horizon", "grid"],
+        active: ambientBackdrop === "kiroshi_netrunner",
+        action: () => setAmbientBackdrop("kiroshi_netrunner"),
+      },
+      {
         id: "backdrop-cyber",
         category: "Toggles",
         title: "Backdrop: Cyber Horizon Synth Grid",

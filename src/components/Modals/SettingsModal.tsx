@@ -596,6 +596,12 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
                   {[
                     {
+                      id: "kiroshi_netrunner" as AmbientBackdrop,
+                      label: "Kiroshi 2077",
+                      desc: "3D horizon, hex telemetry & ICE alerts",
+                      icon: Zap,
+                    },
+                    {
                       id: "cyber_grid" as AmbientBackdrop,
                       label: "Cyber Horizon",
                       desc: "Synth grid & reactive circuits",
