@@ -84,6 +84,7 @@ export const TranslationStage: React.FC = () => {
     caretStyle,
     smoothCaret,
     confidenceMode,
+    blindMode,
     stopOnError,
     fontSize,
     soundVolume,
@@ -105,7 +106,8 @@ export const TranslationStage: React.FC = () => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const letterRefs = useRef<Map<string, HTMLSpanElement>>(new Map());
 
-  // Show literal translation toggle (hidden by default to avoid revealing translation)
+  // Guided translation mode (visible faint words) vs blind spelling test
+  const [guidedMode, setGuidedMode] = useState<boolean>(true);
   const [showLiteral, setShowLiteral] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
   const [isExporting, setIsExporting] = useState<boolean>(false);
@@ -778,6 +780,21 @@ export const TranslationStage: React.FC = () => {
               <span className="hidden sm:inline text-xs">Breakdown</span>
             </button>
 
+            {/* Guided Translation vs Blind Spelling Test Toggle */}
+            <button
+              type="button"
+              onClick={() => setGuidedMode((prev) => !prev)}
+              className={`px-2.5 py-1.5 rounded-xl flex items-center gap-1.5 transition-all text-xs font-medium border ${
+                guidedMode
+                  ? "bg-main/20 text-main border-main/40 font-semibold"
+                  : "bg-sub/15 text-sub hover:text-text border-sub/20 hover:border-sub/40"
+              }`}
+              title="Toggle Guided Mode (faint target words visible) vs Blind Spelling Test"
+            >
+              <Eye className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">{guidedMode ? "Guided Words" : "Spelling Test"}</span>
+            </button>
+
             {/* Vocabulary Hints Toggle */}
             <button
               type="button"
@@ -888,14 +905,14 @@ export const TranslationStage: React.FC = () => {
       {/* English Translation Multi-word Typing Buffer */}
       <div
         ref={containerRef}
-        className={`w-full relative min-h-[160px] p-8 backdrop-blur-sm shadow-xl flex flex-col justify-center overflow-hidden cursor-text transition-all ${
+        className={`w-full relative min-h-[160px] p-8 backdrop-blur-md shadow-xl flex flex-col justify-center overflow-hidden cursor-text transition-all ${
           isCyberpunk
-            ? "cyber-cut cyber-reticle-crosshair bg-[#08080c]/85 border border-[#fcee09]/40 shadow-[0_0_20px_rgba(252,238,9,0.12)]"
-            : "rounded-3xl bg-sub/5 border border-sub/20"
+            ? "cyber-cut cyber-reticle-crosshair bg-[#08080c]/96 border border-[#fcee09]/40 shadow-[0_0_24px_rgba(252,238,9,0.12)]"
+            : "rounded-3xl bg-bg/95 border border-sub/20 shadow-lg"
         }`}
         style={{ fontSize: `${fontSize * 1.35}rem` }}
       >
-        {isCyberpunk && <div className="absolute inset-0 cyber-scanlines opacity-40 pointer-events-none" />}
+        {isCyberpunk && <div className="absolute inset-0 cyber-scanlines opacity-15 pointer-events-none z-0" />}
         {/* PB Pace Car / Shadow Ghost Caret */}
         {paceCarMode !== "off" && stats.elapsedMs > 0 && !isSentenceComplete && ghostOffset > 0 && (
           <div
@@ -936,15 +953,17 @@ export const TranslationStage: React.FC = () => {
           />
         )}
 
-        {/* Word Wrapped English Target Buffer with Word Masking */}
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-3 font-mono leading-relaxed select-none">
+        {/* Word Wrapped English Target Buffer with High Contrast & Legibility */}
+        <div className="relative z-10 flex flex-wrap items-center gap-x-3 gap-y-3 font-mono leading-relaxed select-none">
           {words.map((w, wIdx) => {
             const isActiveWord = wIdx === currentWordIndex;
             return (
               <div
                 key={wIdx}
-                className={`flex items-center px-1.5 py-0.5 rounded-lg transition-colors ${
-                  isActiveWord ? "bg-sub/15 ring-1 ring-main/30" : ""
+                className={`flex items-center px-2 py-1 rounded-xl transition-all ${
+                  isActiveWord
+                    ? "bg-main/10 ring-1 ring-main/50 shadow-xs"
+                    : "opacity-90"
                 }`}
               >
                 {w.letters.map((l, lIdx) => {
@@ -954,21 +973,33 @@ export const TranslationStage: React.FC = () => {
 
                   if (l.state === "correct") {
                     displayChar = l.typedChar || l.char;
-                    letterClass = "text-text font-semibold";
+                    letterClass = "text-text font-bold";
                   } else if (l.state === "error") {
                     displayChar = l.typedChar || l.char;
-                    letterClass = "text-error font-bold bg-error/20 rounded px-0.5";
+                    letterClass = "text-error font-bold bg-error/25 rounded px-0.5 shadow-[0_0_8px_rgba(255,0,60,0.4)]";
                   } else {
                     // state === "pending"
+                    const showGhost = guidedMode && !blindMode;
                     if (l.char === " ") {
                       displayChar = "\u00A0";
-                      letterClass = "text-sub/40";
+                      letterClass = "text-sub/50";
                     } else if (/[.,?!'"\-;:—–’“”«»]/.test(l.char)) {
                       displayChar = l.char;
-                      letterClass = "text-sub/50";
+                      letterClass = "text-sub/80 font-medium";
+                    } else if (showGhost) {
+                      // Guided Mode: Target word letters visible as faint guide
+                      displayChar = l.char;
+                      letterClass = isCurrentCaret
+                        ? "text-main font-bold underline decoration-2 decoration-main/80"
+                        : isActiveWord
+                        ? "text-text/80 font-medium"
+                        : "text-sub/70 font-normal";
                     } else {
+                      // Spelling Test / Blind Mode: Masked with underscores
                       displayChar = "_";
-                      letterClass = isCurrentCaret ? "text-main/60 font-semibold" : "text-sub/40";
+                      letterClass = isCurrentCaret
+                        ? "text-main font-bold underline decoration-2 decoration-main"
+                        : "text-sub/70 font-semibold";
                     }
                   }
 

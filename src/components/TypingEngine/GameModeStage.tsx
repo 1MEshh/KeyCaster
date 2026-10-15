@@ -524,28 +524,28 @@ export const GameModeStage: React.FC = () => {
               if (blindMode) {
                 if (l.state === "correct") {
                   displayChar = isSpace ? "\u00A0" : (l.typedChar || l.char);
-                  colorClass = "text-text font-medium";
+                  colorClass = "text-text font-bold";
                 } else if (l.state === "error") {
                   displayChar = l.typedChar || (isSpace ? "␣" : l.char);
-                  colorClass = "text-error font-bold bg-error/15 rounded px-0.5";
+                  colorClass = "text-error font-bold bg-error/25 rounded px-1 shadow-[0_0_8px_rgba(255,0,60,0.4)]";
                 } else {
                   // Untyped in blind mode: keep spaces visible between words, letters as underscores
                   displayChar = isSpace ? "\u00A0" : "_";
-                  colorClass = isCurrent ? "text-main/70 font-bold" : "text-sub/30";
+                  colorClass = isCurrent ? "text-main font-bold underline decoration-2 decoration-main" : "text-sub/70";
                 }
               } else {
                 if (l.state === "correct") {
                   displayChar = isSpace ? "\u00A0" : (l.typedChar || l.char);
-                  colorClass = "text-text font-medium";
+                  colorClass = "text-text font-bold";
                 } else if (l.state === "error") {
                   displayChar = l.typedChar || (isSpace ? "␣" : l.char);
-                  colorClass = "text-error font-bold bg-error/15 rounded px-0.5";
+                  colorClass = "text-error font-bold bg-error/25 rounded px-1 shadow-[0_0_8px_rgba(255,0,60,0.4)]";
                 } else if (isCurrent) {
                   displayChar = isSpace ? "\u00A0" : l.char;
-                  colorClass = "text-sub font-medium";
+                  colorClass = "text-main font-bold underline decoration-2 decoration-main/70";
                 } else {
                   displayChar = isSpace ? "\u00A0" : l.char;
-                  colorClass = "text-sub/40";
+                  colorClass = "text-sub/80 font-normal";
                 }
               }
 

@@ -177,14 +177,14 @@ body {
   transform: translateY(-1px);
 }
 
-/* Kiroshi Optics Scanline Raster Effect */
+/* Kiroshi Optics Scanline Raster Effect (Subtle background ambient texture) */
 [data-theme="cyberpunk"] .cyber-scanlines {
   background-image: repeating-linear-gradient(
     0deg,
-    rgba(0, 0, 0, 0.22) 0px,
-    rgba(0, 0, 0, 0.22) 1px,
+    rgba(0, 0, 0, 0.12) 0px,
+    rgba(0, 0, 0, 0.12) 1px,
     transparent 1px,
-    transparent 2px
+    transparent 3px
   );
   pointer-events: none;
 }
