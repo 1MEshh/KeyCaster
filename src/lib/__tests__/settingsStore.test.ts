@@ -60,6 +60,23 @@ test("useSettingsStore: handles matrix_rain and sine_wave ambientBackdrop update
 
   store.setAmbientBackdrop("cyber_grid");
   assert.equal(useSettingsStore.getState().ambientBackdrop, "cyber_grid");
+
+  store.setAmbientBackdrop("kiroshi_netrunner");
+  assert.equal(useSettingsStore.getState().ambientBackdrop, "kiroshi_netrunner");
+});
+
+test("useSettingsStore: automatically engages kiroshi_netrunner backdrop when switching to cyberpunk theme", () => {
+  const store = useSettingsStore.getState();
+
+  store.setAmbientBackdrop("constellation");
+  store.setTheme("cyberpunk");
+  assert.equal(useSettingsStore.getState().ambientBackdrop, "kiroshi_netrunner");
+
+  // Preserves off state if user explicitly disabled backdrops
+  store.setAmbientBackdrop("off");
+  store.setTheme("matrix_crt");
+  store.setTheme("cyberpunk");
+  assert.equal(useSettingsStore.getState().ambientBackdrop, "off");
 });
 
 test("useSettingsStore: supports matrix_crt and tokyo_night themes", () => {

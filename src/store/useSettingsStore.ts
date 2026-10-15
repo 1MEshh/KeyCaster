@@ -21,6 +21,7 @@ export type LiveStatsMode = "off" | "text" | "mini" | "tachometer";
 export type PaceCarMode = "off" | "pb" | "target_60" | "target_80" | "target_100" | "target_120";
 export type KeyboardLayout = "qwerty" | "dvorak" | "colemak";
 export type AmbientBackdrop =
+  | "kiroshi_netrunner"
   | "cyber_grid"
   | "constellation"
   | "grid"
@@ -254,7 +255,14 @@ export const useSettingsStore = create<SettingsState>()(
         });
       },
       setTheme: (theme) => {
-        set({ theme });
+        if (theme === "cyberpunk") {
+          set((state) => ({
+            theme,
+            ambientBackdrop: state.ambientBackdrop === "off" ? "off" : "kiroshi_netrunner",
+          }));
+        } else {
+          set({ theme });
+        }
         applyThemeCSS(theme);
       },
       setFontFamily: (fontFamily) => {

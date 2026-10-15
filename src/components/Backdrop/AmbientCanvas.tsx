@@ -2,11 +2,31 @@
 
 import React, { useEffect, useRef } from "react";
 import { useSettingsStore } from "@/store/useSettingsStore";
+import { useProfileStore } from "@/store/useProfileStore";
 
 interface RGB {
   r: number;
   g: number;
   b: number;
+}
+
+interface HexColumn {
+  x: number;
+  y: number;
+  speed: number;
+  tokens: string[];
+  highlightIdx: number;
+}
+
+interface CyberSpark {
+  x: number;
+  y: number;
+  vx: number;
+  vy: number;
+  alpha: number;
+  size: number;
+  life: number;
+  maxLife: number;
 }
 
 interface ConstellationNode {
@@ -114,22 +134,64 @@ export const AmbientCanvas: React.FC = () => {
 
     resize();
 
-    // Cache computed CSS variables (--main, --caret, --bg)
+    // Cache computed CSS variables (--main, --caret, --error, --bg)
     let mainColor: RGB = { r: 0, g: 240, b: 255 };
     let caretColor: RGB = { r: 255, g: 230, b: 0 };
+    let errorColor: RGB = { r: 255, g: 0, b: 60 };
     const updateColors = () => {
       if (typeof window === "undefined") return;
       const computed = getComputedStyle(document.documentElement);
       const mainCss = computed.getPropertyValue("--main");
       const caretCss = computed.getPropertyValue("--caret");
+      const errorCss = computed.getPropertyValue("--error");
       mainColor = parseCssColor(mainCss, { r: 0, g: 240, b: 255 });
       caretColor = parseCssColor(caretCss, { r: 255, g: 230, b: 0 });
+      errorColor = parseCssColor(errorCss, { r: 255, g: 0, b: 60 });
     };
     updateColors();
 
-    // Keystroke state
+    // Keystroke & Overclock state
     const ripples: Ripple[] = [];
     let pulseEnergy = 0;
+    let netrunnerOffset = 0;
+    let typingVelocity = 0;
+    let glitchTimer = 0;
+
+    const hexColumns: HexColumn[] = [];
+    const sparks: CyberSpark[] = [];
+
+    const HEX_TOKENS = [
+      "0x7F", "CYBER", "0xNC", "RAM_16G", "0x2A", "KIROSHI", "SYS_SYNC",
+      "ICE_OK", "0xFF", "0x00", "NET", "NODE_4", "ARASAKA", "0xDE", "DAEMON", "CPU_99%"
+    ];
+
+    const initHexColumns = () => {
+      hexColumns.length = 0;
+      const isMob = width < 768;
+      const colCount = isMob ? 4 : 8;
+      for (let i = 0; i < colCount; i++) {
+        const isLeft = i < colCount / 2;
+        const leftIdx = i;
+        const rightIdx = i - Math.floor(colCount / 2);
+        const colX = isLeft
+          ? 20 + leftIdx * 24
+          : width - (24 + (Math.floor(colCount / 2) - rightIdx) * 24);
+
+        hexColumns.push({
+          x: colX,
+          y: Math.random() * height,
+          speed: 0.8 + Math.random() * 1.2,
+          tokens: Array.from({ length: 14 }, () => HEX_TOKENS[Math.floor(Math.random() * HEX_TOKENS.length)]),
+          highlightIdx: Math.floor(Math.random() * 14),
+        });
+      }
+    };
+    initHexColumns();
+
+    const handleErrorEvent = () => {
+      glitchTimer = 0.35;
+    };
+    window.addEventListener("keycaster:typing_error", handleErrorEvent);
 
     // Pointer location for keystroke ripple origin
     let lastKeyPos = { x: width / 2, y: height / 2 };
@@ -145,6 +207,27 @@ export const AmbientCanvas: React.FC = () => {
       }
 
       pulseEnergy = Math.min(2.0, pulseEnergy + 0.5);
+      typingVelocity = Math.min(3.5, typingVelocity + 0.65);
+
+      if (e.key === "Backspace") {
+        glitchTimer = Math.max(glitchTimer, 0.12);
+      }
+
+      const streak = useProfileStore.getState().streak;
+      if (streak >= 10 && sparks.length < 35) {
+        for (let k = 0; k < 2; k++) {
+          sparks.push({
+            x: (width / 2) + (Math.random() - 0.5) * 160,
+            y: height * 0.44 + Math.random() * 30,
+            vx: (Math.random() - 0.5) * 2.0,
+            vy: -(1.5 + Math.random() * 2.5),
+            alpha: 0.95,
+            size: 1.5 + Math.random() * 1.5,
+            life: 0,
+            maxLife: 40 + Math.random() * 25,
+          });
+        }
+      }
 
       // Add a responsive shockwave ripple
       if (ripples.length < 6) {
@@ -161,7 +244,10 @@ export const AmbientCanvas: React.FC = () => {
 
     window.addEventListener("mousemove", handlePointerMove, { passive: true });
     window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("resize", resize);
+    window.addEventListener("resize", () => {
+      resize();
+      initHexColumns();
+    });
 
     // Initial entities setup based on mode
     const isMobile = width < 768;
@@ -229,9 +315,12 @@ export const AmbientCanvas: React.FC = () => {
       lastTime = currentTime;
       simTime += dt;
 
-      // Dampen global pulse energy
+      // Dampen global pulse energy & typing velocity
       pulseEnergy *= 0.93;
       if (pulseEnergy < 0.001) pulseEnergy = 0;
+      typingVelocity *= 0.95;
+      if (typingVelocity < 0.001) typingVelocity = 0;
+      if (glitchTimer > 0) glitchTimer -= dt;
 
       // Clear canvas
       ctx.clearRect(0, 0, width, height);
@@ -239,8 +328,194 @@ export const AmbientCanvas: React.FC = () => {
       const m = mainColor;
       const c = caretColor;
 
+      // MODE 0: KIROSHI NETRUNNER 3D HORIZON (AUTHENTIC CDPR CYBERPUNK 2077 VIBE)
+      if (ambientBackdrop === "kiroshi_netrunner" || (theme === "cyberpunk" && ambientBackdrop === "cyber_grid")) {
+        const horizonY = height * 0.44;
+        const groundHeight = height - horizonY;
+        const vanishX = width / 2;
+        const isGlitching = glitchTimer > 0;
+        const err = errorColor;
+
+        // Glitch slice displacement during Arasaka ICE Breach
+        let xShift = 0;
+        if (isGlitching) {
+          xShift = (Math.random() - 0.5) * 14;
+        }
+
+        // 1. Upper Braindance Sky & Atmospheric Neon Haze
+        const skyGrad = ctx.createLinearGradient(0, 0, 0, horizonY);
+        skyGrad.addColorStop(0, "rgba(8, 8, 12, 0)");
+        skyGrad.addColorStop(0.65, "rgba(8, 8, 12, 0.45)");
+        skyGrad.addColorStop(
+          1,
+          isGlitching
+            ? `rgba(${err.r}, ${err.g}, ${err.b}, 0.22)`
+            : `rgba(${m.r}, ${m.g}, ${m.b}, ${0.12 + pulseEnergy * 0.12})`
+        );
+        ctx.fillStyle = skyGrad;
+        ctx.fillRect(0, 0, width, horizonY);
+
+        // 2. Horizon Radiant Core Glow (Kiroshi Optics vanishing point)
+        const coreRadius = Math.min(width * 0.5, 380);
+        const sunGrad = ctx.createRadialGradient(
+          vanishX + xShift, horizonY, 2,
+          vanishX + xShift, horizonY, coreRadius
+        );
+        sunGrad.addColorStop(
+          0,
+          isGlitching
+            ? `rgba(${err.r}, ${err.g}, ${err.b}, 0.45)`
+            : `rgba(${m.r}, ${m.g}, ${m.b}, ${0.32 + pulseEnergy * 0.28})`
+        );
+        sunGrad.addColorStop(
+          0.35,
+          `rgba(${c.r}, ${c.g}, ${c.b}, ${0.14 + pulseEnergy * 0.14})`
+        );
+        sunGrad.addColorStop(1, "rgba(8, 8, 12, 0)");
+        ctx.fillStyle = sunGrad;
+        ctx.fillRect(vanishX - coreRadius, horizonY - coreRadius * 0.5, coreRadius * 2, coreRadius);
+
+        // 3. Ground Perspective Floor
+        const groundGrad = ctx.createLinearGradient(0, horizonY, 0, height);
+        groundGrad.addColorStop(
+          0,
+          isGlitching
+            ? `rgba(${err.r}, ${err.g}, ${err.b}, 0.15)`
+            : `rgba(${m.r}, ${m.g}, ${m.b}, ${0.08 + pulseEnergy * 0.1})`
+        );
+        groundGrad.addColorStop(0.35, `rgba(${c.r}, ${c.g}, ${c.b}, 0.04)`);
+        groundGrad.addColorStop(1, "rgba(8, 8, 12, 0.8)");
+        ctx.fillStyle = groundGrad;
+        ctx.fillRect(0, horizonY, width, groundHeight);
+
+        // 4. Perspective Longitudinal Rays (Angled Wireframe Lines)
+        const rayCount = isMobile ? 22 : 38;
+        const raySpread = width * 2.2;
+        ctx.beginPath();
+        for (let i = 0; i <= rayCount; i++) {
+          const bottomX = (width / 2) - (raySpread / 2) + (i / rayCount) * raySpread + xShift;
+          const isCenter = Math.abs(i - rayCount / 2) <= 1;
+          const rayAlpha = isGlitching
+            ? 0.35
+            : isCenter
+            ? 0.28 + pulseEnergy * 0.28
+            : 0.12 + pulseEnergy * 0.12;
+
+          ctx.strokeStyle = isGlitching
+            ? `rgba(${err.r}, ${err.g}, ${err.b}, ${rayAlpha})`
+            : isCenter
+            ? `rgba(${c.r}, ${c.g}, ${c.b}, ${rayAlpha})`
+            : i % 2 === 0
+            ? `rgba(${m.r}, ${m.g}, ${m.b}, ${rayAlpha})`
+            : `rgba(${c.r}, ${c.g}, ${c.b}, ${rayAlpha * 0.8})`;
+          ctx.lineWidth = isCenter ? 1.4 : 0.8;
+
+          ctx.moveTo(vanishX + xShift, horizonY);
+          ctx.lineTo(bottomX, height);
+        }
+        ctx.stroke();
+
+        // 5. Traversing Transverse Grid Lines (Flowing forward with typing velocity)
+        const lineCount = 16;
+        const forwardSpeed = (0.22 + typingVelocity * 0.35);
+        netrunnerOffset = (netrunnerOffset + forwardSpeed * 0.016) % (1 / lineCount);
+
+        for (let i = 1; i <= lineCount; i++) {
+          const norm = (i / lineCount + netrunnerOffset) % 1;
+          const depth = Math.pow(norm, 2.5); // Exponential perspective
+          const y = horizonY + groundHeight * depth;
+          const lineAlpha = isGlitching
+            ? depth * 0.55
+            : depth * (0.2 + pulseEnergy * 0.35);
+
+          ctx.beginPath();
+          ctx.strokeStyle = isGlitching
+            ? `rgba(${err.r}, ${err.g}, ${err.b}, ${lineAlpha})`
+            : i % 4 === 0
+            ? `rgba(${c.r}, ${c.g}, ${c.b}, ${lineAlpha * 0.9})`
+            : `rgba(${m.r}, ${m.g}, ${m.b}, ${lineAlpha})`;
+          ctx.lineWidth = 0.8 + depth * 1.2;
+          ctx.moveTo(0, y);
+          ctx.lineTo(width, y);
+          ctx.stroke();
+
+          // Intersecting Cyber Data Nodes (Glowing dots on grid intersections)
+          if (depth > 0.15 && i % 2 === 0) {
+            for (let r = 0; r <= rayCount; r += (isMobile ? 4 : 2)) {
+              const bottomX = (width / 2) - (raySpread / 2) + (r / rayCount) * raySpread + xShift;
+              const nodeX = vanishX + (bottomX - vanishX) * depth;
+              if (nodeX >= 0 && nodeX <= width) {
+                const nodeSize = 1.0 + depth * 2.0;
+                ctx.fillStyle = isGlitching
+                  ? `rgba(${err.r}, ${err.g}, ${err.b}, ${lineAlpha * 1.5})`
+                  : `rgba(${m.r}, ${m.g}, ${m.b}, ${lineAlpha * 1.3})`;
+                ctx.fillRect(nodeX - nodeSize / 2, y - nodeSize / 2, nodeSize, nodeSize);
+              }
+            }
+          }
+        }
+
+        // 6. Horizon Laser Line
+        ctx.beginPath();
+        ctx.strokeStyle = isGlitching
+          ? `rgba(${err.r}, ${err.g}, ${err.b}, 0.85)`
+          : `rgba(${m.r}, ${m.g}, ${m.b}, ${0.45 + pulseEnergy * 0.45})`;
+        ctx.lineWidth = isGlitching ? 2.5 : 1.5;
+        ctx.moveTo(0, horizonY);
+        ctx.lineTo(width, horizonY);
+        ctx.stroke();
+
+        // 7. Telemetry Status Badge
+        ctx.font = "bold 9px 'JetBrains Mono', monospace";
+        ctx.textAlign = "center";
+        const statusText = isGlitching
+          ? "⚠ [ICE BREACH ALERT :: ARASAKA THREAT DETECTED]"
+          : "// KIROSHI OPTICS v2.077 :: DEEP_NET_HORIZON [OVERCLOCK_ACTIVE]";
+        ctx.fillStyle = isGlitching
+          ? `rgba(${err.r}, ${err.g}, ${err.b}, 0.95)`
+          : `rgba(${m.r}, ${m.g}, ${m.b}, ${0.5 + pulseEnergy * 0.4})`;
+        ctx.fillText(statusText, vanishX + xShift, horizonY - 10);
+        ctx.textAlign = "start";
+
+        // 8. Vertical Cascading Hex Code Columns (Netrunner Gutter Streams)
+        ctx.font = "9px 'JetBrains Mono', monospace";
+        for (let col of hexColumns) {
+          col.y = (col.y + col.speed * (1 + typingVelocity * 0.4)) % height;
+          for (let ti = 0; ti < col.tokens.length; ti++) {
+            const tokenY = (col.y + ti * 18) % height;
+            if (tokenY < horizonY - 20 || tokenY > height - 10) continue;
+            const isHighlight = ti === col.highlightIdx;
+            const tokenAlpha = isHighlight ? 0.65 : 0.22;
+            ctx.fillStyle = isGlitching
+              ? `rgba(${err.r}, ${err.g}, ${err.b}, ${tokenAlpha * 1.4})`
+              : isHighlight
+              ? `rgba(${c.r}, ${c.g}, ${c.b}, ${tokenAlpha})`
+              : `rgba(${m.r}, ${m.g}, ${m.b}, ${tokenAlpha * 0.8})`;
+            ctx.fillText(col.tokens[ti], col.x, tokenY);
+          }
+        }
+
+        // 9. Rising Spark Particles (Overclock burst)
+        for (let sIdx = sparks.length - 1; sIdx >= 0; sIdx--) {
+          const sp = sparks[sIdx];
+          sp.x += sp.vx;
+          sp.y += sp.vy;
+          sp.life++;
+          sp.alpha = Math.max(0, 1 - sp.life / sp.maxLife);
+          ctx.beginPath();
+          ctx.arc(sp.x, sp.y, sp.size, 0, Math.PI * 2);
+          ctx.fillStyle = isGlitching
+            ? `rgba(${err.r}, ${err.g}, ${err.b}, ${sp.alpha * 0.8})`
+            : `rgba(${m.r}, ${m.g}, ${m.b}, ${sp.alpha * 0.9})`;
+          ctx.fill();
+          if (sp.life >= sp.maxLife || sp.alpha <= 0.01) {
+            sparks.splice(sIdx, 1);
+          }
+        }
+      }
+
       // MODE 1: CYBER HORIZON & SYNTH CIRCUIT MESH
-      if (ambientBackdrop === "cyber_grid") {
+      else if (ambientBackdrop === "cyber_grid") {
         const horizonY = height * 0.44;
         const groundHeight = height - horizonY;
         const vanishX = width / 2;
@@ -619,7 +894,7 @@ export const AmbientCanvas: React.FC = () => {
       }
       window.removeEventListener("mousemove", handlePointerMove);
       window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("resize", resize);
+      window.removeEventListener("keycaster:typing_error", handleErrorEvent);
       document.removeEventListener("visibilitychange", handleVisibility);
     };
   }, [ambientBackdrop, theme]);

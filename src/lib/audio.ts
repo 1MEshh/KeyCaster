@@ -367,6 +367,9 @@ export function playMechanicalClick(
  */
 export function playErrorThud(volume = 0.5): void {
   try {
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new CustomEvent("keycaster:typing_error"));
+    }
     const ctx = getAudioContext();
     if (!ctx || volume <= 0) return;
 
