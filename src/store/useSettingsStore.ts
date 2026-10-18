@@ -19,7 +19,7 @@ export type Theme =
 export type FontFamily = "Thmanyah Sans" | "JetBrains Mono" | "Roboto Mono" | "Fira Code";
 export type LiveStatsMode = "off" | "text" | "mini" | "tachometer";
 export type PaceCarMode = "off" | "pb" | "target_60" | "target_80" | "target_100" | "target_120";
-export type KeyboardLayout = "qwerty" | "dvorak" | "colemak";
+export type KeyboardLayout = "qwerty" | "dvorak" | "colemak" | "workman" | "colemak_dh";
 export type AmbientBackdrop =
   | "kiroshi_netrunner"
   | "cyber_grid"
