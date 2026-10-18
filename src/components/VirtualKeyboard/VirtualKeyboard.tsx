@@ -34,6 +34,16 @@ const KEYBOARD_LAYOUTS: Record<KeyboardLayout, string[][]> = {
     ["a", "r", "s", "t", "d", "h", "n", "e", "i", "o"],
     ["z", "x", "c", "v", "b", "k", "m"],
   ],
+  workman: [
+    ["q", "d", "r", "w", "b", "j", "f", "u", "p", ";"],
+    ["a", "s", "h", "t", "g", "y", "n", "e", "o", "i"],
+    ["z", "x", "m", "c", "v", "k", "l"],
+  ],
+  colemak_dh: [
+    ["q", "w", "f", "p", "b", "j", "l", "u", "y", ";"],
+    ["a", "r", "s", "t", "g", "m", "n", "e", "i", "o"],
+    ["z", "x", "c", "d", "v", "k", "h"],
+  ],
 };
 
 const FINGER_MAP: Record<string, FingerZone> = {
@@ -122,7 +132,7 @@ export const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({ expectedNextCh
         <div className="flex items-center gap-2">
           {/* Quick Layout Switcher */}
           <div className="flex items-center gap-1 bg-sub/10 p-0.5 rounded-lg border border-sub/20 text-[10px] font-mono">
-            {(["qwerty", "dvorak", "colemak"] as KeyboardLayout[]).map((layout) => (
+            {(["qwerty", "dvorak", "colemak", "workman", "colemak_dh"] as KeyboardLayout[]).map((layout) => (
               <button
                 key={layout}
                 type="button"
@@ -132,9 +142,9 @@ export const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({ expectedNextCh
                     ? "bg-main text-bg shadow-xs"
                     : "text-sub hover:text-text"
                 }`}
-                title={`Switch layout to ${layout.toUpperCase()}`}
+                title={`Switch layout to ${layout.replace("_", "-").toUpperCase()}`}
               >
-                {layout}
+                {layout === "colemak_dh" ? "DH" : layout}
               </button>
             ))}
           </div>

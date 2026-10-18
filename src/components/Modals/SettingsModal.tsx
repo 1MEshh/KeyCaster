@@ -933,8 +933,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                 <label className="text-xs uppercase text-sub font-semibold block mb-2">
                   Keyboard Layout
                 </label>
-                <div className="grid grid-cols-3 gap-2">
-                  {(["qwerty", "dvorak", "colemak"] as KeyboardLayout[]).map((layout) => (
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                  {(["qwerty", "dvorak", "colemak", "workman", "colemak_dh"] as KeyboardLayout[]).map((layout) => (
                     <button
                       key={layout}
                       onClick={() => setKeyboardLayout(layout)}
@@ -944,7 +944,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                           : "border-sub/20 text-sub hover:border-sub/50"
                       }`}
                     >
-                      {layout}
+                      {layout.replace("_", "-")}
                     </button>
                   ))}
                 </div>
