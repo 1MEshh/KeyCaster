@@ -270,6 +270,49 @@ export const ProgressDashboard: React.FC<ProgressDashboardProps> = ({
                     })}
                   </div>
                 </div>
+
+                {/* Streak Milestone Tiers */}
+                <div className="pt-2 border-t border-sub/15">
+                  <div className="text-[10px] uppercase font-bold text-sub mb-2 flex items-center justify-between">
+                    <span>Streak Milestone Tiers</span>
+                    <span className="text-amber-400 font-mono">Current: {streak}d</span>
+                  </div>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    {[
+                      { tier: "Tier I", threshold: 3, label: "3-Day Spark", icon: "⚡", desc: "Forming the habit" },
+                      { tier: "Tier II", threshold: 7, label: "7-Day Rhythm", icon: "🎯", desc: "One week uninterrupted" },
+                      { tier: "Tier III", threshold: 14, label: "14-Day Flow", icon: "🌊", desc: "Fortnight consistency" },
+                      { tier: "Tier IV", threshold: 30, label: "30-Day Master", icon: "👑", desc: "Monthly dedication" },
+                    ].map((m) => {
+                      const isReached = streak >= m.threshold;
+                      return (
+                        <div
+                          key={m.tier}
+                          className={`p-2.5 rounded-xl border flex items-center gap-2.5 transition-all ${
+                            isReached
+                              ? "border-amber-500/40 bg-amber-500/10 shadow-sm shadow-amber-500/10"
+                              : "border-sub/15 bg-sub/5 opacity-50"
+                          }`}
+                        >
+                          <span className="text-xl">{m.icon}</span>
+                          <div>
+                            <div className="flex items-center gap-1.5">
+                              <span className={`text-[11px] font-bold ${isReached ? "text-amber-400" : "text-sub"}`}>
+                                {m.label}
+                              </span>
+                              {isReached && (
+                                <span className="text-[8px] px-1 rounded bg-amber-500/20 text-amber-300 font-mono">
+                                  UNLOCKED
+                                </span>
+                              )}
+                            </div>
+                            <div className="text-[9px] text-sub">{m.desc}</div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
               </div>
 
               {/* Category Mastery Breakdown */}
