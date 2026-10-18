@@ -346,6 +346,19 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
           playMechanicalClick(soundVolume, "cream_linear");
         },
       },
+      {
+        id: "audio-box-navy",
+        category: "Audio",
+        title: "Switch: Kailh Box Navy",
+        subtitle: "Thick clickbar snap with heavy solid bottom-out clack",
+        icon: <Volume2 className="w-4 h-4 text-blue-500" />,
+        keywords: ["box navy", "clickbar", "kailh", "loud", "thick", "switch", "click"],
+        active: switchSound === "box_navy",
+        action: () => {
+          setSwitchSound("box_navy");
+          playMechanicalClick(soundVolume, "box_navy");
+        },
+      },
 
       // Toggles & Settings
       {
