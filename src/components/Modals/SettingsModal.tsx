@@ -5,6 +5,7 @@ import {
   X,
   Volume2,
   RotateCcw,
+  AlertTriangle,
   Sliders,
   Type,
   Keyboard,
@@ -48,6 +49,7 @@ type TabType = "caret_typing" | "appearance" | "audio" | "keyboard" | "data";
 export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose }) => {
   const [activeTab, setActiveTab] = useState<TabType>("caret_typing");
   const [voices, setVoices] = useState<SpeechSynthesisVoice[]>([]);
+  const [showResetConfirm, setShowResetConfirm] = useState(false);
 
   const {
     caretStyle,
@@ -1061,13 +1063,42 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                     Reset SRS Intervals
                   </button>
                   <button
-                    onClick={resetToDefaults}
+                    onClick={() => setShowResetConfirm(true)}
                     className="flex items-center gap-1.5 px-3 py-2 text-xs rounded-lg border border-sub/30 text-sub hover:text-text transition-colors"
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
                     Reset Settings to Defaults
                   </button>
                 </div>
+
+                {showResetConfirm && (
+                  <div className="p-3.5 rounded-xl border border-amber-500/40 bg-amber-500/10 space-y-2.5 animate-fadeIn">
+                    <div className="text-xs font-bold text-amber-400 flex items-center gap-2">
+                      <AlertTriangle className="w-4 h-4 text-amber-400" />
+                      <span>Confirm Factory Reset</span>
+                    </div>
+                    <p className="text-[11px] text-sub">
+                      Are you sure you want to reset all themes, caret styles, audio switches, and preferences back to default? (SRS word progress will remain intact).
+                    </p>
+                    <div className="flex items-center gap-2 pt-1">
+                      <button
+                        onClick={() => {
+                          resetToDefaults();
+                          setShowResetConfirm(false);
+                        }}
+                        className="px-3 py-1.5 text-xs font-bold rounded-lg bg-error/20 border border-error text-error hover:bg-error/30 transition-colors"
+                      >
+                        Yes, Reset Settings
+                      </button>
+                      <button
+                        onClick={() => setShowResetConfirm(false)}
+                        className="px-3 py-1.5 text-xs rounded-lg border border-sub/30 text-sub hover:text-text transition-colors"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           )}
