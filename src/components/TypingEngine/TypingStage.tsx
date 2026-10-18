@@ -32,6 +32,7 @@ export const TypingStage: React.FC = () => {
   const {
     theme,
     caretStyle,
+    caretBlinkRate,
     smoothCaret,
     confidenceMode,
     blindMode,
@@ -722,6 +723,12 @@ export const TypingStage: React.FC = () => {
           {/* Custom Caret */}
           <div
             className={`absolute pointer-events-none transition-all ${
+              caretBlinkRate === "off"
+                ? "opacity-100"
+                : caretBlinkRate === "rapid"
+                ? "animate-[pulse_0.6s_ease-in-out_infinite]"
+                : "animate-[pulse_1.2s_ease-in-out_infinite]"
+            } ${
               caretStyle === "default"
                 ? "w-[2.5px] bg-caret h-[1.1em] -ml-[1px]"
                 : caretStyle === "block"

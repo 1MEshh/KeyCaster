@@ -4,6 +4,7 @@ import { persist } from "zustand/middleware";
 import { type SwitchSoundProfile } from "@/lib/audio";
 
 export type CaretStyle = "default" | "block" | "underline" | "outline";
+export type CaretBlinkRate = "smooth" | "rapid" | "off";
 export type SmoothCaretSpeed = "off" | "fast" | "medium" | "slow";
 export type ConfidenceMode = "off" | "on" | "max";
 export type StopOnError = "off" | "letter" | "word";
@@ -35,6 +36,7 @@ export type AppSection = "srs_words" | "sentences" | "arabic_dictation" | "arcad
 export interface SettingsState {
   // Caret
   caretStyle: CaretStyle;
+  caretBlinkRate: CaretBlinkRate;
   smoothCaret: SmoothCaretSpeed;
   caretSparks: boolean;
 
@@ -77,6 +79,7 @@ export interface SettingsState {
 
   // Actions
   setCaretStyle: (style: CaretStyle) => void;
+  setCaretBlinkRate: (rate: CaretBlinkRate) => void;
   setSmoothCaret: (speed: SmoothCaretSpeed) => void;
   setCaretSparks: (enabled: boolean) => void;
   setConfidenceMode: (mode: ConfidenceMode) => void;
@@ -206,6 +209,7 @@ export const SMOOTH_CARET_DURATIONS: Record<SmoothCaretSpeed, string> = {
 
 const DEFAULT_SETTINGS = {
   caretStyle: "default" as CaretStyle,
+  caretBlinkRate: "smooth" as CaretBlinkRate,
   smoothCaret: "medium" as SmoothCaretSpeed,
   caretSparks: true,
   confidenceMode: "off" as ConfidenceMode,
@@ -242,6 +246,7 @@ export const useSettingsStore = create<SettingsState>()(
       ...DEFAULT_SETTINGS,
 
       setCaretStyle: (caretStyle) => set({ caretStyle }),
+      setCaretBlinkRate: (caretBlinkRate) => set({ caretBlinkRate }),
       setSmoothCaret: (smoothCaret) => set({ smoothCaret }),
       setCaretSparks: (caretSparks) => set({ caretSparks }),
       setConfidenceMode: (confidenceMode) => set({ confidenceMode }),
