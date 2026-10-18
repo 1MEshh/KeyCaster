@@ -45,6 +45,7 @@ export const TypingStage: React.FC = () => {
     ttsVoiceURI,
     switchSound,
     paceCarMode,
+    minWpmGate,
     activeCategory,
     sessionSize,
   } = useSettingsStore();
@@ -608,6 +609,14 @@ export const TypingStage: React.FC = () => {
           isRetryAttempt={isRetryAttempt}
         />
       </div>
+
+      {/* Min WPM Threshold Alert */}
+      {minWpmGate > 0 && firstKeyTimeRef.current && liveWpm > 0 && liveWpm < minWpmGate && (
+        <div className="mb-4 w-full max-w-md mx-auto px-3.5 py-1.5 rounded-full border border-amber-500/40 bg-amber-500/10 text-amber-400 text-xs font-mono flex items-center justify-center gap-2 animate-pulse shadow-sm shadow-amber-500/10">
+          <span>⚡ PACE ALERT:</span>
+          <span>{liveWpm} WPM (Gate: {minWpmGate}+ WPM)</span>
+        </div>
+      )}
 
       {/* Pace Car Race Delta Indicator */}
       {paceCarMode !== "off" && firstKeyTimeRef.current && (

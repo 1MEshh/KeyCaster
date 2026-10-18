@@ -45,6 +45,7 @@ export interface SettingsState {
   phraseMode: boolean;
   stopOnError: StopOnError;
   paceCarMode: PaceCarMode;
+  minWpmGate: number; // 0 = off, 30, 50, 70, 90 WPM threshold alert
 
   // Visual & UI
   theme: Theme;
@@ -85,6 +86,7 @@ export interface SettingsState {
   setStopOnError: (stop: StopOnError) => void;
   setPaceCarMode: (paceCarMode: PaceCarMode) => void;
   cyclePaceCarMode: () => void;
+  setMinWpmGate: (gate: number) => void;
   setTheme: (theme: Theme) => void;
   setFontFamily: (font: FontFamily) => void;
   setFontSize: (size: number) => void;
@@ -212,6 +214,7 @@ const DEFAULT_SETTINGS = {
   phraseMode: false,
   stopOnError: "letter" as StopOnError,
   paceCarMode: "off" as PaceCarMode,
+  minWpmGate: 0,
   theme: "midnight" as Theme,
   fontFamily: "Thmanyah Sans" as FontFamily,
   fontSize: 1.75,
@@ -247,6 +250,7 @@ export const useSettingsStore = create<SettingsState>()(
       setPhraseMode: (phraseMode) => set({ phraseMode }),
       setStopOnError: (stopOnError) => set({ stopOnError }),
       setPaceCarMode: (paceCarMode) => set({ paceCarMode }),
+      setMinWpmGate: (minWpmGate) => set({ minWpmGate }),
       cyclePaceCarMode: () => {
         const modes: PaceCarMode[] = ["off", "pb", "target_60", "target_80", "target_100", "target_120"];
         set((state) => {
