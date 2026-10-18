@@ -24,6 +24,7 @@ import {
   THEME_VARIABLES,
   type Theme,
   type CaretStyle,
+  type CaretBlinkRate,
   type SmoothCaretSpeed,
   type ConfidenceMode,
   type StopOnError,
@@ -51,6 +52,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
   const {
     caretStyle,
     setCaretStyle,
+    caretBlinkRate,
+    setCaretBlinkRate,
     smoothCaret,
     setSmoothCaret,
     caretSparks,
@@ -368,6 +371,33 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                   onChange={(e) => setCaretSparks(e.target.checked)}
                   className="w-4 h-4 rounded border-sub/30 text-main focus:ring-main accent-main cursor-pointer"
                 />
+              </div>
+
+              {/* Caret Blink Rate */}
+              <div>
+                <label className="text-xs uppercase text-sub font-semibold block mb-2">
+                  Caret Blink Style
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  {[
+                    { id: "smooth", label: "Smooth (Pulse)", desc: "1.2s fluid breathing pulse" },
+                    { id: "rapid", label: "Rapid (Blink)", desc: "0.6s classic terminal snap" },
+                    { id: "off", label: "Solid (Off)", desc: "Static zero-distraction caret" },
+                  ].map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => setCaretBlinkRate(item.id as CaretBlinkRate)}
+                      className={`p-2.5 rounded-lg border text-left transition-all ${
+                        caretBlinkRate === item.id
+                          ? "border-main bg-main/10 text-main font-bold"
+                          : "border-sub/20 text-sub hover:border-sub/50"
+                      }`}
+                    >
+                      <div className="text-xs">{item.label}</div>
+                      <div className="text-[10px] opacity-70 font-normal">{item.desc}</div>
+                    </button>
+                  ))}
+                </div>
               </div>
 
               {/* Stop on Error */}
