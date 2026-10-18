@@ -52,7 +52,8 @@ export type SwitchSoundProfile =
   | "topre_capacitive"
   | "typewriter"
   | "holy_panda"
-  | "cream_linear";
+  | "cream_linear"
+  | "box_navy";
 
 /**
  * Procedural Mechanical Switch Synthesizer
@@ -317,6 +318,56 @@ export function playMechanicalClick(
 
       const noiseGain = ctx.createGain();
       noiseGain.gain.setValueAtTime(0.6, now);
+      noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+      noise.connect(filter);
+      filter.connect(noiseGain);
+      noiseGain.connect(masterGain);
+      noise.start(now);
+      noise.stop(now + 0.04);
+    } else if (switchType === "box_navy") {
+      // Kailh Box Navy: thick clickbar snap + heavy solid bottom-out clack
+      masterGain.gain.setValueAtTime(volume * 0.55, now);
+      masterGain.connect(ctx.destination);
+
+      // Thick clickbar snap
+      const osc = ctx.createOscillator();
+      const oscGain = ctx.createGain();
+      osc.type = "sine";
+      osc.frequency.setValueAtTime(5200 * jitter, now);
+      osc.frequency.exponentialRampToValueAtTime(1200 * jitter, now + 0.022);
+
+      oscGain.gain.setValueAtTime(1.0, now);
+      oscGain.gain.exponentialRampToValueAtTime(0.001, now + 0.022);
+      osc.connect(oscGain);
+      oscGain.connect(masterGain);
+      osc.start(now);
+      osc.stop(now + 0.025);
+
+      // Secondary clickbar rebound (12ms)
+      const rebound = ctx.createOscillator();
+      const reboundGain = ctx.createGain();
+      rebound.type = "triangle";
+      rebound.frequency.setValueAtTime(3600 * jitter, now + 0.012);
+      rebound.frequency.exponentialRampToValueAtTime(1600 * jitter, now + 0.028);
+
+      reboundGain.gain.setValueAtTime(0, now);
+      reboundGain.gain.setValueAtTime(0.7, now + 0.012);
+      reboundGain.gain.exponentialRampToValueAtTime(0.001, now + 0.028);
+      rebound.connect(reboundGain);
+      reboundGain.connect(masterGain);
+      rebound.start(now + 0.012);
+      rebound.stop(now + 0.032);
+
+      // Heavy bottom-out transient
+      const noise = ctx.createBufferSource();
+      noise.buffer = getNoiseBuffer(ctx);
+      const filter = ctx.createBiquadFilter();
+      filter.type = "bandpass";
+      filter.frequency.setValueAtTime(2400 * jitter, now);
+      filter.Q.setValueAtTime(1.8, now);
+
+      const noiseGain = ctx.createGain();
+      noiseGain.gain.setValueAtTime(0.75, now);
       noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
       noise.connect(filter);
       filter.connect(noiseGain);
