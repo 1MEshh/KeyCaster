@@ -365,6 +365,13 @@ export const TranslationStage: React.FC = () => {
         return;
       }
 
+      // Guided Mode Toggle (Alt+G)
+      if (e.altKey && (key === "g" || key === "G")) {
+        e.preventDefault();
+        setGuidedMode((prev) => !prev);
+        return;
+      }
+
       // Next Sentence on Enter when complete
       if (key === "Enter" && isSentenceComplete) {
         e.preventDefault();
