@@ -32,6 +32,7 @@ export const LiveStats: React.FC<LiveStatsProps> = ({
   const completedCount = isComplete ? totalWords : currentWordIndex;
   const progressPercent =
     totalWords > 0 ? Math.min(100, Math.round((completedCount / totalWords) * 100)) : 0;
+  const kps = ((wpm * 5) / 60).toFixed(1);
 
   if (liveStats === "tachometer") {
     return (
@@ -54,6 +55,7 @@ export const LiveStats: React.FC<LiveStatsProps> = ({
           <span className="flex items-center gap-1.5">
             <span className="text-main font-semibold">{wpm}</span>
             <span className="text-[11px] uppercase opacity-70">wpm</span>
+            <span className="text-[9px] text-sub/60 font-mono">({kps} kps)</span>
           </span>
           <span className="flex items-center gap-1.5">
             <span className="text-text font-semibold">{accuracy}%</span>
@@ -85,6 +87,12 @@ export const LiveStats: React.FC<LiveStatsProps> = ({
       <div className="flex items-center gap-2">
         <span className="text-sub uppercase tracking-wider text-[10px]">WPM</span>
         <span className="text-main font-bold text-base">{wpm}</span>
+        <span
+          className="text-[9px] px-1.5 py-0.5 rounded bg-sub/20 text-sub/80 font-mono font-medium"
+          title="Keystrokes Per Second"
+        >
+          {kps} KPS
+        </span>
       </div>
 
       <div className="h-4 w-px bg-sub/30" />
