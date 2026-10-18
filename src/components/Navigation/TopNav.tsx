@@ -562,7 +562,13 @@ export const TopNav: React.FC<TopNavProps> = ({
                     max="1"
                     step="0.05"
                     value={soundVolume}
-                    onChange={(e) => setSoundVolume(parseFloat(e.target.value))}
+                    onChange={(e) => {
+                      const vol = parseFloat(e.target.value);
+                      setSoundVolume(vol);
+                      if (vol > 0) {
+                        playMechanicalClick(vol, switchSound);
+                      }
+                    }}
                     className="w-full accent-main cursor-pointer"
                   />
                 </div>
