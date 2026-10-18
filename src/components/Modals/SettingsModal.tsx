@@ -67,6 +67,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
     setStopOnError,
     paceCarMode,
     setPaceCarMode,
+    minWpmGate,
+    setMinWpmGate,
     theme,
     setTheme,
     fontFamily,
@@ -447,6 +449,34 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                     >
                       <div className="text-xs">{item.label}</div>
                       <div className="text-[10px] opacity-70 font-normal">{item.desc}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Min WPM Gate / Speed Threshold */}
+              <div>
+                <label className="text-xs uppercase text-sub font-semibold block mb-2">
+                  ⚡ Minimum WPM Speed Gate
+                </label>
+                <div className="grid grid-cols-5 gap-2">
+                  {[
+                    { val: 0, label: "Off" },
+                    { val: 30, label: "30 WPM" },
+                    { val: 50, label: "50 WPM" },
+                    { val: 70, label: "70 WPM" },
+                    { val: 90, label: "90 WPM" },
+                  ].map((gate) => (
+                    <button
+                      key={gate.val}
+                      onClick={() => setMinWpmGate(gate.val)}
+                      className={`p-2.5 rounded-lg border text-center transition-all ${
+                        minWpmGate === gate.val
+                          ? "border-main bg-main/10 text-main font-bold"
+                          : "border-sub/20 text-sub hover:border-sub/50"
+                      }`}
+                    >
+                      <div className="text-xs">{gate.label}</div>
                     </button>
                   ))}
                 </div>
