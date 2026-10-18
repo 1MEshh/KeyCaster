@@ -227,8 +227,17 @@ export const CustomCursor: React.FC = () => {
             <span className="absolute -bottom-1 -left-1 w-1.5 h-1.5 border-b border-l border-[#fcee09]" />
             <span className="absolute -bottom-1 -right-1 w-1.5 h-1.5 border-b border-r border-[#fcee09]" />
             {isHovered && (
-              <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[7px] font-mono tracking-widest text-[#00f0ff] uppercase whitespace-nowrap">
-                TARGET_LOCK
+              <>
+                <span className="absolute inset-x-0 top-1/2 h-[1px] bg-[#00f0ff]/30 pointer-events-none" />
+                <span className="absolute inset-y-0 left-1/2 w-[1px] bg-[#00f0ff]/30 pointer-events-none" />
+                <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[7px] font-mono tracking-widest text-[#00f0ff] uppercase whitespace-nowrap">
+                  TARGET_LOCK
+                </span>
+              </>
+            )}
+            {isClicking && (
+              <span className="absolute -bottom-4 left-1/2 -translate-x-1/2 text-[7px] font-mono tracking-widest text-[#ff003c] uppercase whitespace-nowrap animate-pulse">
+                SYS_ENGAGE
               </span>
             )}
           </>
