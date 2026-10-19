@@ -1718,5 +1718,395 @@
         "en": "highest levels"
       }
     ]
+  },
+  {
+    "id": "ar-biz-13",
+    "category": "business",
+    "difficulty": "intermediate",
+    "arabic": "يَتَطَلَّبُ النَّجَاحُ فِي رِيَادَةِ الأَعْمَالِ مَزِيجًا مِنَ الصَّبْرِ وَالابْتِكَارِ المُسْتَمِرِّ.",
+    "english": "Success in entrepreneurship requires a blend of patience and continuous innovation.",
+    "acceptedAlternatives": [
+      "Succeeding in entrepreneurship requires patience and continuous innovation.",
+      "Success in entrepreneurship demands a combination of patience and constant innovation."
+    ],
+    "literalMeaning": "Requires success in entrepreneurship blend of patience and innovation continuous.",
+    "vocabularyCards": [
+      {
+        "ar": "رِيَادَة الأَعْمَال",
+        "en": "entrepreneurship"
+      },
+      {
+        "ar": "صَبْر",
+        "en": "patience"
+      },
+      {
+        "ar": "ابْتِكَار مُسْتَمِرّ",
+        "en": "continuous innovation"
+      }
+    ]
+  },
+  {
+    "id": "ar-biz-14",
+    "category": "business",
+    "difficulty": "intermediate",
+    "arabic": "تُسَاهِمُ الحَمَلَاتُ التَّسْوِيقِيَّةُ الرَّقْمِيَّةُ فِي زِيَادَةِ المَبِيعَاتِ السَّنَوِيَّةِ.",
+    "english": "Digital marketing campaigns contribute to increasing annual sales.",
+    "acceptedAlternatives": [
+      "Digital marketing campaigns help boost annual sales.",
+      "Digital marketing campaigns contribute to raising yearly sales."
+    ],
+    "literalMeaning": "Contribute campaigns marketing digital in increasing sales annual.",
+    "vocabularyCards": [
+      {
+        "ar": "حَمَلَات تَسْوِيقِيَّة",
+        "en": "marketing campaigns"
+      },
+      {
+        "ar": "مَبِيعَات سَنَوِيَّة",
+        "en": "annual sales"
+      },
+      {
+        "ar": "زِيَادَة",
+        "en": "increasing"
+      }
+    ]
+  },
+  {
+    "id": "ar-biz-15",
+    "category": "business",
+    "difficulty": "advanced",
+    "arabic": "يَجِبُ تَقْيِيمُ المَخَاطِرِ المَالِيَّةِ قَبْلَ الإِقْدَامِ عَلَى أَيِّ اسْتِثْمَارٍ ضَخْمٍ.",
+    "english": "Financial risks must be evaluated before undertaking any major investment.",
+    "acceptedAlternatives": [
+      "Financial risks should be assessed prior to making any large investment.",
+      "One must assess financial risks before engaging in any massive investment."
+    ],
+    "literalMeaning": "Must evaluation of risks financial before undertaking on any investment massive.",
+    "vocabularyCards": [
+      {
+        "ar": "مَخَاطِر مَالِيَّة",
+        "en": "financial risks"
+      },
+      {
+        "ar": "تَقْيِيم",
+        "en": "evaluation"
+      },
+      {
+        "ar": "اسْتِثْمَار ضَخْم",
+        "en": "major investment"
+      }
+    ]
+  },
+  {
+    "id": "ar-biz-16",
+    "category": "business",
+    "difficulty": "beginner",
+    "arabic": "يُعْتَبَرُ رِضَا العُمَلَاءِ الهَدَفَ الأَسَاسِيَّ لِشَرِكَتِنَا.",
+    "english": "Customer satisfaction is considered the primary goal of our company.",
+    "acceptedAlternatives": [
+      "Customer satisfaction is the main goal of our company.",
+      "Client satisfaction is regarded as the fundamental goal of our company."
+    ],
+    "literalMeaning": "Is considered satisfaction of customers the goal primary of our company.",
+    "vocabularyCards": [
+      {
+        "ar": "رِضَا العُمَلَاء",
+        "en": "customer satisfaction"
+      },
+      {
+        "ar": "هَدَف أَسَاسِيّ",
+        "en": "primary goal"
+      },
+      {
+        "ar": "شَرِكَة",
+        "en": "company"
+      }
+    ]
+  },
+  {
+    "id": "ar-biz-17",
+    "category": "business",
+    "difficulty": "intermediate",
+    "arabic": "يُسَاعِدُ التَّفْوِيضُ الفَعَّالُ فِي تَمْكِينِ فَرِيقِ العَمَلِ وَتَحْسِينِ الإِنْتَاجِيَّةِ.",
+    "english": "Effective delegation helps empower the work team and improve productivity.",
+    "acceptedAlternatives": [
+      "Effective delegation assists in empowering the team and boosting productivity.",
+      "Effective delegation helps empower team members and improve productivity."
+    ],
+    "literalMeaning": "Helps delegation effective in empowering team of work and improving productivity.",
+    "vocabularyCards": [
+      {
+        "ar": "تَفْوِيض فَعَّال",
+        "en": "effective delegation"
+      },
+      {
+        "ar": "تَمْكِين",
+        "en": "empowerment"
+      },
+      {
+        "ar": "إِنْتَاجِيَّة",
+        "en": "productivity"
+      }
+    ]
+  },
+  {
+    "id": "ar-biz-18",
+    "category": "business",
+    "difficulty": "advanced",
+    "arabic": "تَسْعَى الشَّرِكَةُ إِلَى تَوْسِيعِ حِصَّتِهَا السُّوقِيَّةِ فِي الشَّرْقِ الأَوْسَطِ.",
+    "english": "The company seeks to expand its market share in the Middle East.",
+    "acceptedAlternatives": [
+      "The company aims to expand its market share in the Middle East.",
+      "The firm strives to increase its market share across the Middle East."
+    ],
+    "literalMeaning": "Seeks the company to expansion of its share market in the East Middle.",
+    "vocabularyCards": [
+      {
+        "ar": "حِصَّة سُوقِيَّة",
+        "en": "market share"
+      },
+      {
+        "ar": "تَوْسِيع",
+        "en": "expansion"
+      },
+      {
+        "ar": "الشَّرْق الأَوْسَط",
+        "en": "Middle East"
+      }
+    ]
+  },
+  {
+    "id": "ar-biz-19",
+    "category": "business",
+    "difficulty": "intermediate",
+    "arabic": "يُعَزِّزُ التَّنَوُّعُ الثَّقَافِيُّ بِيئَةَ الابْتِكَارِ وَالإِبْدَاعِ فِي مُؤَسَّسَاتِ اليَوْمِ.",
+    "english": "Cultural diversity enhances the environment of innovation and creativity in today organizations.",
+    "acceptedAlternatives": [
+      "Cultural diversity fosters innovation and creativity in modern organizations.",
+      "Cultural diversity enhances innovation and creative environments in today institutions."
+    ],
+    "literalMeaning": "Enhances diversity cultural environment of innovation and creativity in institutions today.",
+    "vocabularyCards": [
+      {
+        "ar": "تَنَوُّع ثَقَافِيّ",
+        "en": "cultural diversity"
+      },
+      {
+        "ar": "بِيئَة ابْتِكَار",
+        "en": "innovation environment"
+      },
+      {
+        "ar": "مُؤَسَّسَات",
+        "en": "organizations"
+      }
+    ]
+  },
+  {
+    "id": "ar-biz-20",
+    "category": "business",
+    "difficulty": "beginner",
+    "arabic": "البَحْثُ وَالتَّطْوِيرُ هُمَا مِفْتَاحُ التَّمَيُّزِ التَّنَافُسِيِّ فِي السُّوقِ.",
+    "english": "Research and development are the key to competitive excellence in the market.",
+    "acceptedAlternatives": [
+      "Research and development are the key to competitive advantage in the market.",
+      "R&D is the key to competitive distinction in the marketplace."
+    ],
+    "literalMeaning": "Research and development they two key of excellence competitive in market.",
+    "vocabularyCards": [
+      {
+        "ar": "بَحْث وَتَطْوِير",
+        "en": "research and development"
+      },
+      {
+        "ar": "تَمَيُّز تَنَافُسِيّ",
+        "en": "competitive excellence"
+      },
+      {
+        "ar": "مِفْتَاح",
+        "en": "key"
+      }
+    ]
+  },
+  {
+    "id": "ar-biz-21",
+    "category": "business",
+    "difficulty": "intermediate",
+    "arabic": "تَتَطَلَّبُ مُفَاوَضَاتُ العُقُودِ دِقَّةً شَدِيدَةً وَفَهْمًا قَانُونِيًّا عَمِيقًا.",
+    "english": "Contract negotiations require utmost precision and deep legal understanding.",
+    "acceptedAlternatives": [
+      "Negotiating contracts requires strict accuracy and deep legal understanding.",
+      "Contract negotiations demand high precision and profound legal knowledge."
+    ],
+    "literalMeaning": "Requires negotiations of contracts precision strict and understanding legal deep.",
+    "vocabularyCards": [
+      {
+        "ar": "مُفَاوَضَات العُقُود",
+        "en": "contract negotiations"
+      },
+      {
+        "ar": "دِقَّة شَدِيدَة",
+        "en": "utmost precision"
+      },
+      {
+        "ar": "فَهْم قَانُونِيّ",
+        "en": "legal understanding"
+      }
+    ]
+  },
+  {
+    "id": "ar-biz-22",
+    "category": "business",
+    "difficulty": "advanced",
+    "arabic": "يُسَاعِدُ التَّخْطِيطُ الاسْتِرَاتِيجِيُّ عَلَى التَّنَبُّؤِ بِالتَّحَدِّيَاتِ المُسْتَقْبَلِيَّةِ.",
+    "english": "Strategic planning helps anticipate future challenges.",
+    "acceptedAlternatives": [
+      "Strategic planning assists in forecasting future challenges.",
+      "Strategic planning helps predict upcoming challenges."
+    ],
+    "literalMeaning": "Helps planning strategic on predicting challenges future.",
+    "vocabularyCards": [
+      {
+        "ar": "تَخْطِيط اسْتِرَاتِيجِيّ",
+        "en": "strategic planning"
+      },
+      {
+        "ar": "تَنَبُّؤ",
+        "en": "anticipation"
+      },
+      {
+        "ar": "تَحَدِّيَات مُسْتَقْبَلِيَّة",
+        "en": "future challenges"
+      }
+    ]
+  },
+  {
+    "id": "ar-biz-23",
+    "category": "business",
+    "difficulty": "beginner",
+    "arabic": "الوَقْتُ هُوَ أَثْمَنُ مَوْرِدٍ لَدَى رَجُلِ الأَعْمَالِ النَّاجِحِ.",
+    "english": "Time is the most valuable resource for a successful businessperson.",
+    "acceptedAlternatives": [
+      "Time is the most precious resource of a successful entrepreneur.",
+      "Time is the most valuable asset of a successful business person."
+    ],
+    "literalMeaning": "Time is most precious resource with person of business successful.",
+    "vocabularyCards": [
+      {
+        "ar": "أَثْمَن مَوْرِد",
+        "en": "most valuable resource"
+      },
+      {
+        "ar": "رَجُل أَعْمَال",
+        "en": "businessperson"
+      },
+      {
+        "ar": "نَاجِح",
+        "en": "successful"
+      }
+    ]
+  },
+  {
+    "id": "ar-biz-24",
+    "category": "business",
+    "difficulty": "intermediate",
+    "arabic": "يُؤَدِّي تَحْسِينُ خِدْمَةِ مَا بَعْدَ البَيْعِ إِلَى بِنَاءِ وَلَاءِ العُمَلَاءِ.",
+    "english": "Improving after-sales service leads to building customer loyalty.",
+    "acceptedAlternatives": [
+      "Enhancing after-sales service results in building customer loyalty.",
+      "Improving after-sales support leads to greater customer loyalty."
+    ],
+    "literalMeaning": "Leads improving service what after sale to building loyalty customers.",
+    "vocabularyCards": [
+      {
+        "ar": "خِدْمَة مَا بَعْدَ البَيْع",
+        "en": "after-sales service"
+      },
+      {
+        "ar": "وَلَاء العُمَلَاء",
+        "en": "customer loyalty"
+      },
+      {
+        "ar": "بِنَاء",
+        "en": "building"
+      }
+    ]
+  },
+  {
+    "id": "ar-biz-25",
+    "category": "business",
+    "difficulty": "advanced",
+    "arabic": "تُقَلِّلُ أَتْمَتَةُ المَهَامِّ الرَّتِيبَةِ مِنَ الأَخْطَاءِ البَشَرِيَّةِ فِي الحِسَابَاتِ.",
+    "english": "Automating repetitive tasks reduces human errors in accounting.",
+    "acceptedAlternatives": [
+      "Automation of routine tasks reduces human error in accounts.",
+      "Automating routine tasks minimizes human errors in financial calculations."
+    ],
+    "literalMeaning": "Reduces automation of tasks routine from errors human in calculations.",
+    "vocabularyCards": [
+      {
+        "ar": "أَتْمَتَة",
+        "en": "automation"
+      },
+      {
+        "ar": "مَهَام رَتِيبَة",
+        "en": "repetitive tasks"
+      },
+      {
+        "ar": "أَخْطَاء بَشَرِيَّة",
+        "en": "human errors"
+      }
+    ]
+  },
+  {
+    "id": "ar-biz-26",
+    "category": "business",
+    "difficulty": "intermediate",
+    "arabic": "يَسْمَحُ التَّوَاصُلُ الشَّفَّافُ بِتَفَادِي سُوءِ الفَهْمِ بَيْنَ الإِدَارَةِ وَالمُوَظَّفِينَ.",
+    "english": "Transparent communication allows avoiding misunderstandings between management and employees.",
+    "acceptedAlternatives": [
+      "Transparent communication helps avoid misunderstandings between management and staff.",
+      "Clear communication avoids misunderstanding between management and employees."
+    ],
+    "literalMeaning": "Permits communication transparent with avoiding bad understanding between management and employees.",
+    "vocabularyCards": [
+      {
+        "ar": "تَوَاصُل شَفَّاف",
+        "en": "transparent communication"
+      },
+      {
+        "ar": "سُوء الفَهْم",
+        "en": "misunderstanding"
+      },
+      {
+        "ar": "مُوَظَّفِينَ",
+        "en": "employees"
+      }
+    ]
+  },
+  {
+    "id": "ar-biz-27",
+    "category": "business",
+    "difficulty": "advanced",
+    "arabic": "تُعْتَبَرُ السُّيُولَةُ المَالِيَّةُ صِمَامَ الأَمَانِ لِاسْتِمْرَارِيَّةِ المَشَارِيعِ النَّاشِئَةِ.",
+    "english": "Financial liquidity is considered the safety valve for the sustainability of startups.",
+    "acceptedAlternatives": [
+      "Cash liquidity is regarded as the safety valve for startup continuity.",
+      "Financial liquidity is considered essential for the survival of early-stage startups."
+    ],
+    "literalMeaning": "Is considered liquidity financial valve of safety for continuity projects emergent.",
+    "vocabularyCards": [
+      {
+        "ar": "سُيُولَة مَالِيَّة",
+        "en": "financial liquidity"
+      },
+      {
+        "ar": "صِمَام أَمَان",
+        "en": "safety valve"
+      },
+      {
+        "ar": "مَشَارِيع نَاشِئَة",
+        "en": "startups"
+      }
+    ]
   }
 ]

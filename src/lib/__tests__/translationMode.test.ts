@@ -32,9 +32,9 @@ import { useSentenceStore } from "../../store/useSentenceStore";
    1. Dataset Loading and Schema Verification (All 50 Sentences)
    ========================================================================== */
 
-test("translationMode: loads and retrieves exactly 65 bilingual sentences with complete schemas", () => {
+test("translationMode: loads and retrieves exactly 80 bilingual sentences with complete schemas", () => {
   const sentences = getAllBilingualSentences();
-  assert.equal(sentences.length, 65, "Bilingual dataset must contain exactly 65 sentences");
+  assert.equal(sentences.length, 80, "Bilingual dataset must contain exactly 80 sentences");
 
   const seenIds = new Set<string>();
   const categoryCounts: Record<SentenceCategory, number> = {
@@ -93,7 +93,7 @@ test("translationMode: loads and retrieves exactly 65 bilingual sentences with c
   assert.equal(categoryCounts.daily, 13, "Should have 13 daily sentences");
   assert.equal(categoryCounts.tech, 28, "Should have 28 tech sentences");
   assert.equal(categoryCounts.wisdom, 12, "Should have 12 wisdom sentences");
-  assert.equal(categoryCounts.business, 12, "Should have 12 business sentences");
+  assert.equal(categoryCounts.business, 27, "Should have 27 business sentences");
 });
 
 test("translationMode: retrieves individual sentences by unique ID across all categories", () => {
@@ -268,7 +268,7 @@ test("translationMode: handles punctuation tolerance and strict matching", () =>
 
 test("translationMode: filterBilingualSentences filters by category and difficulty accurately", () => {
   const all = filterBilingualSentences();
-  assert.equal(all.length, 65);
+  assert.equal(all.length, 80);
 
   const daily = filterBilingualSentences({ category: "daily" });
   assert.equal(daily.length, 13);
@@ -283,7 +283,7 @@ test("translationMode: filterBilingualSentences filters by category and difficul
   assert.ok(wisdom.every((s) => s.category === "wisdom"));
 
   const business = filterBilingualSentences({ category: "business" });
-  assert.equal(business.length, 12);
+  assert.equal(business.length, 27);
   assert.ok(business.every((s) => s.category === "business"));
 
   // Difficulty filter
