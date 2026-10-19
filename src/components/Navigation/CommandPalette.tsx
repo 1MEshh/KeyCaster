@@ -33,11 +33,12 @@ import { useGameModeStore } from "@/store/useGameModeStore";
 import { playMechanicalClick, type SwitchSoundProfile } from "@/lib/audio";
 import { exportQuickBackupJson } from "@/lib/backupHealth";
 import { downloadSessionHistoryCsv } from "@/lib/csvExporter";
+import { getAllBilingualSentences } from "@/lib/sentenceDictionary";
 import { db } from "@/lib/db";
 
 interface CommandItem {
   id: string;
-  category: "Navigation" | "Theme" | "Audio" | "Toggles" | "Actions";
+  category: "Navigation" | "Theme" | "Audio" | "Toggles" | "Actions" | "Dictionary";
   title: string;
   subtitle?: string;
   icon: React.ReactNode;
@@ -638,16 +639,64 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
   // Filter commands by query
   const filteredCommands = useMemo(() => {
     if (!query.trim()) return commands;
-    const lower = query.toLowerCase().trim();
-    return commands.filter((cmd) => {
+    const raw = query.trim();
+    const isLookup = raw.toLowerCase().startsWith("lookup:");
+    const searchTerm = isLookup ? raw.slice(7).trim().toLowerCase() : raw.toLowerCase();
+
+    const matchedCommands = commands.filter((cmd) => {
       return (
-        cmd.title.toLowerCase().includes(lower) ||
-        (cmd.subtitle && cmd.subtitle.toLowerCase().includes(lower)) ||
-        cmd.category.toLowerCase().includes(lower) ||
-        cmd.keywords.some((k) => k.toLowerCase().includes(lower))
+        cmd.title.toLowerCase().includes(searchTerm) ||
+        (cmd.subtitle && cmd.subtitle.toLowerCase().includes(searchTerm)) ||
+        cmd.category.toLowerCase().includes(searchTerm) ||
+        cmd.keywords.some((k) => k.toLowerCase().includes(searchTerm))
       );
     });
-  }, [commands, query]);
+
+    // If query is at least 2 characters, search bilingual sentence vocabulary cards
+    if (searchTerm.length >= 2) {
+      const allSentences = getAllBilingualSentences();
+      const seenCards = new Set<string>();
+      const vocabMatches: CommandItem[] = [];
+
+      for (const sentence of allSentences) {
+        if (!sentence.vocabularyCards) continue;
+        for (const card of sentence.vocabularyCards) {
+          const key = `${card.en.toLowerCase()}-${card.ar}`;
+          if (seenCards.has(key)) continue;
+
+          if (
+            card.en.toLowerCase().includes(searchTerm) ||
+            card.ar.includes(searchTerm) ||
+            sentence.english.toLowerCase().includes(searchTerm) ||
+            sentence.arabic.includes(searchTerm)
+          ) {
+            seenCards.add(key);
+            vocabMatches.push({
+              id: `dict-${key}`,
+              category: "Dictionary",
+              title: `${card.en} ↔ ${card.ar}`,
+              subtitle: `Example: "${sentence.english}" (${sentence.arabic})`,
+              icon: <BookOpen className="w-4 h-4 text-emerald-400" />,
+              keywords: ["dictionary", "lookup", "vocab", card.en.toLowerCase(), card.ar],
+              action: () => {
+                setActiveSection("arabic_dictation");
+                initSentenceSession("translation", sentence.category);
+              },
+            });
+          }
+          if (vocabMatches.length >= 8) break;
+        }
+        if (vocabMatches.length >= 8) break;
+      }
+
+      if (isLookup) {
+        return vocabMatches;
+      }
+      return [...matchedCommands, ...vocabMatches];
+    }
+
+    return matchedCommands;
+  }, [commands, query, setActiveSection, initSentenceSession]);
 
   // Clamp selected index
   useEffect(() => {
