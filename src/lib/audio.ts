@@ -597,6 +597,7 @@ export class TTSController {
     word: string,
     options: {
       rate?: number;
+      pitch?: number;
       voiceURI?: string;
       slow?: boolean;
       onStart?: () => void;
@@ -611,6 +612,7 @@ export class TTSController {
       const utterance = new SpeechSynthesisUtterance(word);
       const baseRate = options.rate ?? 0.95;
       utterance.rate = options.slow ? Math.max(0.5, baseRate * 0.72) : baseRate;
+      if (options.pitch !== undefined) utterance.pitch = options.pitch;
       utterance.lang = "en-US";
 
       const voices = this.getVoices();
@@ -648,6 +650,7 @@ export class TTSController {
     text: string,
     options: {
       rate?: number;
+      pitch?: number;
       onStart?: () => void;
       onEnd?: () => void;
     } = {}
@@ -659,6 +662,7 @@ export class TTSController {
 
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.rate = options.rate ?? 0.88;
+      if (options.pitch !== undefined) utterance.pitch = options.pitch;
       utterance.lang = "ar-SA";
 
       const voices = this.getVoices();

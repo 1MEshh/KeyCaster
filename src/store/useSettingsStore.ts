@@ -68,6 +68,7 @@ export interface SettingsState {
   soundOnError: boolean;
   switchSound: SwitchSoundProfile;
   speechRate: number;
+  speechPitch: number;
   ttsVoiceURI: string;
 
   // Session
@@ -106,6 +107,7 @@ export interface SettingsState {
   setSoundOnError: (val: boolean) => void;
   setSwitchSound: (profile: SwitchSoundProfile) => void;
   setSpeechRate: (rate: number) => void;
+  setSpeechPitch: (pitch: number) => void;
   setTtsVoiceURI: (uri: string) => void;
   setSessionSize: (size: number) => void;
   setActiveCategory: (cat: string) => void;
@@ -231,6 +233,7 @@ const DEFAULT_SETTINGS = {
   soundOnError: true,
   switchSound: "cherry_brown" as SwitchSoundProfile,
   speechRate: 0.95,
+  speechPitch: 1.0,
   ttsVoiceURI: "",
   sessionSize: 15,
   activeCategory: "daily",
@@ -307,6 +310,7 @@ export const useSettingsStore = create<SettingsState>()(
       setSoundOnError: (soundOnError) => set({ soundOnError }),
       setSwitchSound: (switchSound) => set({ switchSound }),
       setSpeechRate: (speechRate) => set({ speechRate }),
+      setSpeechPitch: (speechPitch) => set({ speechPitch }),
       setTtsVoiceURI: (ttsVoiceURI) => set({ ttsVoiceURI }),
       setSessionSize: (sessionSize) => set({ sessionSize }),
       setActiveCategory: (activeCategory) => set({ activeCategory }),

@@ -96,6 +96,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
     setSwitchSound,
     speechRate,
     setSpeechRate,
+    speechPitch,
+    setSpeechPitch,
     ttsVoiceURI,
     setTtsVoiceURI,
     sessionSize,
@@ -930,6 +932,25 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                   step="0.05"
                   value={speechRate}
                   onChange={(e) => setSpeechRate(parseFloat(e.target.value))}
+                  className="w-full accent-main cursor-pointer"
+                />
+              </div>
+
+              {/* TTS Speech Pitch Slider */}
+              <div>
+                <div className="flex justify-between items-center mb-2">
+                  <label className="text-xs uppercase text-sub font-semibold">
+                    TTS Speech Pitch
+                  </label>
+                  <span className="text-xs text-main">{speechPitch.toFixed(2)}x</span>
+                </div>
+                <input
+                  type="range"
+                  min="0.6"
+                  max="1.4"
+                  step="0.05"
+                  value={speechPitch}
+                  onChange={(e) => setSpeechPitch(parseFloat(e.target.value))}
                   className="w-full accent-main cursor-pointer"
                 />
               </div>

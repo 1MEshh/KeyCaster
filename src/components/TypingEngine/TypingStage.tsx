@@ -43,6 +43,7 @@ export const TypingStage: React.FC = () => {
     soundOnClick,
     soundOnError,
     speechRate,
+    speechPitch,
     ttsVoiceURI,
     switchSound,
     paceCarMode,
@@ -194,12 +195,13 @@ export const TypingStage: React.FC = () => {
     setTimeout(() => {
       TTSController.speakWord(currentWord.word, {
         rate: speechRate,
+        pitch: speechPitch,
         voiceURI: ttsVoiceURI,
         onStart: () => setIsSpeaking(true),
         onEnd: () => setIsSpeaking(false),
       });
     }, 40);
-  }, [currentWord?.word, speechRate, ttsVoiceURI]);
+  }, [currentWord?.word, speechRate, speechPitch, ttsVoiceURI]);
 
   // Play slow-motion audio for current word (0.7x)
   const speakCurrentWordSlow = useCallback(() => {
@@ -208,13 +210,14 @@ export const TypingStage: React.FC = () => {
     setTimeout(() => {
       TTSController.speakWord(currentWord.word, {
         rate: speechRate,
+        pitch: speechPitch,
         voiceURI: ttsVoiceURI,
         slow: true,
         onStart: () => setIsSpeaking(true),
         onEnd: () => setIsSpeaking(false),
       });
     }, 40);
-  }, [currentWord?.word, speechRate, ttsVoiceURI]);
+  }, [currentWord?.word, speechRate, speechPitch, ttsVoiceURI]);
 
   // Initialize new word
   useEffect(() => {
