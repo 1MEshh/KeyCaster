@@ -94,6 +94,7 @@ export const TranslationStage: React.FC = () => {
     paceCarMode,
     speechRate,
     speechPitch,
+    autoReplayOnError,
     ttsVoiceURI,
     theme,
   } = useSettingsStore();
@@ -426,6 +427,9 @@ export const TranslationStage: React.FC = () => {
             if (soundOnClick) playMechanicalClick(soundVolume, switchSound);
           } else {
             if (soundOnError) playErrorThud(soundVolume);
+            if (autoReplayOnError) {
+              speakRemainingSentence(true);
+            }
           }
         }
 
@@ -435,6 +439,7 @@ export const TranslationStage: React.FC = () => {
     [
       setActiveKey,
       speakRemainingSentence,
+      autoReplayOnError,
       toggleVocabHint,
       isSentenceComplete,
       nextSentence,

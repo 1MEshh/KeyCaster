@@ -98,6 +98,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
     setSpeechRate,
     speechPitch,
     setSpeechPitch,
+    autoReplayOnError,
+    setAutoReplayOnError,
     ttsVoiceURI,
     setTtsVoiceURI,
     sessionSize,
@@ -978,6 +980,21 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
 
               {/* SFX Toggles */}
               <div className="space-y-3 pt-2">
+                <label className="flex items-center justify-between p-3 rounded-lg border border-sub/20 bg-sub/5 cursor-pointer">
+                  <div>
+                    <div className="text-xs text-text font-semibold">Auto-Replay Audio on Mistake</div>
+                    <div className="text-[10px] text-sub">
+                      Automatically re-speaks the sentence or word prompt when an error occurs
+                    </div>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={autoReplayOnError}
+                    onChange={(e) => setAutoReplayOnError(e.target.checked)}
+                    className="w-4 h-4 accent-main cursor-pointer"
+                  />
+                </label>
+
                 <label className="flex items-center justify-between p-3 rounded-lg border border-sub/20 bg-sub/5 cursor-pointer">
                   <span className="text-xs text-text">Mechanical Keystroke Sound</span>
                   <input
