@@ -12,9 +12,18 @@
     ],
     "literalMeaning": "Morning of the good, how is your condition today?",
     "vocabularyCards": [
-      { "ar": "صَبَاحُ الخَيْر", "en": "good morning" },
-      { "ar": "حَالُك", "en": "your condition / how are you" },
-      { "ar": "اليَوْم", "en": "today" }
+      {
+        "ar": "صَبَاحُ الخَيْر",
+        "en": "good morning"
+      },
+      {
+        "ar": "حَالُك",
+        "en": "your condition / how are you"
+      },
+      {
+        "ar": "اليَوْم",
+        "en": "today"
+      }
     ]
   },
   {
@@ -31,9 +40,18 @@
     ],
     "literalMeaning": "Is it possible for me obtaining on a cup of water, from your favor?",
     "vocabularyCards": [
-      { "ar": "كُوب", "en": "cup / glass" },
-      { "ar": "مَاء", "en": "water" },
-      { "ar": "مِنْ فَضْلِك", "en": "please" }
+      {
+        "ar": "كُوب",
+        "en": "cup / glass"
+      },
+      {
+        "ar": "مَاء",
+        "en": "water"
+      },
+      {
+        "ar": "مِنْ فَضْلِك",
+        "en": "please"
+      }
     ]
   },
   {
@@ -49,9 +67,18 @@
     ],
     "literalMeaning": "Where falls nearest station of train from here?",
     "vocabularyCards": [
-      { "ar": "أَقْرَب", "en": "nearest / closest" },
-      { "ar": "مَحَطَّة", "en": "station" },
-      { "ar": "قِطَار", "en": "train" }
+      {
+        "ar": "أَقْرَب",
+        "en": "nearest / closest"
+      },
+      {
+        "ar": "مَحَطَّة",
+        "en": "station"
+      },
+      {
+        "ar": "قِطَار",
+        "en": "train"
+      }
     ]
   },
   {
@@ -67,9 +94,18 @@
     ],
     "literalMeaning": "I am grateful very for your help the kind.",
     "vocabularyCards": [
-      { "ar": "مُمْتَنّ", "en": "grateful" },
-      { "ar": "مُسَاعَدَة", "en": "help / assistance" },
-      { "ar": "لَطِيفَة", "en": "kind" }
+      {
+        "ar": "مُمْتَنّ",
+        "en": "grateful"
+      },
+      {
+        "ar": "مُسَاعَدَة",
+        "en": "help / assistance"
+      },
+      {
+        "ar": "لَطِيفَة",
+        "en": "kind"
+      }
     ]
   },
   {
@@ -85,9 +121,18 @@
     ],
     "literalMeaning": "I will meet with my friends in the cafe after end of the work.",
     "vocabularyCards": [
-      { "ar": "سَأَلْتَقِي", "en": "I will meet" },
-      { "ar": "أَصْدِقَائِي", "en": "my friends" },
-      { "ar": "المَقْهَى", "en": "the cafe" }
+      {
+        "ar": "سَأَلْتَقِي",
+        "en": "I will meet"
+      },
+      {
+        "ar": "أَصْدِقَائِي",
+        "en": "my friends"
+      },
+      {
+        "ar": "المَقْهَى",
+        "en": "the cafe"
+      }
     ]
   },
   {
@@ -103,9 +148,18 @@
     ],
     "literalMeaning": "It appears that the weather will be rainy this evening.",
     "vocabularyCards": [
-      { "ar": "يَبْدُو", "en": "it seems / it looks" },
-      { "ar": "الطَّقْس", "en": "weather" },
-      { "ar": "مَاطِر", "en": "rainy" }
+      {
+        "ar": "يَبْدُو",
+        "en": "it seems / it looks"
+      },
+      {
+        "ar": "الطَّقْس",
+        "en": "weather"
+      },
+      {
+        "ar": "مَاطِر",
+        "en": "rainy"
+      }
     ]
   },
   {
@@ -121,9 +175,18 @@
     ],
     "literalMeaning": "Do not forget buying some of the vegetables fresh in path of your return.",
     "vocabularyCards": [
-      { "ar": "لَا تَنْسَ", "en": "do not forget" },
-      { "ar": "خُضْرَاوَات", "en": "vegetables" },
-      { "ar": "طَازَجَة", "en": "fresh" }
+      {
+        "ar": "لَا تَنْسَ",
+        "en": "do not forget"
+      },
+      {
+        "ar": "خُضْرَاوَات",
+        "en": "vegetables"
+      },
+      {
+        "ar": "طَازَجَة",
+        "en": "fresh"
+      }
     ]
   },
   {
@@ -139,9 +202,18 @@
     ],
     "literalMeaning": "I prefer the reading in quiet of the night over watching the television.",
     "vocabularyCards": [
-      { "ar": "أُفَضِّل", "en": "I prefer" },
-      { "ar": "هُدُوء", "en": "quiet / calm" },
-      { "ar": "مُشَاهَدَة", "en": "watching" }
+      {
+        "ar": "أُفَضِّل",
+        "en": "I prefer"
+      },
+      {
+        "ar": "هُدُوء",
+        "en": "quiet / calm"
+      },
+      {
+        "ar": "مُشَاهَدَة",
+        "en": "watching"
+      }
     ]
   },
   {
@@ -156,9 +228,18 @@
     ],
     "literalMeaning": "Preserving on style of life healthy requires commitment daily to nutrition sound and practice sports.",
     "vocabularyCards": [
-      { "ar": "نَمَط حَيَاة", "en": "lifestyle" },
-      { "ar": "التِزَام", "en": "commitment" },
-      { "ar": "تَغْذِيَة سَلِيمَة", "en": "proper nutrition" }
+      {
+        "ar": "نَمَط حَيَاة",
+        "en": "lifestyle"
+      },
+      {
+        "ar": "التِزَام",
+        "en": "commitment"
+      },
+      {
+        "ar": "تَغْذِيَة سَلِيمَة",
+        "en": "proper nutrition"
+      }
     ]
   },
   {
@@ -173,9 +254,18 @@
     ],
     "literalMeaning": "Sharing family meals contributes in strengthening emotional bonds between members of the family.",
     "vocabularyCards": [
-      { "ar": "تُسْهِم", "en": "contributes" },
-      { "ar": "تَعْزِيز", "en": "strengthening / enhancing" },
-      { "ar": "رَوَابِط", "en": "bonds / ties" }
+      {
+        "ar": "تُسْهِم",
+        "en": "contributes"
+      },
+      {
+        "ar": "تَعْزِيز",
+        "en": "strengthening / enhancing"
+      },
+      {
+        "ar": "رَوَابِط",
+        "en": "bonds / ties"
+      }
     ]
   },
   {
@@ -191,9 +281,18 @@
     ],
     "literalMeaning": "Despite crowd of schedule of his appointments, indeed he is keen always on allocating time for relaxation.",
     "vocabularyCards": [
-      { "ar": "عَلَى الرَّغْمِ مِنْ", "en": "despite / although" },
-      { "ar": "جَدْوَل مَوَاعِيد", "en": "schedule of appointments" },
-      { "ar": "اسْتِرْخَاء", "en": "relaxation" }
+      {
+        "ar": "عَلَى الرَّغْمِ مِنْ",
+        "en": "despite / although"
+      },
+      {
+        "ar": "جَدْوَل مَوَاعِيد",
+        "en": "schedule of appointments"
+      },
+      {
+        "ar": "اسْتِرْخَاء",
+        "en": "relaxation"
+      }
     ]
   },
   {
@@ -208,9 +307,18 @@
     ],
     "literalMeaning": "Is it possible for you lending me your umbrella for a few minutes until stops the downpour?",
     "vocabularyCards": [
-      { "ar": "إِعَارَتِي", "en": "lending me" },
-      { "ar": "مِظَلَّة", "en": "umbrella" },
-      { "ar": "الهَطْل", "en": "downpour / heavy rainfall" }
+      {
+        "ar": "إِعَارَتِي",
+        "en": "lending me"
+      },
+      {
+        "ar": "مِظَلَّة",
+        "en": "umbrella"
+      },
+      {
+        "ar": "الهَطْل",
+        "en": "downpour / heavy rainfall"
+      }
     ]
   },
   {
@@ -227,9 +335,18 @@
     ],
     "literalMeaning": "I will contact with you when I reach to the house.",
     "vocabularyCards": [
-      { "ar": "سَأَتَّصِلُ بِك", "en": "I will call you" },
-      { "ar": "عِنْدَمَا", "en": "when" },
-      { "ar": "المَنْزِل", "en": "the house / home" }
+      {
+        "ar": "سَأَتَّصِلُ بِك",
+        "en": "I will call you"
+      },
+      {
+        "ar": "عِنْدَمَا",
+        "en": "when"
+      },
+      {
+        "ar": "المَنْزِل",
+        "en": "the house / home"
+      }
     ]
   },
   {
@@ -245,9 +362,18 @@
     ],
     "literalMeaning": "This application easy of use and works with speed superior.",
     "vocabularyCards": [
-      { "ar": "تَطْبِيق", "en": "application / app" },
-      { "ar": "سَهْل الِاسْتِخْدَام", "en": "easy to use" },
-      { "ar": "سُرْعَة فَائِقَة", "en": "extreme speed" }
+      {
+        "ar": "تَطْبِيق",
+        "en": "application / app"
+      },
+      {
+        "ar": "سَهْل الِاسْتِخْدَام",
+        "en": "easy to use"
+      },
+      {
+        "ar": "سُرْعَة فَائِقَة",
+        "en": "extreme speed"
+      }
     ]
   },
   {
@@ -263,9 +389,18 @@
     ],
     "literalMeaning": "Must upon you updating word of pass with regularity to protect your account.",
     "vocabularyCards": [
-      { "ar": "كَلِمَة المُرُور", "en": "password" },
-      { "ar": "بِانْتِظَام", "en": "regularly" },
-      { "ar": "حِمَايَة حِسَابِك", "en": "protecting your account" }
+      {
+        "ar": "كَلِمَة المُرُور",
+        "en": "password"
+      },
+      {
+        "ar": "بِانْتِظَام",
+        "en": "regularly"
+      },
+      {
+        "ar": "حِمَايَة حِسَابِك",
+        "en": "protecting your account"
+      }
     ]
   },
   {
@@ -281,9 +416,18 @@
     ],
     "literalMeaning": "Completed saving the modifications in base of data with success.",
     "vocabularyCards": [
-      { "ar": "تَعْدِيلَات", "en": "modifications / changes" },
-      { "ar": "قَاعِدَة البَيَانَات", "en": "database" },
-      { "ar": "بِنَجَاح", "en": "successfully" }
+      {
+        "ar": "تَعْدِيلَات",
+        "en": "modifications / changes"
+      },
+      {
+        "ar": "قَاعِدَة البَيَانَات",
+        "en": "database"
+      },
+      {
+        "ar": "بِنَجَاح",
+        "en": "successfully"
+      }
     ]
   },
   {
@@ -298,9 +442,18 @@
     ],
     "literalMeaning": "Helps computing of cloud in reducing costs of structure under for companies emerging.",
     "vocabularyCards": [
-      { "ar": "حَوْسَبَة السَّحَابَة", "en": "cloud computing" },
-      { "ar": "بِنْيَة تَحْتِيَّة", "en": "infrastructure" },
-      { "ar": "شَرِكَات نَاشِئَة", "en": "startups" }
+      {
+        "ar": "حَوْسَبَة السَّحَابَة",
+        "en": "cloud computing"
+      },
+      {
+        "ar": "بِنْيَة تَحْتِيَّة",
+        "en": "infrastructure"
+      },
+      {
+        "ar": "شَرِكَات نَاشِئَة",
+        "en": "startups"
+      }
     ]
   },
   {
@@ -315,9 +468,18 @@
     ],
     "literalMeaning": "Needs the algorithm to improvement to reduce consumption of memory and time of execution.",
     "vocabularyCards": [
-      { "ar": "خَوَارِزْمِيَّة", "en": "algorithm" },
-      { "ar": "تَحْسِين", "en": "optimization / improvement" },
-      { "ar": "زَمَن التَّنْفِيذ", "en": "execution time" }
+      {
+        "ar": "خَوَارِزْمِيَّة",
+        "en": "algorithm"
+      },
+      {
+        "ar": "تَحْسِين",
+        "en": "optimization / improvement"
+      },
+      {
+        "ar": "زَمَن التَّنْفِيذ",
+        "en": "execution time"
+      }
     ]
   },
   {
@@ -333,9 +495,18 @@
     ],
     "literalMeaning": "Did the team with repairing the defect programming which caused in disruption of system.",
     "vocabularyCards": [
-      { "ar": "خَلَل بَرْمَجِيّ", "en": "software bug" },
-      { "ar": "تَسَبَّبَ فِي", "en": "caused" },
-      { "ar": "تَعَطُّل النِّظَام", "en": "system crash" }
+      {
+        "ar": "خَلَل بَرْمَجِيّ",
+        "en": "software bug"
+      },
+      {
+        "ar": "تَسَبَّبَ فِي",
+        "en": "caused"
+      },
+      {
+        "ar": "تَعَطُّل النِّظَام",
+        "en": "system crash"
+      }
     ]
   },
   {
@@ -350,9 +521,18 @@
     ],
     "literalMeaning": "Rely models of learning deep on networks neural complex to process the images.",
     "vocabularyCards": [
-      { "ar": "تَعَلُّم عَمِيق", "en": "deep learning" },
-      { "ar": "شَبَكَات عَصَبِيَّة", "en": "neural networks" },
-      { "ar": "مُعَالَجَة", "en": "processing" }
+      {
+        "ar": "تَعَلُّم عَمِيق",
+        "en": "deep learning"
+      },
+      {
+        "ar": "شَبَكَات عَصَبِيَّة",
+        "en": "neural networks"
+      },
+      {
+        "ar": "مُعَالَجَة",
+        "en": "processing"
+      }
     ]
   },
   {
@@ -367,9 +547,18 @@
     ],
     "literalMeaning": "Is counted the encryption end to end standard fundamental to protect privacy of users across the internet.",
     "vocabularyCards": [
-      { "ar": "تَشْفِير", "en": "encryption" },
-      { "ar": "طَرَفًا لِطَرَف", "en": "end-to-end" },
-      { "ar": "خُصُوصِيَّة", "en": "privacy" }
+      {
+        "ar": "تَشْفِير",
+        "en": "encryption"
+      },
+      {
+        "ar": "طَرَفًا لِطَرَف",
+        "en": "end-to-end"
+      },
+      {
+        "ar": "خُصُوصِيَّة",
+        "en": "privacy"
+      }
     ]
   },
   {
@@ -384,9 +573,18 @@
     ],
     "literalMeaning": "Requires architecture based on services miniaturized strategies strong for monitoring of performance and management of errors.",
     "vocabularyCards": [
-      { "ar": "مِعْمَارِيَّة", "en": "architecture" },
-      { "ar": "خَدَمَات مُصَغَّرَة", "en": "microservices" },
-      { "ar": "مُرَاقَبَة الأَدَاءِ", "en": "performance monitoring" }
+      {
+        "ar": "مِعْمَارِيَّة",
+        "en": "architecture"
+      },
+      {
+        "ar": "خَدَمَات مُصَغَّرَة",
+        "en": "microservices"
+      },
+      {
+        "ar": "مُرَاقَبَة الأَدَاءِ",
+        "en": "performance monitoring"
+      }
     ]
   },
   {
@@ -402,9 +600,18 @@
     ],
     "literalMeaning": "Allows use of interfaces programming of applications integration smooth between systems non-homogeneous.",
     "vocabularyCards": [
-      { "ar": "وَاجِهَات بَرْمَجَةِ التَّطْبِيقَات", "en": "APIs / application programming interfaces" },
-      { "ar": "تَكَامُل سَلِس", "en": "seamless integration" },
-      { "ar": "غَيْرِ مُتَجَانِسَة", "en": "heterogeneous / disparate" }
+      {
+        "ar": "وَاجِهَات بَرْمَجَةِ التَّطْبِيقَات",
+        "en": "APIs / application programming interfaces"
+      },
+      {
+        "ar": "تَكَامُل سَلِس",
+        "en": "seamless integration"
+      },
+      {
+        "ar": "غَيْرِ مُتَجَانِسَة",
+        "en": "heterogeneous / disparate"
+      }
     ]
   },
   {
@@ -419,9 +626,18 @@
     ],
     "literalMeaning": "Use algorithms of consensus in chains of blocks mechanisms proof of share to reduce consumption of energy.",
     "vocabularyCards": [
-      { "ar": "سَلَاسِل الكُتَل", "en": "blockchain" },
-      { "ar": "تَوَافُق", "en": "consensus" },
-      { "ar": "إِثْبَات الحِصَّة", "en": "proof-of-stake" }
+      {
+        "ar": "سَلَاسِل الكُتَل",
+        "en": "blockchain"
+      },
+      {
+        "ar": "تَوَافُق",
+        "en": "consensus"
+      },
+      {
+        "ar": "إِثْبَات الحِصَّة",
+        "en": "proof-of-stake"
+      }
     ]
   },
   {
@@ -437,9 +653,18 @@
     ],
     "literalMeaning": "Make sure from taking copy backup for your files before start of the upgrade.",
     "vocabularyCards": [
-      { "ar": "نُسْخَة احْتِيَاطِيَّة", "en": "backup copy" },
-      { "ar": "تَرْقِيَة", "en": "upgrade" },
-      { "ar": "مَلَفَّات", "en": "files" }
+      {
+        "ar": "نُسْخَة احْتِيَاطِيَّة",
+        "en": "backup copy"
+      },
+      {
+        "ar": "تَرْقِيَة",
+        "en": "upgrade"
+      },
+      {
+        "ar": "مَلَفَّات",
+        "en": "files"
+      }
     ]
   },
   {
@@ -454,9 +679,18 @@
     ],
     "literalMeaning": "Allows to us repository of code source with tracking changes and collaboration with effectiveness.",
     "vocabularyCards": [
-      { "ar": "شِفْرَة مَصْدَرِيَّة", "en": "source code" },
-      { "ar": "تَتَبُّع", "en": "tracking / tracing" },
-      { "ar": "تَعَاوُن", "en": "collaboration" }
+      {
+        "ar": "شِفْرَة مَصْدَرِيَّة",
+        "en": "source code"
+      },
+      {
+        "ar": "تَتَبُّع",
+        "en": "tracking / tracing"
+      },
+      {
+        "ar": "تَعَاوُن",
+        "en": "collaboration"
+      }
     ]
   },
   {
@@ -471,9 +705,18 @@
     ],
     "literalMeaning": "The patience key of the relief.",
     "vocabularyCards": [
-      { "ar": "الصَّبْر", "en": "patience" },
-      { "ar": "مِفْتَاح", "en": "key" },
-      { "ar": "الفَرَج", "en": "relief" }
+      {
+        "ar": "الصَّبْر",
+        "en": "patience"
+      },
+      {
+        "ar": "مِفْتَاح",
+        "en": "key"
+      },
+      {
+        "ar": "الفَرَج",
+        "en": "relief"
+      }
     ]
   },
   {
@@ -489,9 +732,18 @@
     ],
     "literalMeaning": "Journey of the thousand miles begins with step one.",
     "vocabularyCards": [
-      { "ar": "رِحْلَة", "en": "journey" },
-      { "ar": "أَلْف مِيل", "en": "a thousand miles" },
-      { "ar": "خُطْوَة", "en": "step" }
+      {
+        "ar": "رِحْلَة",
+        "en": "journey"
+      },
+      {
+        "ar": "أَلْف مِيل",
+        "en": "a thousand miles"
+      },
+      {
+        "ar": "خُطْوَة",
+        "en": "step"
+      }
     ]
   },
   {
@@ -507,9 +759,18 @@
     ],
     "literalMeaning": "The knowledge in the youth like the engraving on the stone.",
     "vocabularyCards": [
-      { "ar": "العِلْم", "en": "knowledge / learning" },
-      { "ar": "الصِّغَر", "en": "youth / childhood" },
-      { "ar": "النَّقْش", "en": "engraving / carving" }
+      {
+        "ar": "العِلْم",
+        "en": "knowledge / learning"
+      },
+      {
+        "ar": "الصِّغَر",
+        "en": "youth / childhood"
+      },
+      {
+        "ar": "النَّقْش",
+        "en": "engraving / carving"
+      }
     ]
   },
   {
@@ -525,9 +786,18 @@
     ],
     "literalMeaning": "Do not judge on the book from its cover, for the jewel lies in the inside.",
     "vocabularyCards": [
-      { "ar": "غِلَاف", "en": "cover" },
-      { "ar": "جَوْهَر", "en": "essence / substance" },
-      { "ar": "يَكْمُن", "en": "lies / resides" }
+      {
+        "ar": "غِلَاف",
+        "en": "cover"
+      },
+      {
+        "ar": "جَوْهَر",
+        "en": "essence / substance"
+      },
+      {
+        "ar": "يَكْمُن",
+        "en": "lies / resides"
+      }
     ]
   },
   {
@@ -543,9 +813,18 @@
     ],
     "literalMeaning": "Who did not try taste of the failure will not taste sweetness of the success.",
     "vocabularyCards": [
-      { "ar": "طَعْم", "en": "taste" },
-      { "ar": "فَشَل", "en": "failure" },
-      { "ar": "حَلَاوَة النَّجَاح", "en": "sweetness of success" }
+      {
+        "ar": "طَعْم",
+        "en": "taste"
+      },
+      {
+        "ar": "فَشَل",
+        "en": "failure"
+      },
+      {
+        "ar": "حَلَاوَة النَّجَاح",
+        "en": "sweetness of success"
+      }
     ]
   },
   {
@@ -561,9 +840,18 @@
     ],
     "literalMeaning": "The time like the sword if you do not cut it, it cuts you.",
     "vocabularyCards": [
-      { "ar": "سَيْف", "en": "sword" },
-      { "ar": "تَقْطَعْه", "en": "you cut it" },
-      { "ar": "قَطَعَك", "en": "it cut you" }
+      {
+        "ar": "سَيْف",
+        "en": "sword"
+      },
+      {
+        "ar": "تَقْطَعْه",
+        "en": "you cut it"
+      },
+      {
+        "ar": "قَطَعَك",
+        "en": "it cut you"
+      }
     ]
   },
   {
@@ -578,9 +866,18 @@
     ],
     "literalMeaning": "The friend time of hardship is the treasure real in the life.",
     "vocabularyCards": [
-      { "ar": "وَقْت الضِّيق", "en": "time of distress / hardship" },
-      { "ar": "كَنْز", "en": "treasure" },
-      { "ar": "حَقِيقِيّ", "en": "real / true" }
+      {
+        "ar": "وَقْت الضِّيق",
+        "en": "time of distress / hardship"
+      },
+      {
+        "ar": "كَنْز",
+        "en": "treasure"
+      },
+      {
+        "ar": "حَقِيقِيّ",
+        "en": "real / true"
+      }
     ]
   },
   {
@@ -596,9 +893,18 @@
     ],
     "literalMeaning": "Not the strength in overcoming on others, but in controlling on the self at anger.",
     "vocabularyCards": [
-      { "ar": "قُوَّة", "en": "strength / power" },
-      { "ar": "التَّغَلُّب", "en": "overcoming / conquering" },
-      { "ar": "السَّيْطَرَة عَلَى النَّفْس", "en": "self-control" }
+      {
+        "ar": "قُوَّة",
+        "en": "strength / power"
+      },
+      {
+        "ar": "التَّغَلُّب",
+        "en": "overcoming / conquering"
+      },
+      {
+        "ar": "السَّيْطَرَة عَلَى النَّفْس",
+        "en": "self-control"
+      }
     ]
   },
   {
@@ -613,9 +919,18 @@
     ],
     "literalMeaning": "The wisdom lost-stray of the believer, wherever he found it, so he most rightful of people with it.",
     "vocabularyCards": [
-      { "ar": "حِكْمَة", "en": "wisdom" },
-      { "ar": "ضَالَّة", "en": "lost property / stray" },
-      { "ar": "أَحَقّ", "en": "most entitled" }
+      {
+        "ar": "حِكْمَة",
+        "en": "wisdom"
+      },
+      {
+        "ar": "ضَالَّة",
+        "en": "lost property / stray"
+      },
+      {
+        "ar": "أَحَقّ",
+        "en": "most entitled"
+      }
     ]
   },
   {
@@ -630,9 +945,18 @@
     ],
     "literalMeaning": "Indeed the courage not absence of fear, but it is the ability on behaving despite existence of it.",
     "vocabularyCards": [
-      { "ar": "شَجَاعَة", "en": "courage" },
-      { "ar": "غِيَاب", "en": "absence" },
-      { "ar": "القُدْرَة عَلَى التَّصَرُّف", "en": "ability to act" }
+      {
+        "ar": "شَجَاعَة",
+        "en": "courage"
+      },
+      {
+        "ar": "غِيَاب",
+        "en": "absence"
+      },
+      {
+        "ar": "القُدْرَة عَلَى التَّصَرُّف",
+        "en": "ability to act"
+      }
     ]
   },
   {
@@ -647,9 +971,18 @@
     ],
     "literalMeaning": "Run the winds with what not desire the ships, but the sailor skilled adapts with the waves.",
     "vocabularyCards": [
-      { "ar": "تَجْرِي الرِّيَاح", "en": "the winds blow" },
-      { "ar": "بَحَّار مَاهِر", "en": "skilled sailor" },
-      { "ar": "يَتَكَيَّف", "en": "adapts" }
+      {
+        "ar": "تَجْرِي الرِّيَاح",
+        "en": "the winds blow"
+      },
+      {
+        "ar": "بَحَّار مَاهِر",
+        "en": "skilled sailor"
+      },
+      {
+        "ar": "يَتَكَيَّف",
+        "en": "adapts"
+      }
     ]
   },
   {
@@ -665,9 +998,18 @@
     ],
     "literalMeaning": "Who strived found, and who sowed harvested.",
     "vocabularyCards": [
-      { "ar": "مَنْ جَدَّ", "en": "whoever strives" },
-      { "ar": "زَرَع", "en": "sowed / planted" },
-      { "ar": "حَصَد", "en": "reaped / harvested" }
+      {
+        "ar": "مَنْ جَدَّ",
+        "en": "whoever strives"
+      },
+      {
+        "ar": "زَرَع",
+        "en": "sowed / planted"
+      },
+      {
+        "ar": "حَصَد",
+        "en": "reaped / harvested"
+      }
     ]
   },
   {
@@ -683,9 +1025,18 @@
     ],
     "literalMeaning": "We will hold a meeting morning of tomorrow to discuss plan of the project.",
     "vocabularyCards": [
-      { "ar": "اجْتِمَاع", "en": "meeting" },
-      { "ar": "مُنَاقَشَة", "en": "discussing" },
-      { "ar": "خِطَّة المَشْرُوع", "en": "project plan" }
+      {
+        "ar": "اجْتِمَاع",
+        "en": "meeting"
+      },
+      {
+        "ar": "مُنَاقَشَة",
+        "en": "discussing"
+      },
+      {
+        "ar": "خِطَّة المَشْرُوع",
+        "en": "project plan"
+      }
     ]
   },
   {
@@ -701,9 +1052,18 @@
     ],
     "literalMeaning": "Please sending the report financial before end of day of the work.",
     "vocabularyCards": [
-      { "ar": "تَقْرِير مَالِيّ", "en": "financial report" },
-      { "ar": "يَوْم العَمَل", "en": "business day / workday" },
-      { "ar": "نِهَايَة", "en": "end / close" }
+      {
+        "ar": "تَقْرِير مَالِيّ",
+        "en": "financial report"
+      },
+      {
+        "ar": "يَوْم العَمَل",
+        "en": "business day / workday"
+      },
+      {
+        "ar": "نِهَايَة",
+        "en": "end / close"
+      }
     ]
   },
   {
@@ -719,9 +1079,18 @@
     ],
     "literalMeaning": "We aim to increase sales by percentage ten in the hundred this quarter.",
     "vocabularyCards": [
-      { "ar": "مَبِيعَات", "en": "sales" },
-      { "ar": "نِسْبَة", "en": "percentage / rate" },
-      { "ar": "الرُّبْع", "en": "quarter" }
+      {
+        "ar": "مَبِيعَات",
+        "en": "sales"
+      },
+      {
+        "ar": "نِسْبَة",
+        "en": "percentage / rate"
+      },
+      {
+        "ar": "الرُّبْع",
+        "en": "quarter"
+      }
     ]
   },
   {
@@ -736,9 +1105,18 @@
     ],
     "literalMeaning": "Requires negotiations successful understanding precise to needs of party the other.",
     "vocabularyCards": [
-      { "ar": "مُفَاوَضَات", "en": "negotiations" },
-      { "ar": "فَهْم دَقِيق", "en": "precise understanding" },
-      { "ar": "الطَّرَف الآخَر", "en": "the other party" }
+      {
+        "ar": "مُفَاوَضَات",
+        "en": "negotiations"
+      },
+      {
+        "ar": "فَهْم دَقِيق",
+        "en": "precise understanding"
+      },
+      {
+        "ar": "الطَّرَف الآخَر",
+        "en": "the other party"
+      }
     ]
   },
   {
@@ -754,9 +1132,18 @@
     ],
     "literalMeaning": "Must that we commit with the time final to delivery of the product to the client.",
     "vocabularyCards": [
-      { "ar": "مَوْعِد نِهَائِيّ", "en": "deadline" },
-      { "ar": "تَسْلِيم", "en": "delivering / delivery" },
-      { "ar": "عَمِيل", "en": "client / customer" }
+      {
+        "ar": "مَوْعِد نِهَائِيّ",
+        "en": "deadline"
+      },
+      {
+        "ar": "تَسْلِيم",
+        "en": "delivering / delivery"
+      },
+      {
+        "ar": "عَمِيل",
+        "en": "client / customer"
+      }
     ]
   },
   {
@@ -771,9 +1158,18 @@
     ],
     "literalMeaning": "Is considered satisfaction of customers the metric main to measuring success of campaign our marketing.",
     "vocabularyCards": [
-      { "ar": "رِضَا العُمَلَاء", "en": "customer satisfaction" },
-      { "ar": "مِعْيَار رَئِيسِيّ", "en": "main metric" },
-      { "ar": "حَمْلَة تَسْوِيقِيَّة", "en": "marketing campaign" }
+      {
+        "ar": "رِضَا العُمَلَاء",
+        "en": "customer satisfaction"
+      },
+      {
+        "ar": "مِعْيَار رَئِيسِيّ",
+        "en": "main metric"
+      },
+      {
+        "ar": "حَمْلَة تَسْوِيقِيَّة",
+        "en": "marketing campaign"
+      }
     ]
   },
   {
@@ -789,9 +1185,18 @@
     ],
     "literalMeaning": "We will do with reviewing budget estimated with manager of accounts tomorrow.",
     "vocabularyCards": [
-      { "ar": "مُدِير الحِسَابَات", "en": "account manager" },
-      { "ar": "مِيزَانِيَّة تَقْدِيرِيَّة", "en": "estimated budget" },
-      { "ar": "مُرَاجَعَة", "en": "review / auditing" }
+      {
+        "ar": "مُدِير الحِسَابَات",
+        "en": "account manager"
+      },
+      {
+        "ar": "مِيزَانِيَّة تَقْدِيرِيَّة",
+        "en": "estimated budget"
+      },
+      {
+        "ar": "مُرَاجَعَة",
+        "en": "review / auditing"
+      }
     ]
   },
   {
@@ -806,9 +1211,18 @@
     ],
     "literalMeaning": "Requires expansion in markets regional conducting study of feasibility comprehensive and analysis of risks.",
     "vocabularyCards": [
-      { "ar": "دِرَاسَة جَدْوَى", "en": "feasibility study" },
-      { "ar": "تَحْلِيل المَخَاطِر", "en": "risk analysis" },
-      { "ar": "أَسْوَاق إِقْلِيمِيَّة", "en": "regional markets" }
+      {
+        "ar": "دِرَاسَة جَدْوَى",
+        "en": "feasibility study"
+      },
+      {
+        "ar": "تَحْلِيل المَخَاطِر",
+        "en": "risk analysis"
+      },
+      {
+        "ar": "أَسْوَاق إِقْلِيمِيَّة",
+        "en": "regional markets"
+      }
     ]
   },
   {
@@ -823,9 +1237,18 @@
     ],
     "literalMeaning": "Strives the company to diversification sources of revenues its to ensure sustainability financial on term long.",
     "vocabularyCards": [
-      { "ar": "تَنْوِيع الإِيرَادَات", "en": "revenue diversification" },
-      { "ar": "اسْتِدَامَة مَالِيَّة", "en": "financial sustainability" },
-      { "ar": "عَلَى المَدَى الطَّوِيل", "en": "long-term" }
+      {
+        "ar": "تَنْوِيع الإِيرَادَات",
+        "en": "revenue diversification"
+      },
+      {
+        "ar": "اسْتِدَامَة مَالِيَّة",
+        "en": "financial sustainability"
+      },
+      {
+        "ar": "عَلَى المَدَى الطَّوِيل",
+        "en": "long-term"
+      }
     ]
   },
   {
@@ -840,9 +1263,18 @@
     ],
     "literalMeaning": "Completed signing on agreement of partnership strategic after negotiations intensive lasted several months.",
     "vocabularyCards": [
-      { "ar": "شَرَاكَة اسْتِرَاتِيجِيَّة", "en": "strategic partnership" },
-      { "ar": "اتِّفَاقِيَّة", "en": "agreement / contract" },
-      { "ar": "مُفَاوَضَات مُكَثَّفَة", "en": "intensive negotiations" }
+      {
+        "ar": "شَرَاكَة اسْتِرَاتِيجِيَّة",
+        "en": "strategic partnership"
+      },
+      {
+        "ar": "اتِّفَاقِيَّة",
+        "en": "agreement / contract"
+      },
+      {
+        "ar": "مُفَاوَضَات مُكَثَّفَة",
+        "en": "intensive negotiations"
+      }
     ]
   },
   {
@@ -857,9 +1289,18 @@
     ],
     "literalMeaning": "Targets capital daring supporting projects innovative with opportunities developmental high.",
     "vocabularyCards": [
-      { "ar": "رَأْس المَال الجَرِيء", "en": "venture capital" },
-      { "ar": "مَشَارِيع ابْتِكَارِيَّة", "en": "innovative ventures" },
-      { "ar": "فُرَص نَمَائِيَّة", "en": "growth potential" }
+      {
+        "ar": "رَأْس المَال الجَرِيء",
+        "en": "venture capital"
+      },
+      {
+        "ar": "مَشَارِيع ابْتِكَارِيَّة",
+        "en": "innovative ventures"
+      },
+      {
+        "ar": "فُرَص نَمَائِيَّة",
+        "en": "growth potential"
+      }
     ]
   },
   {
@@ -874,9 +1315,408 @@
     ],
     "literalMeaning": "Ought distribution of tasks on members of the team building on their experiences and competencies professional.",
     "vocabularyCards": [
-      { "ar": "تَوْزِيع المَهَام", "en": "task distribution" },
-      { "ar": "خِبْرَات", "en": "expertise" },
-      { "ar": "كِفَايَات مِهْنِيَّة", "en": "professional competencies" }
+      {
+        "ar": "تَوْزِيع المَهَام",
+        "en": "task distribution"
+      },
+      {
+        "ar": "خِبْرَات",
+        "en": "expertise"
+      },
+      {
+        "ar": "كِفَايَات مِهْنِيَّة",
+        "en": "professional competencies"
+      }
+    ]
+  },
+  {
+    "id": "ar-tech-14",
+    "category": "tech",
+    "difficulty": "intermediate",
+    "arabic": "تُسَاهِمُ النَّمَاذِجُ اللُّغَوِيَّةُ الكَبِيرَةُ فِي تَسْرِيعِ تَطْوِيرِ البَرْمَجِيَّاتِ الحَدِيثَةِ.",
+    "english": "Large language models contribute to accelerating modern software development.",
+    "acceptedAlternatives": [
+      "Large language models help speed up modern software development.",
+      "Large language models assist in speeding up modern software development."
+    ],
+    "literalMeaning": "Contribute the models linguistic large in accelerating development of software modern.",
+    "vocabularyCards": [
+      {
+        "ar": "نَمَاذِج لُغَوِيَّة كَبِيرَة",
+        "en": "large language models"
+      },
+      {
+        "ar": "تَسْرِيع",
+        "en": "accelerating"
+      },
+      {
+        "ar": "تَطْوِير البَرْمَجِيَّات",
+        "en": "software development"
+      }
+    ]
+  },
+  {
+    "id": "ar-tech-15",
+    "category": "tech",
+    "difficulty": "advanced",
+    "arabic": "يَتَطَلَّبُ تَدْرِيبُ الشَّبَكَاتِ العَصَبِيَّةِ قُوَّةَ مُعَالَجَةٍ حِسَابِيَّةٍ هَائِلَةً.",
+    "english": "Training neural networks requires massive computational processing power.",
+    "acceptedAlternatives": [
+      "Training neural networks demands huge computational power.",
+      "Training neural networks requires immense computing power."
+    ],
+    "literalMeaning": "Requires training of networks neural power processing computational massive.",
+    "vocabularyCards": [
+      {
+        "ar": "شَبَكَات عَصَبِيَّة",
+        "en": "neural networks"
+      },
+      {
+        "ar": "تَدْرِيب",
+        "en": "training"
+      },
+      {
+        "ar": "مُعَالَجَة حِسَابِيَّة",
+        "en": "computational processing"
+      }
+    ]
+  },
+  {
+    "id": "ar-tech-16",
+    "category": "tech",
+    "difficulty": "advanced",
+    "arabic": "يَعْتَمِدُ التَّعَلُّمُ العَمِيقُ عَلَى طَبَقَاتٍ مُتَعَدِّدَةٍ لِاسْتِخْرَاجِ المُمَيِّزَاتِ المَعْقُودَةِ.",
+    "english": "Deep learning relies on multiple layers to extract complex features.",
+    "acceptedAlternatives": [
+      "Deep learning depends on multiple layers to extract intricate features.",
+      "Deep learning relies on multiple layers for extracting complex features."
+    ],
+    "literalMeaning": "Relies the learning deep on layers multiple to extract features complex.",
+    "vocabularyCards": [
+      {
+        "ar": "تَعَلُّم عَمِيق",
+        "en": "deep learning"
+      },
+      {
+        "ar": "طَبَقَات مُتَعَدِّدَة",
+        "en": "multiple layers"
+      },
+      {
+        "ar": "اسْتِخْرَاج المُمَيِّزَات",
+        "en": "feature extraction"
+      }
+    ]
+  },
+  {
+    "id": "ar-tech-17",
+    "category": "tech",
+    "difficulty": "intermediate",
+    "arabic": "يَحْمِي التَّشْفِيرُ النِّهَائِيُّ خُصُوصِيَّةَ بَيَانَاتِ المُسْتَخْدِمِينَ عَبْرَ الإِنْتَرْنِت.",
+    "english": "End-to-end encryption protects user data privacy over the internet.",
+    "acceptedAlternatives": [
+      "End to end encryption secures user data privacy across the internet.",
+      "End-to-end encryption safeguards the privacy of user data online."
+    ],
+    "literalMeaning": "Protects encryption final privacy of data users across the internet.",
+    "vocabularyCards": [
+      {
+        "ar": "تَشْفِير نِهَائِيّ",
+        "en": "end-to-end encryption"
+      },
+      {
+        "ar": "خُصُوصِيَّة البَيَانَات",
+        "en": "data privacy"
+      },
+      {
+        "ar": "المُسْتَخْدِمِينَ",
+        "en": "users"
+      }
+    ]
+  },
+  {
+    "id": "ar-tech-18",
+    "category": "tech",
+    "difficulty": "intermediate",
+    "arabic": "تُسَاعِدُ الحَوْسَبَةُ السَّحَابِيَّةُ الشَّرِكَاتِ فِي تَقْلِيلِ تَكَالِيفِ البِنْيَةِ التَّحْتِيَّةِ.",
+    "english": "Cloud computing helps companies reduce infrastructure costs.",
+    "acceptedAlternatives": [
+      "Cloud computing assists businesses in reducing infrastructure costs.",
+      "Cloud computing helps organizations lower their infrastructure expenses."
+    ],
+    "literalMeaning": "Helps computing cloudy companies in reducing costs of infrastructure.",
+    "vocabularyCards": [
+      {
+        "ar": "حَوْسَبَة سَحَابِيَّة",
+        "en": "cloud computing"
+      },
+      {
+        "ar": "بِنْيَة تَحْتِيَّة",
+        "en": "infrastructure"
+      },
+      {
+        "ar": "تَقْلِيل التَّكَالِيف",
+        "en": "cost reduction"
+      }
+    ]
+  },
+  {
+    "id": "ar-tech-19",
+    "category": "tech",
+    "difficulty": "beginner",
+    "arabic": "يُمْكِنُ لِلرُّوبُوتَاتِ الذَّكِيَّةِ أَدَاءُ المَهَامِّ المُعَقَّدَةِ بِدِقَّةٍ عَالِيَةٍ.",
+    "english": "Intelligent robots can perform complex tasks with high precision.",
+    "acceptedAlternatives": [
+      "Smart robots can execute complex tasks with high accuracy.",
+      "Intelligent robots are capable of performing complex tasks with high precision."
+    ],
+    "literalMeaning": "Can for robots intelligent performing of tasks complex with precision high.",
+    "vocabularyCards": [
+      {
+        "ar": "رُوبُوتَات ذَكِيَّة",
+        "en": "intelligent robots"
+      },
+      {
+        "ar": "مَهَام مُعَقَّدَة",
+        "en": "complex tasks"
+      },
+      {
+        "ar": "دِقَّة عَالِيَة",
+        "en": "high precision"
+      }
+    ]
+  },
+  {
+    "id": "ar-tech-20",
+    "category": "tech",
+    "difficulty": "intermediate",
+    "arabic": "تُعْتَبَرُ قَوَاعِدُ البَيَانَاتِ السَّرِيعَةُ عُنْصُرًا حَيَوِيًّا لِلتَّطْبِيقَاتِ اللَّحْظِيَّةِ.",
+    "english": "Fast databases are considered a vital element for real-time applications.",
+    "acceptedAlternatives": [
+      "Fast databases are considered an essential component for real-time apps.",
+      "High-speed databases are a vital element for real-time applications."
+    ],
+    "literalMeaning": "Is considered databases fast element vital for applications real-time.",
+    "vocabularyCards": [
+      {
+        "ar": "قَوَاعِد بَيَانَات",
+        "en": "databases"
+      },
+      {
+        "ar": "عُنْصُر حَيَوِيّ",
+        "en": "vital element"
+      },
+      {
+        "ar": "تَطْبِيقَات لَحْظِيَّة",
+        "en": "real-time applications"
+      }
+    ]
+  },
+  {
+    "id": "ar-tech-21",
+    "category": "tech",
+    "difficulty": "intermediate",
+    "arabic": "تُوفِّرُ الوَاجِهَاتُ البَرْمَجِيَّةُ رَبْطًا سَلِسًا بَيْنَ الأَنْظِمَةِ المُخْتَلِفَةِ.",
+    "english": "Application programming interfaces provide seamless integration between different systems.",
+    "acceptedAlternatives": [
+      "APIs provide seamless connection between different systems.",
+      "Application programming interfaces offer smooth connection between diverse systems."
+    ],
+    "literalMeaning": "Provide interfaces programmatic connection smooth between systems different.",
+    "vocabularyCards": [
+      {
+        "ar": "وَاجِهَات بَرْمَجِيَّة",
+        "en": "APIs"
+      },
+      {
+        "ar": "رَبْط سَلِس",
+        "en": "seamless integration"
+      },
+      {
+        "ar": "أَنْظِمَة مُخْتَلِفَة",
+        "en": "different systems"
+      }
+    ]
+  },
+  {
+    "id": "ar-tech-22",
+    "category": "tech",
+    "difficulty": "beginner",
+    "arabic": "يُعَزِّزُ التَّوْثِيقُ الثُّنَائِيُّ أَمْنَ الحِسَابَاتِ الرَّقْمِيَّةِ.",
+    "english": "Two-factor authentication enhances the security of digital accounts.",
+    "acceptedAlternatives": [
+      "Two-factor authentication improves digital account security.",
+      "Two-factor authentication strengthens the security of digital accounts."
+    ],
+    "literalMeaning": "Enhances authentication dual security of accounts digital.",
+    "vocabularyCards": [
+      {
+        "ar": "تَوْثِيق ثُنَائِيّ",
+        "en": "two-factor authentication"
+      },
+      {
+        "ar": "أَمْن الحِسَابَات",
+        "en": "account security"
+      },
+      {
+        "ar": "حِسَابَات رَقْمِيَّة",
+        "en": "digital accounts"
+      }
+    ]
+  },
+  {
+    "id": "ar-tech-23",
+    "category": "tech",
+    "difficulty": "intermediate",
+    "arabic": "تَسْتَخْدِمُ خَوَارِزْمِيَّاتُ التَّوْصِيَةِ بَيَانَاتِ المُسْتَخْدِمِ لِتَقْدِيمِ مُحْتَوًى مُخَصَّصٍ.",
+    "english": "Recommendation algorithms use user data to deliver personalized content.",
+    "acceptedAlternatives": [
+      "Recommendation algorithms utilize user data to provide personalized content.",
+      "Recommendation algorithms leverage user data to serve tailored content."
+    ],
+    "literalMeaning": "Use algorithms recommendation data of user to present content customized.",
+    "vocabularyCards": [
+      {
+        "ar": "خَوَارِزْمِيَّات التَّوْصِيَة",
+        "en": "recommendation algorithms"
+      },
+      {
+        "ar": "مُحْتَوًى مُخَصَّص",
+        "en": "personalized content"
+      },
+      {
+        "ar": "بَيَانَات",
+        "en": "data"
+      }
+    ]
+  },
+  {
+    "id": "ar-tech-24",
+    "category": "tech",
+    "difficulty": "advanced",
+    "arabic": "تُتِيحُ الحَوْسَبَةُ الطَّرَفِيَّةُ مُعَالَجَةَ البَيَانَاتِ قُرْبَ مَصْدَرِهَا.",
+    "english": "Edge computing enables data processing close to its source.",
+    "acceptedAlternatives": [
+      "Edge computing allows data processing near its source.",
+      "Edge computing enables processing data close to where it originates."
+    ],
+    "literalMeaning": "Enables computing edge processing data near its source.",
+    "vocabularyCards": [
+      {
+        "ar": "حَوْسَبَة طَرَفِيَّة",
+        "en": "edge computing"
+      },
+      {
+        "ar": "مُعَالَجَة البَيَانَات",
+        "en": "data processing"
+      },
+      {
+        "ar": "مَصْدَر",
+        "en": "source"
+      }
+    ]
+  },
+  {
+    "id": "ar-tech-25",
+    "category": "tech",
+    "difficulty": "beginner",
+    "arabic": "يُمْكِنُ لِلذَّكَاءِ الاصْطِنَاعِيِّ التَّوْلِيدِيِّ كِتَابَةُ الشِّفْرَاتِ البَرْمَجِيَّةِ بِكِفَايَةٍ.",
+    "english": "Generative artificial intelligence can write computer code efficiently.",
+    "acceptedAlternatives": [
+      "Generative AI can write programming code efficiently.",
+      "Generative artificial intelligence is capable of writing code efficiently."
+    ],
+    "literalMeaning": "Can for intelligence artificial generative writing codes programmatic with efficiency.",
+    "vocabularyCards": [
+      {
+        "ar": "ذَكَاء اصْطِنَاعِيّ تَوْلِيدِيّ",
+        "en": "generative artificial intelligence"
+      },
+      {
+        "ar": "شِفْرَات بَرْمَجِيَّة",
+        "en": "computer code"
+      },
+      {
+        "ar": "كِفَايَة",
+        "en": "efficiency"
+      }
+    ]
+  },
+  {
+    "id": "ar-tech-26",
+    "category": "tech",
+    "difficulty": "advanced",
+    "arabic": "يُعْتَبَرُ التَّحَقُّقُ مِنَ المُدْخَلَاتِ الدِّفَاعَ الأَوَّلَ ضِدَّ الهَجَمَاتِ السَّيْبَرَانِيَّةِ.",
+    "english": "Input validation is considered the first line of defense against cyber attacks.",
+    "acceptedAlternatives": [
+      "Input validation is regarded as the first defense against cyber attacks.",
+      "Validating inputs is considered the primary defense against cyberattacks."
+    ],
+    "literalMeaning": "Is considered validation from inputs defense first against attacks cyber.",
+    "vocabularyCards": [
+      {
+        "ar": "تَحَقُّق مِنَ المُدْخَلَات",
+        "en": "input validation"
+      },
+      {
+        "ar": "هَجَمَات سَيْبَرَانِيَّة",
+        "en": "cyber attacks"
+      },
+      {
+        "ar": "دِفَاع",
+        "en": "defense"
+      }
+    ]
+  },
+  {
+    "id": "ar-tech-27",
+    "category": "tech",
+    "difficulty": "intermediate",
+    "arabic": "تُقَلِّلُ التَّقْنِيَّاتُ مَفْتُوحَةُ المَصْدَرِ احْتِكَارَ الشَّرِكَاتِ الكُبْرَى لِلسُّوقِ.",
+    "english": "Open source technologies reduce the monopoly of big corporations on the market.",
+    "acceptedAlternatives": [
+      "Open-source technologies diminish large corporation monopolies on the market.",
+      "Open source technologies reduce big companies market monopoly."
+    ],
+    "literalMeaning": "Reduces technologies open source monopoly of companies big for market.",
+    "vocabularyCards": [
+      {
+        "ar": "مَفْتُوح المَصْدَر",
+        "en": "open source"
+      },
+      {
+        "ar": "احْتِكَار",
+        "en": "monopoly"
+      },
+      {
+        "ar": "شَرِكَات كُبْرَى",
+        "en": "big corporations"
+      }
+    ]
+  },
+  {
+    "id": "ar-tech-28",
+    "category": "tech",
+    "difficulty": "advanced",
+    "arabic": "يَسْمَحُ التَّخْزِينُ المُوَزَّعُ بِتَحْقِيقِ أَعْلَى مُسْتَوَيَاتِ اعْتِمَادِيَّةِ الأَنْظِمَةِ.",
+    "english": "Distributed storage allows achieving the highest levels of system reliability.",
+    "acceptedAlternatives": [
+      "Distributed storage enables achieving maximum system reliability.",
+      "Distributed storage allows systems to reach the highest reliability levels."
+    ],
+    "literalMeaning": "Permits storage distributed with achieving highest levels reliability of systems.",
+    "vocabularyCards": [
+      {
+        "ar": "تَخْزِين مُوَزَّع",
+        "en": "distributed storage"
+      },
+      {
+        "ar": "اعْتِمَادِيَّة",
+        "en": "reliability"
+      },
+      {
+        "ar": "أَعْلَى مُسْتَوَيَات",
+        "en": "highest levels"
+      }
     ]
   }
 ]
