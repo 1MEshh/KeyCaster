@@ -131,9 +131,14 @@ export const TranslationStage: React.FC = () => {
   const [isFocused, setIsFocused] = useState<boolean>(true);
   const [isSpeakingArabic, setIsSpeakingArabic] = useState<boolean>(false);
   const [showPhoneticBreakdown, setShowPhoneticBreakdown] = useState<boolean>(false);
+  const [showTashkeel, setShowTashkeel] = useState<boolean>(true);
 
   const bilingualSentence = currentSentence as BilingualSentence | null;
   const arabicText = bilingualSentence && "arabic" in bilingualSentence ? bilingualSentence.arabic : "";
+  const displayedArabicText = useMemo(() => {
+    if (!arabicText) return "";
+    return showTashkeel ? arabicText : arabicText.replace(/[\u064B-\u065F\u0670]/g, "");
+  }, [arabicText, showTashkeel]);
   const literalMeaning =
     bilingualSentence && "literalMeaning" in bilingualSentence ? bilingualSentence.literalMeaning : "";
   const vocabCards =
@@ -794,6 +799,20 @@ export const TranslationStage: React.FC = () => {
               )}
             </button>
 
+            {/* Arabic Tashkeel (Diacritics) Toggle */}
+            <button
+              type="button"
+              onClick={() => setShowTashkeel((prev) => !prev)}
+              className={`px-2.5 py-1.5 rounded-xl flex items-center gap-1.5 transition-all text-xs font-medium border ${
+                showTashkeel
+                  ? "bg-amber-500/20 text-amber-300 border-amber-500/30"
+                  : "bg-sub/15 text-sub hover:text-text border-sub/20 hover:border-sub/40"
+              }`}
+              title="Toggle Arabic Tashkeel (diacritics / تشكيل) visibility"
+            >
+              <span className="font-thmanyah font-bold text-xs">{showTashkeel ? "تَشْكِيل" : "تشكيل"}</span>
+            </button>
+
             {/* Phonetic Breakdown Toggle */}
             <button
               type="button"
@@ -848,7 +867,7 @@ export const TranslationStage: React.FC = () => {
           className="font-thmanyah text-2xl sm:text-3xl md:text-4xl text-text font-bold text-right leading-loose py-3 select-text tracking-wide"
           style={{ fontFamily: "var(--font-thmanyah), 'Thmanyah Sans', sans-serif" }}
         >
-          {arabicText}
+          {displayedArabicText}
         </div>
 
         {/* Phonetic Syllables & Word Breakdown Bar */}
