@@ -108,6 +108,7 @@ export interface SettingsState {
   setSoundOnError: (val: boolean) => void;
   setSwitchSound: (profile: SwitchSoundProfile) => void;
   setSpeechRate: (rate: number) => void;
+  cycleSpeechRate: () => void;
   setSpeechPitch: (pitch: number) => void;
   setAutoReplayOnError: (enabled: boolean) => void;
   setTtsVoiceURI: (uri: string) => void;
@@ -313,6 +314,13 @@ export const useSettingsStore = create<SettingsState>()(
       setSoundOnError: (soundOnError) => set({ soundOnError }),
       setSwitchSound: (switchSound) => set({ switchSound }),
       setSpeechRate: (speechRate) => set({ speechRate }),
+      cycleSpeechRate: () =>
+        set((state) => {
+          const rates = [0.8, 0.95, 1.1, 1.25];
+          const currentIndex = rates.findIndex((r) => Math.abs(r - state.speechRate) < 0.05);
+          const nextIndex = (currentIndex + 1) % rates.length;
+          return { speechRate: rates[nextIndex] };
+        }),
       setSpeechPitch: (speechPitch) => set({ speechPitch }),
       setAutoReplayOnError: (autoReplayOnError) => set({ autoReplayOnError }),
       setTtsVoiceURI: (ttsVoiceURI) => set({ ttsVoiceURI }),

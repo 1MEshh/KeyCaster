@@ -94,6 +94,7 @@ export const TranslationStage: React.FC = () => {
     paceCarMode,
     speechRate,
     speechPitch,
+    cycleSpeechRate,
     autoReplayOnError,
     ttsVoiceURI,
     theme,
@@ -384,6 +385,13 @@ export const TranslationStage: React.FC = () => {
       if (e.altKey && (key === "g" || key === "G")) {
         e.preventDefault();
         setGuidedMode((prev) => !prev);
+        return;
+      }
+
+      // Cycle Speech Rate (Alt+S)
+      if (e.altKey && (key === "s" || key === "S")) {
+        e.preventDefault();
+        cycleSpeechRate();
         return;
       }
 
