@@ -115,11 +115,13 @@ export const TranslationStage: React.FC = () => {
   const [copied, setCopied] = useState<boolean>(false);
   const [isExporting, setIsExporting] = useState<boolean>(false);
   const [audioRepeatCount, setAudioRepeatCount] = useState<number>(0);
+  const [vocabSearch, setVocabSearch] = useState<string>("");
 
   // Reset showLiteral and repeat counter when sentence changes
   useEffect(() => {
     setShowLiteral(false);
     setAudioRepeatCount(0);
+    setVocabSearch("");
   }, [currentSentence]);
 
   // Caret visual position
@@ -931,28 +933,45 @@ export const TranslationStage: React.FC = () => {
             exit={{ opacity: 0, height: 0, y: -8 }}
             className="w-full mb-6 p-5 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-text font-mono text-xs overflow-hidden shadow-lg"
           >
-            <div className="flex items-center gap-2 text-amber-400 font-bold mb-3">
-              <BookOpen className="w-4 h-4" />
-              <span>Vocabulary Flashcards</span>
-              <span className="text-sub/70 font-normal ml-1">({vocabCards.length} key words)</span>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-amber-400 font-bold mb-3">
+              <div className="flex items-center gap-2">
+                <BookOpen className="w-4 h-4" />
+                <span>Vocabulary Flashcards</span>
+                <span className="text-sub/70 font-normal ml-1">({vocabCards.length} key words)</span>
+              </div>
+              <div className="relative">
+                <input
+                  type="text"
+                  value={vocabSearch}
+                  onChange={(e) => setVocabSearch(e.target.value)}
+                  placeholder="Filter word pairs..."
+                  className="px-2.5 py-1 text-xs rounded-lg bg-bg/80 border border-amber-500/30 text-text placeholder-sub/50 focus:outline-none focus:border-amber-400 w-full sm:w-44 font-mono font-normal"
+                />
+              </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
-              {vocabCards.map((card, idx) => (
-                <div
-                  key={idx}
-                  className="p-3 rounded-xl bg-sub/15 border border-sub/20 flex flex-col justify-between"
-                >
-                  <span
-                    dir="rtl"
-                    className="font-thmanyah text-base font-bold text-text text-right mb-1"
-                    style={{ fontFamily: "var(--font-thmanyah), 'Thmanyah Sans', sans-serif" }}
+              {vocabCards
+                .filter((card) => {
+                  if (!vocabSearch.trim()) return true;
+                  const q = vocabSearch.toLowerCase().trim();
+                  return card.en.toLowerCase().includes(q) || card.ar.includes(q);
+                })
+                .map((card, idx) => (
+                  <div
+                    key={idx}
+                    className="p-3 rounded-xl bg-sub/15 border border-sub/20 flex flex-col justify-between"
                   >
-                    {card.ar}
-                  </span>
-                  <span className="text-main text-xs font-semibold">{card.en}</span>
-                </div>
-              ))}
+                    <span
+                      dir="rtl"
+                      className="font-thmanyah text-base font-bold text-text text-right mb-1"
+                      style={{ fontFamily: "var(--font-thmanyah), 'Thmanyah Sans', sans-serif" }}
+                    >
+                      {card.ar}
+                    </span>
+                    <span className="text-main text-xs font-semibold">{card.en}</span>
+                  </div>
+                ))}
             </div>
           </motion.div>
         )}
