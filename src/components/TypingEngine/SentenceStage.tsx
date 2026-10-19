@@ -89,6 +89,7 @@ export const SentenceStage: React.FC = () => {
     switchSound,
     paceCarMode,
     speechRate,
+    cycleSpeechRate,
     ttsVoiceURI,
     theme,
   } = useSettingsStore();
@@ -330,6 +331,13 @@ export const SentenceStage: React.FC = () => {
       if ((e.altKey || e.ctrlKey) && (key === "h" || key === "H")) {
         e.preventDefault();
         toggleVocabHint();
+        return;
+      }
+
+      // Cycle Speech Rate (Alt+S)
+      if (e.altKey && (key === "s" || key === "S")) {
+        e.preventDefault();
+        cycleSpeechRate();
         return;
       }
 
