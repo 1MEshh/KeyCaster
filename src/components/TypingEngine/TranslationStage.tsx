@@ -93,6 +93,7 @@ export const TranslationStage: React.FC = () => {
     switchSound,
     paceCarMode,
     speechRate,
+    speechPitch,
     ttsVoiceURI,
     theme,
   } = useSettingsStore();
@@ -111,10 +112,12 @@ export const TranslationStage: React.FC = () => {
   const [showLiteral, setShowLiteral] = useState<boolean>(false);
   const [copied, setCopied] = useState<boolean>(false);
   const [isExporting, setIsExporting] = useState<boolean>(false);
+  const [audioRepeatCount, setAudioRepeatCount] = useState<number>(0);
 
-  // Reset showLiteral when sentence changes
+  // Reset showLiteral and repeat counter when sentence changes
   useEffect(() => {
     setShowLiteral(false);
+    setAudioRepeatCount(0);
   }, [currentSentence]);
 
   // Caret visual position
@@ -211,24 +214,28 @@ export const TranslationStage: React.FC = () => {
   // Speak authentic native Arabic prompt
   const speakArabicSentence = useCallback(() => {
     if (!arabicText) return;
+    setAudioRepeatCount((prev) => prev + 1);
     setIsSpeakingArabic(true);
     setTimeout(() => {
       TTSController.speakArabic(arabicText, {
         rate: speechRate,
+        pitch: speechPitch,
         onStart: () => setIsSpeakingArabic(true),
         onEnd: () => setIsSpeakingArabic(false),
       });
     }, 40);
-  }, [arabicText, speechRate]);
+  }, [arabicText, speechRate, speechPitch]);
 
   // Speak full target English sentence
   const speakFullSentence = useCallback(
     (slow = false) => {
       if (!targetEnglish) return;
+      setAudioRepeatCount((prev) => prev + 1);
       setIsSpeaking(true);
       setTimeout(() => {
         TTSController.speakWord(targetEnglish, {
           rate: speechRate,
+          pitch: speechPitch,
           voiceURI: ttsVoiceURI,
           slow,
           onStart: () => setIsSpeaking(true),
@@ -236,7 +243,7 @@ export const TranslationStage: React.FC = () => {
         });
       }, 50);
     },
-    [targetEnglish, speechRate, ttsVoiceURI, setIsSpeaking]
+    [targetEnglish, speechRate, speechPitch, ttsVoiceURI, setIsSpeaking]
   );
 
   // Mid-sentence replay from active word to the end
@@ -246,10 +253,12 @@ export const TranslationStage: React.FC = () => {
       const textToSpeak = remainingWords.trim() || targetEnglish;
       if (!textToSpeak) return;
 
+      setAudioRepeatCount((prev) => prev + 1);
       setIsSpeaking(true);
       setTimeout(() => {
         TTSController.speakWord(textToSpeak, {
           rate: speechRate,
+          pitch: speechPitch,
           voiceURI: ttsVoiceURI,
           slow,
           onStart: () => setIsSpeaking(true),
@@ -257,7 +266,7 @@ export const TranslationStage: React.FC = () => {
         });
       }, 50);
     },
-    [words, currentWordIndex, targetEnglish, speechRate, ttsVoiceURI, setIsSpeaking]
+    [words, currentWordIndex, targetEnglish, speechRate, speechPitch, ttsVoiceURI, setIsSpeaking]
   );
 
   // Speak full sentence once on mount / new sentence & ensure input focus
@@ -752,6 +761,14 @@ export const TranslationStage: React.FC = () => {
             >
               <Headphones className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">Full Audio</span>
+              {audioRepeatCount > 0 && (
+                <span
+                  className="px-1.5 py-0.2 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30 ml-0.5"
+                  title={`Played ${audioRepeatCount} time${audioRepeatCount > 1 ? "s" : ""}`}
+                >
+                  {audioRepeatCount}x
+                </span>
+              )}
             </button>
 
             {/* Native Arabic Voice Player */}
