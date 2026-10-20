@@ -16,7 +16,9 @@ export type Theme =
   | "midnight"
   | "cyberpunk"
   | "matrix_crt"
-  | "tokyo_night";
+  | "tokyo_night"
+  | "solarized_dark"
+  | "espresso";
 export type FontFamily = "Thmanyah Sans" | "JetBrains Mono" | "Roboto Mono" | "Fira Code";
 export type LiveStatsMode = "off" | "text" | "mini" | "tachometer";
 export type PaceCarMode = "off" | "pb" | "target_60" | "target_80" | "target_100" | "target_120";
@@ -202,6 +204,24 @@ export const THEME_VARIABLES: Record<
     text: "#c0caf5",
     error: "#f7768e",
     errorExtra: "#db4b4b",
+  },
+  solarized_dark: {
+    bg: "#002b36",
+    main: "#2aa198",
+    caret: "#268bd2",
+    sub: "#586e75",
+    text: "#93a1a1",
+    error: "#dc322f",
+    errorExtra: "#cb4b16",
+  },
+  espresso: {
+    bg: "#181412",
+    main: "#d4a373",
+    caret: "#e9edc9",
+    sub: "#6f5b50",
+    text: "#faedcd",
+    error: "#e63946",
+    errorExtra: "#9b2226",
   },
 };
 
