@@ -605,8 +605,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({ isOpen, onClose })
                   Theme Preset
                 </label>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                  {(["cyberpunk", "matrix_crt", "tokyo_night", "midnight", "monochrome", "nord", "dracula", "serika_dark"] as Theme[]).map((thm) => {
-                    const colors = THEME_VARIABLES[thm];
+                  {(["cyberpunk", "matrix_crt", "tokyo_night", "midnight", "solarized_dark", "espresso", "monochrome", "nord", "dracula", "serika_dark"] as Theme[]).map((thm) => {
+                    const colors = THEME_VARIABLES[thm] || THEME_VARIABLES.midnight;
                     const isCur = theme === thm;
                     return (
                       <button
