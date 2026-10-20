@@ -43,6 +43,7 @@ export const GameModeStage: React.FC = () => {
 
   const {
     caretStyle,
+    caretBlinkRate,
     smoothCaret,
     blindMode,
     blindModePro,
@@ -50,6 +51,7 @@ export const GameModeStage: React.FC = () => {
     soundOnClick,
     soundOnError,
     speechRate,
+    speechPitch,
     ttsVoiceURI,
     switchSound,
     fontSize,
@@ -86,10 +88,11 @@ export const GameModeStage: React.FC = () => {
     setTimeout(() => {
       TTSController.speakWord(currentWord, {
         rate: speechRate,
+        pitch: speechPitch,
         voiceURI: ttsVoiceURI,
       });
     }, 40);
-  }, [currentWord, speechRate, ttsVoiceURI]);
+  }, [currentWord, speechRate, speechPitch, ttsVoiceURI]);
 
   // Audio slow-motion pronunciation for new word (0.7x)
   const speakCurrentWordSlow = useCallback(() => {
@@ -97,11 +100,12 @@ export const GameModeStage: React.FC = () => {
     setTimeout(() => {
       TTSController.speakWord(currentWord, {
         rate: speechRate,
+        pitch: speechPitch,
         voiceURI: ttsVoiceURI,
         slow: true,
       });
     }, 40);
-  }, [currentWord, speechRate, ttsVoiceURI]);
+  }, [currentWord, speechRate, speechPitch, ttsVoiceURI]);
 
   // Initialize word state on currentWord change
   useEffect(() => {
@@ -123,23 +127,33 @@ export const GameModeStage: React.FC = () => {
     }, 30);
   }, [currentWord, isGameOver, speakCurrentWord]);
 
-  // Caret coordinate tracking
+  // Caret coordinate tracking with fast offsetParent measurements
   useEffect(() => {
     if (letterRefs.current.length === 0 || !containerRef.current) return;
     const targetEl = letterRefs.current[caretIndex];
     const container = containerRef.current;
     if (targetEl) {
-      const containerRect = container.getBoundingClientRect();
-      const targetRect = targetEl.getBoundingClientRect();
-      setCaretLeft(targetRect.left - containerRect.left);
-      setCaretWidth(targetRect.width);
+      if (targetEl.offsetParent === container) {
+        setCaretLeft(targetEl.offsetLeft);
+        setCaretWidth(targetEl.offsetWidth);
+      } else {
+        const containerRect = container.getBoundingClientRect();
+        const targetRect = targetEl.getBoundingClientRect();
+        setCaretLeft(targetRect.left - containerRect.left);
+        setCaretWidth(targetRect.width);
+      }
     } else if (caretIndex >= letterRefs.current.length) {
       const lastEl = letterRefs.current[letterRefs.current.length - 1];
       if (lastEl) {
-        const containerRect = container.getBoundingClientRect();
-        const lastRect = lastEl.getBoundingClientRect();
-        setCaretLeft(lastRect.right - containerRect.left);
-        setCaretWidth(2);
+        if (lastEl.offsetParent === container) {
+          setCaretLeft(lastEl.offsetLeft + lastEl.offsetWidth);
+          setCaretWidth(2);
+        } else {
+          const containerRect = container.getBoundingClientRect();
+          const lastRect = lastEl.getBoundingClientRect();
+          setCaretLeft(lastRect.right - containerRect.left);
+          setCaretWidth(2);
+        }
       }
     }
   }, [caretIndex, typedLetters, fontSize]);
@@ -498,6 +512,12 @@ export const GameModeStage: React.FC = () => {
             {/* Custom Caret */}
             <div
               className={`absolute pointer-events-none transition-all ${
+                caretBlinkRate === "off"
+                  ? "opacity-100"
+                  : caretBlinkRate === "rapid"
+                  ? "animate-[pulse_0.65s_ease-in-out_infinite]"
+                  : "animate-pulse"
+              } ${
                 caretStyle === "default"
                   ? "w-[2.5px] bg-caret h-[1.1em] -ml-[1px]"
                   : caretStyle === "block"
