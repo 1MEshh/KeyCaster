@@ -600,3 +600,35 @@ test("translationMode: calculateSentenceXP scales with length, difficulty, and p
   });
   assert.equal(xpFloor, 10);
 });
+
+test("translationMode: validates bilingual category distributions and vocabulary card integrity across all 80 sentences", () => {
+  const sentences = getAllBilingualSentences();
+  assert.equal(sentences.length, 80);
+
+  const categories = {
+    daily: sentences.filter((s) => s.category === "daily"),
+    tech: sentences.filter((s) => s.category === "tech"),
+    wisdom: sentences.filter((s) => s.category === "wisdom"),
+    business: sentences.filter((s) => s.category === "business"),
+  };
+
+  assert.equal(categories.daily.length, 13);
+  assert.equal(categories.tech.length, 28);
+  assert.equal(categories.wisdom.length, 12);
+  assert.equal(categories.business.length, 27);
+
+  // Assert every sentence has valid Arabic, English, literal meaning, and vocabulary cards
+  for (const s of sentences) {
+    assert.ok(s.arabic.trim().length > 0, `Sentence ${s.id} has empty Arabic text`);
+    assert.ok(s.english.trim().length > 0, `Sentence ${s.id} has empty English text`);
+    assert.ok(s.literalMeaning.trim().length > 0, `Sentence ${s.id} has empty literal meaning`);
+    assert.ok(Array.isArray(s.vocabularyCards), `Sentence ${s.id} has invalid vocabularyCards array`);
+    assert.ok(s.vocabularyCards.length >= 1, `Sentence ${s.id} has no vocabulary cards`);
+
+    for (const card of s.vocabularyCards) {
+      assert.ok(card.ar.trim().length > 0, `Sentence ${s.id} has empty Arabic in vocabulary card`);
+      assert.ok(card.en.trim().length > 0, `Sentence ${s.id} has empty English in vocabulary card`);
+    }
+  }
+});
+
