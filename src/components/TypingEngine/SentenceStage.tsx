@@ -418,6 +418,14 @@ export const SentenceStage: React.FC = () => {
     setActiveKey(null);
   }, [setActiveKey]);
 
+  const expectedNextChar = useMemo(() => {
+    if (isSentenceComplete || isSessionComplete) return null;
+    const curWordObj = words[currentWordIndex];
+    if (!curWordObj) return null;
+    const curLetter = curWordObj.letters[currentLetterIndex];
+    return curLetter?.char || null;
+  }, [words, currentWordIndex, currentLetterIndex, isSentenceComplete, isSessionComplete]);
+
   // Session Complete Batch Summary View
   if (isSessionComplete) {
     const totalWordsCount = sentenceQueue.reduce((acc, s) => {
@@ -575,14 +583,6 @@ export const SentenceStage: React.FC = () => {
     accuracy: stats.accuracy,
     errors: stats.errors,
   });
-
-  const expectedNextChar = useMemo(() => {
-    if (isSentenceComplete) return null;
-    const curWordObj = words[currentWordIndex];
-    if (!curWordObj) return null;
-    const curLetter = curWordObj.letters[currentLetterIndex];
-    return curLetter?.char || null;
-  }, [words, currentWordIndex, currentLetterIndex, isSentenceComplete]);
 
   return (
     <div
