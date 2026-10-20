@@ -18,6 +18,7 @@ import {
   Download,
   Copy,
   Check,
+  FileText,
 } from "lucide-react";
 import confetti from "canvas-confetti";
 import { useSentenceStore } from "@/store/useSentenceStore";
@@ -27,6 +28,7 @@ import {
   exportScoreCardCanvas,
   downloadDataUrl,
 } from "@/lib/scoreCardExporter";
+import { downloadSessionScorecardMarkdown } from "@/lib/csvExporter";
 import { calculatePaceSplitDelta, findCharPositionInSentence } from "@/lib/paceCarSplits";
 import { useKeyStore } from "@/store/useKeyStore";
 import {
@@ -569,7 +571,7 @@ export const TranslationStage: React.FC = () => {
           </div>
 
           {/* Share & Export Scorecard Controls */}
-          <div className="flex items-center justify-center gap-3 w-full max-w-sm pt-2">
+          <div className="flex flex-wrap items-center justify-center gap-2.5 w-full max-w-md pt-2">
             <button
               onClick={handleExportCard}
               disabled={isExporting}
@@ -577,7 +579,25 @@ export const TranslationStage: React.FC = () => {
               title="Download high-resolution 1200x675 score card PNG"
             >
               <Download className="w-3.5 h-3.5" />
-              <span>{isExporting ? "Exporting..." : "Export Card"}</span>
+              <span>{isExporting ? "Exporting..." : "PNG Card"}</span>
+            </button>
+            <button
+              onClick={() =>
+                downloadSessionScorecardMarkdown({
+                  wpm: stats.wpm,
+                  accuracy: stats.accuracy,
+                  category: `Arabic Translation (${activeCategory})`,
+                  totalWords: totalWordsCount,
+                  duration: Math.max(1, Math.round(stats.elapsedMs / 1000)),
+                  errors: stats.errors,
+                  streak,
+                })
+              }
+              className="flex-1 py-2 px-3 rounded-xl border border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-sm"
+              title="Download formatted Markdown (.md) session scorecard"
+            >
+              <FileText className="w-3.5 h-3.5" />
+              <span>MD Report</span>
             </button>
             <button
               onClick={handleCopySummary}
@@ -592,7 +612,7 @@ export const TranslationStage: React.FC = () => {
               ) : (
                 <>
                   <Copy className="w-3.5 h-3.5" />
-                  <span>Copy Summary</span>
+                  <span>Copy Text</span>
                 </>
               )}
             </button>
