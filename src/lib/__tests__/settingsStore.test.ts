@@ -122,4 +122,37 @@ test("useSettingsStore: authentic CDPR Cyberpunk 2077 color palette", () => {
   assert.equal(THEME_VARIABLES.cyberpunk.sub, "#5a6878"); // Militech Gunmetal
 });
 
+test("useSettingsStore: manages speechPitch and cycles speechRate correctly", () => {
+  const store = useSettingsStore.getState();
+
+  store.setSpeechPitch(1.2);
+  assert.equal(useSettingsStore.getState().speechPitch, 1.2);
+
+  store.setSpeechRate(0.8);
+  assert.equal(useSettingsStore.getState().speechRate, 0.8);
+
+  store.cycleSpeechRate();
+  assert.equal(useSettingsStore.getState().speechRate, 0.95);
+
+  store.cycleSpeechRate();
+  assert.equal(useSettingsStore.getState().speechRate, 1.1);
+
+  store.cycleSpeechRate();
+  assert.equal(useSettingsStore.getState().speechRate, 1.25);
+
+  store.cycleSpeechRate();
+  assert.equal(useSettingsStore.getState().speechRate, 0.8);
+});
+
+test("useSettingsStore: supports workman and colemak_dh keyboard layouts", () => {
+  const store = useSettingsStore.getState();
+
+  store.setKeyboardLayout("workman");
+  assert.equal(useSettingsStore.getState().keyboardLayout, "workman");
+
+  store.setKeyboardLayout("colemak_dh");
+  assert.equal(useSettingsStore.getState().keyboardLayout, "colemak_dh");
+});
+
+
 
