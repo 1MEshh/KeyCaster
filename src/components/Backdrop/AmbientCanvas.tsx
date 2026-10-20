@@ -904,10 +904,23 @@ export const AmbientCanvas: React.FC = () => {
   }
 
   return (
-    <canvas
-      ref={canvasRef}
-      className="fixed inset-0 pointer-events-none z-0 select-none"
-      aria-hidden="true"
-    />
+    <>
+      <canvas
+        ref={canvasRef}
+        className="fixed inset-0 pointer-events-none z-0 select-none"
+        aria-hidden="true"
+      />
+      {(theme === "cyberpunk" || theme === "matrix_crt") && (
+        <div
+          className="fixed inset-0 pointer-events-none z-[1] select-none opacity-40 mix-blend-screen"
+          style={{
+            backgroundImage:
+              "linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03))",
+            backgroundSize: "100% 3px, 6px 100%",
+          }}
+          aria-hidden="true"
+        />
+      )}
+    </>
   );
 };
