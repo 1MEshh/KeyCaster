@@ -596,6 +596,11 @@ export const TypingStage: React.FC = () => {
         onBlur={() => setIsFocused(false)}
       />
 
+      {/* Screen reader live region for session progress accessibility */}
+      <div className="sr-only" aria-live="polite" aria-atomic="true">
+        Word {currentIndex + 1} of {mainQueue.length}. {hasError ? "Typing error detected" : ""}
+      </div>
+
       {/* Cyberpunk 2077 Telemetry HUD Ribbon */}
       {isCyberpunk && (
         <div className="w-full max-w-2xl mb-3 flex items-center justify-between text-[10px] font-mono tracking-widest text-[#fcee09] border-b border-[#fcee09]/30 pb-1.5 select-none uppercase">

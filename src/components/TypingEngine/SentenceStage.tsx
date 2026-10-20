@@ -604,6 +604,11 @@ export const SentenceStage: React.FC = () => {
         onBlur={() => setIsFocused(false)}
       />
 
+      {/* Screen reader live region for sentence progress accessibility */}
+      <div className="sr-only" aria-live="polite" aria-atomic="true">
+        Sentence {queueIndex + 1} of {sentenceQueue.length}. Word {currentWordIndex + 1} of {words.length}.
+      </div>
+
       {/* Top HUD: Queue Progress, Category & Difficulty Badges */}
       <div className="w-full flex items-center justify-between mb-6 text-xs text-sub font-mono">
         <div className="flex items-center gap-2">
