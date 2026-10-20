@@ -154,5 +154,25 @@ test("useSettingsStore: supports workman and colemak_dh keyboard layouts", () =>
   assert.equal(useSettingsStore.getState().keyboardLayout, "colemak_dh");
 });
 
+test("useSettingsStore: manages autoReplayOnError and minWpmGate thresholds", () => {
+  const store = useSettingsStore.getState();
+
+  store.setAutoReplayOnError(true);
+  assert.equal(useSettingsStore.getState().autoReplayOnError, true);
+
+  store.setAutoReplayOnError(false);
+  assert.equal(useSettingsStore.getState().autoReplayOnError, false);
+
+  store.setMinWpmGate(50);
+  assert.equal(useSettingsStore.getState().minWpmGate, 50);
+
+  store.setMinWpmGate(70);
+  assert.equal(useSettingsStore.getState().minWpmGate, 70);
+
+  store.setMinWpmGate(0);
+  assert.equal(useSettingsStore.getState().minWpmGate, 0);
+});
+
+
 
 
