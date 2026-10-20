@@ -688,6 +688,16 @@ export const SentenceStage: React.FC = () => {
             <span className="hidden sm:inline">Full Audio</span>
           </button>
 
+          {/* Interactive Speech Rate Pill */}
+          <button
+            type="button"
+            onClick={cycleSpeechRate}
+            className="px-2.5 py-1.5 rounded-lg flex items-center gap-1 transition-all text-xs font-mono font-bold border bg-sub/10 text-sub hover:text-main border-sub/20 hover:border-main/40"
+            title="Cycle Speech Rate (Alt+S)"
+          >
+            <span>{speechRate}x</span>
+          </button>
+
           <button
             type="button"
             onClick={toggleVocabHint}

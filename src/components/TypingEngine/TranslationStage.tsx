@@ -811,6 +811,16 @@ export const TranslationStage: React.FC = () => {
               )}
             </button>
 
+            {/* Interactive Speech Rate Pill */}
+            <button
+              type="button"
+              onClick={cycleSpeechRate}
+              className="px-2.5 py-1.5 rounded-xl flex items-center gap-1 transition-all text-xs font-mono font-bold border bg-sub/15 text-sub hover:text-main border-sub/20 hover:border-main/40"
+              title="Cycle Speech Rate (Alt+S)"
+            >
+              <span>{speechRate}x</span>
+            </button>
+
             {/* Native Arabic Voice Player */}
             <button
               type="button"
