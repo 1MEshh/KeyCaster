@@ -1,11 +1,11 @@
 {
   "name": "KeyCaster",
   "short_name": "KeyCaster",
-  "description": "Audio-first SRS typing practice — 100% offline, zero tracking.",
+  "description": "Audio-first SRS typing practice and bilingual Arabic dictation engine — 100% offline, zero tracking.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#38bdf8",
+  "background_color": "#08080c",
+  "theme_color": "#fcee09",
   "orientation": "any",
   "icons": [
     {
@@ -21,6 +21,6 @@
       "purpose": "any maskable"
     }
   ],
-  "categories": ["education", "productivity", "games"],
+  "categories": ["education", "productivity", "games", "utilities"],
   "lang": "en"
 }
