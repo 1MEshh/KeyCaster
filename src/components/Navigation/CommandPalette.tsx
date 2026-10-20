@@ -254,6 +254,26 @@ export const CommandPalette: React.FC<CommandPaletteProps> = ({
         active: theme === "midnight",
         action: () => setTheme("midnight"),
       },
+      {
+        id: "theme-solarized-dark",
+        category: "Theme",
+        title: "Theme: Solarized Dark Precision",
+        subtitle: "High-contrast teal and solar cyan on deep dark teal background",
+        icon: <Palette className="w-4 h-4 text-teal-400" />,
+        keywords: ["solarized", "dark", "teal", "cyan", "theme", "contrast"],
+        active: theme === "solarized_dark",
+        action: () => setTheme("solarized_dark"),
+      },
+      {
+        id: "theme-espresso",
+        category: "Theme",
+        title: "Theme: Espresso Roast Warm",
+        subtitle: "Rich dark roast coffee and warm caramel cream accents",
+        icon: <Palette className="w-4 h-4 text-amber-500" />,
+        keywords: ["espresso", "coffee", "roast", "warm", "caramel", "theme"],
+        active: theme === "espresso",
+        action: () => setTheme("espresso"),
+      },
 
       // Audio Switches
       {
