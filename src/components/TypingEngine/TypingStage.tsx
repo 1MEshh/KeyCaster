@@ -252,7 +252,7 @@ export const TypingStage: React.FC = () => {
     }, 50);
   }, [currentWord, speakCurrentWord]);
 
-  // Update Caret visual coordinates
+  // Update Caret visual coordinates with fast offset measurements
   useEffect(() => {
     if (letterRefs.current.length === 0 || !containerRef.current) return;
 
@@ -260,19 +260,29 @@ export const TypingStage: React.FC = () => {
     const container = containerRef.current;
 
     if (targetEl) {
-      const containerRect = container.getBoundingClientRect();
-      const targetRect = targetEl.getBoundingClientRect();
-      const left = targetRect.left - containerRect.left;
-      setCaretLeft(left);
-      setCaretWidth(targetRect.width);
+      // Fast path: use offsetLeft/offsetWidth if parent is offsetParent, else getBoundingClientRect
+      if (targetEl.offsetParent === container) {
+        setCaretLeft(targetEl.offsetLeft);
+        setCaretWidth(targetEl.offsetWidth);
+      } else {
+        const containerRect = container.getBoundingClientRect();
+        const targetRect = targetEl.getBoundingClientRect();
+        setCaretLeft(targetRect.left - containerRect.left);
+        setCaretWidth(targetRect.width);
+      }
     } else if (caretIndex >= letterRefs.current.length) {
       // Past last letter
       const lastEl = letterRefs.current[letterRefs.current.length - 1];
       if (lastEl) {
-        const containerRect = container.getBoundingClientRect();
-        const lastRect = lastEl.getBoundingClientRect();
-        setCaretLeft(lastRect.right - containerRect.left);
-        setCaretWidth(2);
+        if (lastEl.offsetParent === container) {
+          setCaretLeft(lastEl.offsetLeft + lastEl.offsetWidth);
+          setCaretWidth(2);
+        } else {
+          const containerRect = container.getBoundingClientRect();
+          const lastRect = lastEl.getBoundingClientRect();
+          setCaretLeft(lastRect.right - containerRect.left);
+          setCaretWidth(2);
+        }
       }
     }
   }, [caretIndex, typedLetters, fontSize]);
