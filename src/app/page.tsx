@@ -15,6 +15,7 @@ import { CommandPalette } from "@/components/Navigation/CommandPalette";
 import { OnboardingFlow } from "@/components/Onboarding/OnboardingFlow";
 import { AudioUnlockOverlay } from "@/components/Onboarding/AudioUnlockOverlay";
 import { XPToastBadge } from "@/components/HUD/XPToastBadge";
+import { AppErrorBoundary } from "@/components/ErrorBoundary/AppErrorBoundary";
 import { useSettingsStore, type AppSection } from "@/store/useSettingsStore";
 import { useSessionStore } from "@/store/useSessionStore";
 import { useSentenceStore } from "@/store/useSentenceStore";
@@ -316,49 +317,51 @@ export default function Home() {
 
         {/* Main Stage Container */}
         <main className="flex-1 flex flex-col items-center justify-center max-w-5xl w-full mx-auto px-4 py-6">
-          {activeSection === "arcade" ? (
-            <GameModeStage />
-          ) : activeSection === "sentences" ? (
-            <SentenceStage />
-          ) : activeSection === "arabic_dictation" ? (
-            <TranslationStage />
-          ) : !isInitialized || isLoading ? (
-            <div className="flex flex-col items-center gap-3 font-mono text-xs text-sub">
-              <div className="w-6 h-6 border-2 border-main border-t-transparent rounded-full animate-spin" />
-              <span>Loading SRS deck...</span>
-            </div>
-          ) : isSessionActive && (currentWord || isSessionComplete) ? (
-            <TypingStage />
-          ) : (
-            /* Empty / All Caught Up State */
-            <div className="flex flex-col items-center justify-center text-center p-8 rounded-2xl border border-sub/20 bg-sub/5 backdrop-blur-sm max-w-md mx-auto font-mono space-y-4 animate-fadeIn">
-              <div className="w-12 h-12 rounded-xl bg-main/15 text-main flex items-center justify-center mx-auto">
-                <Sparkles className="w-6 h-6" />
+          <AppErrorBoundary>
+            {activeSection === "arcade" ? (
+              <GameModeStage />
+            ) : activeSection === "sentences" ? (
+              <SentenceStage />
+            ) : activeSection === "arabic_dictation" ? (
+              <TranslationStage />
+            ) : !isInitialized || isLoading ? (
+              <div className="flex flex-col items-center gap-3 font-mono text-xs text-sub">
+                <div className="w-6 h-6 border-2 border-main border-t-transparent rounded-full animate-spin" />
+                <span>Loading SRS deck...</span>
               </div>
+            ) : isSessionActive && (currentWord || isSessionComplete) ? (
+              <TypingStage />
+            ) : (
+              /* Empty / All Caught Up State */
+              <div className="flex flex-col items-center justify-center text-center p-8 rounded-2xl border border-sub/20 bg-sub/5 backdrop-blur-sm max-w-md mx-auto font-mono space-y-4 animate-fadeIn">
+                <div className="w-12 h-12 rounded-xl bg-main/15 text-main flex items-center justify-center mx-auto">
+                  <Sparkles className="w-6 h-6" />
+                </div>
 
-              <h3 className="text-lg font-bold text-text">All Caught Up!</h3>
-              <p className="text-xs text-sub leading-relaxed">
-                No words are currently due for review in this deck. Your spaced repetition schedule
-                has been updated in IndexedDB.
-              </p>
+                <h3 className="text-lg font-bold text-text">All Caught Up!</h3>
+                <p className="text-xs text-sub leading-relaxed">
+                  No words are currently due for review in this deck. Your spaced repetition schedule
+                  has been updated in IndexedDB.
+                </p>
 
-              <div className="flex flex-col sm:flex-row items-center gap-2 pt-2">
-                <button
-                  onClick={() => initSession(activeCategory, sessionSize)}
-                  className="px-4 py-2 rounded-lg bg-main text-bg text-xs font-bold hover:opacity-90 transition-opacity flex items-center gap-2 shadow-sm"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  <span>Practice Ahead</span>
-                </button>
-                <button
-                  onClick={() => setIsDashboardOpen(true)}
-                  className="px-4 py-2 rounded-lg border border-sub/30 text-sub hover:text-text text-xs transition-colors"
-                >
-                  <span>View Schedule</span>
-                </button>
+                <div className="flex flex-col sm:flex-row items-center gap-2 pt-2">
+                  <button
+                    onClick={() => initSession(activeCategory, sessionSize)}
+                    className="px-4 py-2 rounded-lg bg-main text-bg text-xs font-bold hover:opacity-90 transition-opacity flex items-center gap-2 shadow-sm"
+                  >
+                    <RotateCcw className="w-3.5 h-3.5" />
+                    <span>Practice Ahead</span>
+                  </button>
+                  <button
+                    onClick={() => setIsDashboardOpen(true)}
+                    className="px-4 py-2 rounded-lg border border-sub/30 text-sub hover:text-text text-xs transition-colors"
+                  >
+                    <span>View Schedule</span>
+                  </button>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </AppErrorBoundary>
         </main>
 
         {/* High-density Footer Keybindings (Zen-mode auto-dimming) */}
