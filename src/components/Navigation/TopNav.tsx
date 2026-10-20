@@ -479,25 +479,28 @@ export const TopNav: React.FC<TopNavProps> = ({
             </button>
 
             {isThemeMenuOpen && (
-              <div className="absolute right-0 top-full mt-2 w-44 rounded-xl border border-sub/30 bg-bg shadow-2xl py-1.5 z-40 animate-fadeIn text-xs">
-                {(["cyberpunk", "matrix_crt", "tokyo_night", "midnight", "monochrome", "serika_dark", "nord", "dracula"] as Theme[]).map((thm) => (
-                  <button
-                    key={thm}
-                    onClick={() => {
-                      setTheme(thm);
-                      setIsThemeMenuOpen(false);
-                    }}
-                    className={`w-full text-left px-3 py-2 flex items-center justify-between hover:bg-sub/10 transition-colors capitalize ${
-                      theme === thm ? "text-main font-bold" : "text-text"
-                    }`}
-                  >
-                    <span>{thm.replace("_", " ")}</span>
-                    <span
-                      className="w-3 h-3 rounded-full border border-sub/30"
-                      style={{ backgroundColor: THEME_VARIABLES[thm].main }}
-                    />
-                  </button>
-                ))}
+              <div className="absolute right-0 top-full mt-2 w-48 rounded-xl border border-sub/30 bg-bg shadow-2xl py-1.5 z-40 animate-fadeIn text-xs">
+                {(["cyberpunk", "matrix_crt", "tokyo_night", "midnight", "solarized_dark", "espresso", "monochrome", "serika_dark", "nord", "dracula"] as Theme[]).map((thm) => {
+                  const themeVars = THEME_VARIABLES[thm] || THEME_VARIABLES.midnight;
+                  return (
+                    <button
+                      key={thm}
+                      onClick={() => {
+                        setTheme(thm);
+                        setIsThemeMenuOpen(false);
+                      }}
+                      className={`w-full text-left px-3 py-2 flex items-center justify-between hover:bg-sub/10 transition-colors capitalize ${
+                        theme === thm ? "text-main font-bold" : "text-text"
+                      }`}
+                    >
+                      <span>{thm.replace("_", " ")}</span>
+                      <span
+                        className="w-3 h-3 rounded-full border border-sub/30"
+                        style={{ backgroundColor: themeVars.main }}
+                      />
+                    </button>
+                  );
+                })}
               </div>
             )}
           </div>
