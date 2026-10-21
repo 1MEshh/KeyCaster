@@ -21,14 +21,14 @@ const firaCode = Fira_Code({
 });
 
 export const metadata: Metadata = {
-  title: "KeyCaster | Audio-First SRS Typing Client",
+  title: "KeyCaster 3.5 | Audio-First SRS Typing & Bilingual Dictation",
   description:
-    "Zero-latency audio-first spelling practice client with SuperMemo-2 (SM-2) Spaced Repetition and Monkeytype customization.",
+    "Zero-latency audio-first spelling & bilingual Arabic dictation practice client with SuperMemo-2 (SM-2) Spaced Repetition and CDPR Cyberpunk 2077 HUD.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
-    title: "KeyCaster",
+    title: "KeyCaster 3.5",
   },
   other: {
     "mobile-web-app-capable": "yes",
