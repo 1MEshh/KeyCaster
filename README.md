@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🎙️ KeyCaster 3.4
+# 🎙️ KeyCaster 3.5
 
 ### Acoustic SRS Typing, Bilingual Arabic Dictation, CDPR Cyberpunk Aesthetics & Speedrun Mastery
 
@@ -10,24 +10,24 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.7-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 [![PWA Ready](https://img.shields.io/badge/PWA-Installable-blueviolet)](https://github.com/1MEshh/KeyCaster)
 [![Storage](https://img.shields.io/badge/Storage-IndexedDB_%2F_Dexie.js-orange)](https://dexie.org/)
-[![Tests](https://img.shields.io/badge/Tests-116%20Passing-success)](https://github.com/1MEshh/KeyCaster)
+[![Tests](https://img.shields.io/badge/Tests-115%20Passing-success)](https://github.com/1MEshh/KeyCaster)
 [![Privacy](https://img.shields.io/badge/Privacy-100%25_Local--First-success)](https://github.com/1MEshh/KeyCaster)
 
 <p align="center">
-  <b>KeyCaster 3.4</b> elevates touch typing and spelling into a comprehensive <b>bilingual fluency & speedrun platform</b>.<br/>
+  <b>KeyCaster 3.5</b> elevates touch typing and spelling into a comprehensive <b>bilingual fluency & speedrun platform</b>.<br/>
   Featuring <b>80 Bilingual Sentences with Phonetics & Vocab</b>, <b>CDPR Cyberpunk 2077 Telemetry HUD</b>, <b>Workman & Colemak-DH Keyboards</b>,<br/>
-  <b>Kailh Box Navy Switch Synthesis</b>, <b>Speech Pitch Tuning & Auto-Replay</b>, and <b>Markdown & CSV Scorecard Exports</b>.
+  <b>Kailh Box Navy Switch Synthesis</b>, <b>Interactive Speech Rate & Pitch Tuning</b>, <b>Self-Healing Error Boundary</b>, and <b>Markdown & CSV Scorecard Exports</b>.
 </p>
 
-[KeyCaster 3.4 Highlights](#-keycaster-34-highlights) • [4-in-1 Section Architecture](#-4-in-1-section-architecture) • [Anti-Slop Design Philosophy](#-anti-slop-design-philosophy) • [Global Shortcuts](#-global-shortcuts) • [Getting Started](#-getting-started) • [License](#-license)
+[KeyCaster 3.5 Highlights](#-keycaster-35-highlights) • [4-in-1 Section Architecture](#-4-in-1-section-architecture) • [Anti-Slop Design Philosophy](#-anti-slop-design-philosophy) • [Global Shortcuts](#-global-shortcuts) • [Getting Started](#-getting-started) • [License](#-license)
 
 ---
 
 </div>
 
-## 🌟 KeyCaster 3.4 Highlights
+## 🌟 KeyCaster 3.5 Highlights
 
-KeyCaster 3.4 delivers an uncompromising, professional-grade typing experience:
+KeyCaster 3.5 delivers an uncompromising, professional-grade typing experience:
 
 1. **🌐 Expanded Bilingual Arabic Dictation (80 Curated Sentences)**:
    - 80 bilingual sentence pairs across 4 core domains (`daily`, `tech`, `wisdom`, `business`).
@@ -45,22 +45,23 @@ KeyCaster 3.4 delivers an uncompromising, professional-grade typing experience:
 
 4. **🔊 Acoustic Mechanical Switch Synthesis & Kailh Box Navy**:
    - Web Audio procedural synthesis: **Kailh Box Navy** (thick clickbar pop), **Holy Panda**, **Cream Linear**, **Cherry MX Blue**, and **Gateron Ink Black**.
-   - Speech synthesis pitch adjustment slider (0.5x to 1.8x) and auto-replay on error toggle.
+   - Interactive HUD speech rate badge (`0.8x`–`1.25x`), speech pitch adjustment slider (`0.5x`–`1.8x`), and auto-replay on error toggle.
    - Interactive audio feedback on volume adjustments.
 
 5. **🏎️ Speedrun Gates, Caret Customization & Live HUD**:
    - Minimum WPM speed gate threshold alerts (30, 50, 70, 90 WPM).
    - Real-time Keystrokes-Per-Second (KPS) chip alongside Live WPM and Accuracy.
-   - Customizable caret blink styles (`smooth`, `rapid`, `solid`).
+   - Customizable caret blink styles (`smooth`, `rapid`, `solid`) across all 4 stages including Arcade Speedrun.
    - Streak milestone tier badges (Rookie, Apprentice, Specialist, Grandmaster, Legendary).
 
 6. **🔍 Dynamic Command Matrix Dictionary Lookup & Scorecard Exports**:
    - Instant vocabulary lookups directly inside Command Palette (<kbd>⌘K</kbd>) with quick jump to dictation.
-   - Markdown scorecard generator and CSV spreadsheet export for analytics.
-   - Solarized Dark and Espresso Roast warm themes.
+   - 1-click Markdown scorecard report (`.md`), PNG summary card, and RFC 4180 CSV spreadsheet export across all stages.
+   - Solarized Dark and Espresso Roast warm themes exposed in both TopNav and Settings pickers.
 
-7. **🛡️ 116 Comprehensive Unit & Integration Tests**:
-   - 100% test pass rate across SM-2 calculations, sentence WPM math, bilingual schemas, and layout engines.
+7. **🛡️ Resilient Client Architecture & 115 Automated Tests**:
+   - Strict React 19 hook-order invariants, defensive `localStorage` theme fallbacks, and self-healing `AppErrorBoundary` recovery.
+   - 100% test pass rate across SM-2 calculations, sentence WPM math, bilingual schemas, Markdown/CSV exporters, and layout engines.
 
 ---
 
