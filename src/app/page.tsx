@@ -372,7 +372,7 @@ export default function Home() {
               : "opacity-100"
           }`}
         >
-          <span>KeyCaster 3.3 · local-first SM-2 acoustic typing · </span>
+          <span>KeyCaster 3.5 · local-first SM-2 acoustic typing · </span>
           <span className="opacity-75">
             <kbd className="px-1 bg-sub/10 rounded">Ctrl+1</kbd> Words ·{" "}
             <kbd className="px-1 bg-sub/10 rounded">Ctrl+2</kbd> Sentences ·{" "}
