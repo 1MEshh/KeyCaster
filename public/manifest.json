@@ -1,7 +1,7 @@
 {
-  "name": "KeyCaster",
+  "name": "KeyCaster 3.5",
   "short_name": "KeyCaster",
-  "description": "Audio-first SRS typing practice and bilingual Arabic dictation engine — 100% offline, zero tracking.",
+  "description": "KeyCaster 3.5: Audio-first SRS typing practice, 80-sentence bilingual Arabic dictation, and speedrun engine — 100% offline, zero tracking.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#08080c",
