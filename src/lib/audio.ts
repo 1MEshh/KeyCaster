@@ -26,23 +26,62 @@ export function getAudioContext(): AudioContext | null {
   return audioCtx;
 }
 
+// In-memory synthesized audio buffer cache to eliminate GC pressure during rapid typing bursts
+const audioBufferCache = new Map<string, AudioBuffer>();
+
 /**
- * Pre-generate a 0.05s white noise buffer for switch click realism
+ * Returns or creates a cached AudioBuffer for procedural noise or key sound variants.
+ * Memoizes buffers indexed by sample rate, duration, and variation slot.
  */
-function getNoiseBuffer(ctx: AudioContext): AudioBuffer {
-  if (noiseBuffer && noiseBuffer.sampleRate === ctx.sampleRate) {
-    return noiseBuffer;
+export function getCachedAudioBuffer(
+  ctx: AudioContext,
+  key: string,
+  generator: (ctx: AudioContext) => AudioBuffer
+): AudioBuffer {
+  const cacheKey = `${ctx.sampleRate}::${key}`;
+  const existing = audioBufferCache.get(cacheKey);
+  if (existing) {
+    return existing;
   }
+  const buffer = generator(ctx);
+  audioBufferCache.set(cacheKey, buffer);
+  return buffer;
+}
 
-  const bufferSize = Math.floor(ctx.sampleRate * 0.05);
-  noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
-  const output = noiseBuffer.getChannelData(0);
+/**
+ * Returns the current count of cached procedural audio buffers.
+ */
+export function getAudioBufferCacheSize(): number {
+  return audioBufferCache.size;
+}
 
-  for (let i = 0; i < bufferSize; i++) {
-    output[i] = Math.random() * 2 - 1;
-  }
+/**
+ * Clears the in-memory procedural audio buffer cache.
+ */
+export function clearAudioBufferCache(): void {
+  audioBufferCache.clear();
+  noiseBuffer = null;
+}
 
-  return noiseBuffer;
+/**
+ * Procedural noise buffer cache with multi-variant acoustic seeds
+ */
+const NOISE_BUFFER_VARIANTS = 4;
+
+export function getNoiseBuffer(ctx: AudioContext, variant = 0): AudioBuffer {
+  const variantIndex = Math.abs(Math.floor(variant)) % NOISE_BUFFER_VARIANTS;
+  const cacheKey = `noise_0.05s_v${variantIndex}`;
+
+  return getCachedAudioBuffer(ctx, cacheKey, (context) => {
+    const bufferSize = Math.floor(context.sampleRate * 0.05);
+    const buf = context.createBuffer(1, bufferSize, context.sampleRate);
+    const output = buf.getChannelData(0);
+
+    for (let i = 0; i < bufferSize; i++) {
+      output[i] = Math.random() * 2 - 1;
+    }
+    return buf;
+  });
 }
 
 export type SwitchSoundProfile =
@@ -81,6 +120,8 @@ export function playMechanicalClick(
       ? 1 + (((keyChar.charCodeAt(0) % 9) - 4) * 0.009)
       : 1 + ((Math.random() - 0.5) * 0.05);
 
+    const noiseVariant = keyChar ? keyChar.charCodeAt(0) : 0;
+
     if (switchType === "cherry_blue") {
       // Crisp clicky switch: high-pitched leaf snap + sharp transient clack
       masterGain.gain.setValueAtTime(volume * 0.45, now);
@@ -116,7 +157,7 @@ export function playMechanicalClick(
 
       // Noise clack
       const noise = ctx.createBufferSource();
-      noise.buffer = getNoiseBuffer(ctx);
+      noise.buffer = getNoiseBuffer(ctx, noiseVariant);
       const filter = ctx.createBiquadFilter();
       filter.type = "highpass";
       filter.frequency.setValueAtTime(3200 * jitter, now);
@@ -149,7 +190,7 @@ export function playMechanicalClick(
 
       // Dampened housing noise
       const noise = ctx.createBufferSource();
-      noise.buffer = getNoiseBuffer(ctx);
+      noise.buffer = getNoiseBuffer(ctx, noiseVariant);
       const filter = ctx.createBiquadFilter();
       filter.type = "lowpass";
       filter.frequency.setValueAtTime(700 * jitter, now);
@@ -183,7 +224,7 @@ export function playMechanicalClick(
 
       // Rubber dome return sound
       const noise = ctx.createBufferSource();
-      noise.buffer = getNoiseBuffer(ctx);
+      noise.buffer = getNoiseBuffer(ctx, noiseVariant);
       const filter = ctx.createBiquadFilter();
       filter.type = "bandpass";
       filter.frequency.setValueAtTime(1400 * jitter, now);
@@ -229,7 +270,7 @@ export function playMechanicalClick(
 
       // Mechanical lever noise
       const noise = ctx.createBufferSource();
-      noise.buffer = getNoiseBuffer(ctx);
+      noise.buffer = getNoiseBuffer(ctx, noiseVariant);
       const filter = ctx.createBiquadFilter();
       filter.type = "bandpass";
       filter.frequency.setValueAtTime(2200 * jitter, now);
@@ -277,7 +318,7 @@ export function playMechanicalClick(
       snap.stop(now + 0.03);
 
       const noise = ctx.createBufferSource();
-      noise.buffer = getNoiseBuffer(ctx);
+      noise.buffer = getNoiseBuffer(ctx, noiseVariant);
       const filter = ctx.createBiquadFilter();
       filter.type = "bandpass";
       filter.frequency.setValueAtTime(2600 * jitter, now);
@@ -310,7 +351,7 @@ export function playMechanicalClick(
       osc.stop(now + 0.055);
 
       const noise = ctx.createBufferSource();
-      noise.buffer = getNoiseBuffer(ctx);
+      noise.buffer = getNoiseBuffer(ctx, noiseVariant);
       const filter = ctx.createBiquadFilter();
       filter.type = "bandpass";
       filter.frequency.setValueAtTime(1450 * jitter, now);
@@ -360,7 +401,7 @@ export function playMechanicalClick(
 
       // Heavy bottom-out transient
       const noise = ctx.createBufferSource();
-      noise.buffer = getNoiseBuffer(ctx);
+      noise.buffer = getNoiseBuffer(ctx, noiseVariant);
       const filter = ctx.createBiquadFilter();
       filter.type = "bandpass";
       filter.frequency.setValueAtTime(2400 * jitter, now);
@@ -393,7 +434,7 @@ export function playMechanicalClick(
       osc.stop(now + 0.05);
 
       const noise = ctx.createBufferSource();
-      noise.buffer = getNoiseBuffer(ctx);
+      noise.buffer = getNoiseBuffer(ctx, noiseVariant);
       const filter = ctx.createBiquadFilter();
       filter.type = "bandpass";
       filter.frequency.setValueAtTime(2800 * jitter, now);

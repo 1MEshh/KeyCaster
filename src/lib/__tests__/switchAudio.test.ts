@@ -5,6 +5,10 @@ import {
   playStreakChord,
   playSuccessChime,
   TTSController,
+  getNoiseBuffer,
+  getCachedAudioBuffer,
+  getAudioBufferCacheSize,
+  clearAudioBufferCache,
   type SwitchSoundProfile,
 } from "../audio";
 
@@ -58,3 +62,34 @@ test("TTSController: speakArabic gracefully handles headless/SSR environment wit
     TTSController.speakArabic("", {});
   });
 });
+
+test("Procedural Audio: caches synthesized audio buffers to minimize GC allocations", () => {
+  clearAudioBufferCache();
+  assert.equal(getAudioBufferCacheSize(), 0);
+
+  const mockCtx = {
+    sampleRate: 44100,
+    createBuffer: (_channels: number, length: number, sampleRate: number) => {
+      const data = new Float32Array(length);
+      return {
+        numberOfChannels: _channels,
+        length,
+        sampleRate,
+        getChannelData: () => data,
+      } as unknown as AudioBuffer;
+    },
+  } as unknown as AudioContext;
+
+  const buf1 = getNoiseBuffer(mockCtx, 0);
+  assert.ok(buf1);
+  assert.equal(getAudioBufferCacheSize(), 1);
+
+  // Subsequent call for same variant should reuse cached buffer
+  const buf2 = getNoiseBuffer(mockCtx, 0);
+  assert.strictEqual(buf1, buf2);
+  assert.equal(getAudioBufferCacheSize(), 1);
+
+  clearAudioBufferCache();
+  assert.equal(getAudioBufferCacheSize(), 0);
+});
+
