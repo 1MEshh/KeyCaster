@@ -93,3 +93,73 @@ test("Procedural Audio: caches synthesized audio buffers to minimize GC allocati
   assert.equal(getAudioBufferCacheSize(), 0);
 });
 
+test("Procedural Audio: multi-variant buffer caching partitions variants and sample rates cleanly", () => {
+  clearAudioBufferCache();
+
+  const createMockContext = (sampleRate: number) =>
+    ({
+      sampleRate,
+      createBuffer: (_channels: number, length: number, sr: number) => {
+        const data = new Float32Array(length);
+        return {
+          numberOfChannels: _channels,
+          length,
+          sampleRate: sr,
+          getChannelData: () => data,
+        } as unknown as AudioBuffer;
+      },
+    } as unknown as AudioContext);
+
+  const ctx44k = createMockContext(44100);
+  const ctx48k = createMockContext(48000);
+
+  // Generate 4 distinct variants at 44.1kHz
+  const v0 = getNoiseBuffer(ctx44k, 0);
+  const v1 = getNoiseBuffer(ctx44k, 1);
+  const v2 = getNoiseBuffer(ctx44k, 2);
+  const v3 = getNoiseBuffer(ctx44k, 3);
+
+  assert.notStrictEqual(v0, v1);
+  assert.notStrictEqual(v1, v2);
+  assert.equal(getAudioBufferCacheSize(), 4);
+
+  // Variant index wraps around modulo 4
+  const v4 = getNoiseBuffer(ctx44k, 4);
+  assert.strictEqual(v0, v4);
+  assert.equal(getAudioBufferCacheSize(), 4);
+
+  // Different sample rate uses separate cache key
+  const v0_48k = getNoiseBuffer(ctx48k, 0);
+  assert.notStrictEqual(v0, v0_48k);
+  assert.equal(getAudioBufferCacheSize(), 5);
+
+  clearAudioBufferCache();
+  assert.equal(getAudioBufferCacheSize(), 0);
+});
+
+test("Switch Audio: edge volume states handle zero, negative, and extreme values safely", () => {
+  const switchProfiles: SwitchSoundProfile[] = [
+    "cherry_brown",
+    "cherry_blue",
+    "gateron_ink_black",
+    "topre_capacitive",
+    "typewriter",
+    "holy_panda",
+    "cream_linear",
+    "box_navy",
+  ];
+
+  for (const profile of switchProfiles) {
+    // Zero volume (mute state)
+    assert.doesNotThrow(() => playMechanicalClick(0, profile));
+    // Negative volumes
+    assert.doesNotThrow(() => playMechanicalClick(-0.01, profile));
+    assert.doesNotThrow(() => playMechanicalClick(-100, profile));
+    // Extreme high volumes
+    assert.doesNotThrow(() => playMechanicalClick(2.5, profile));
+    // Tiny volume
+    assert.doesNotThrow(() => playMechanicalClick(0.0001, profile));
+  }
+});
+
+
