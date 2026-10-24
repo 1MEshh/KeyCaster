@@ -9,7 +9,16 @@ import {
 import { sanitizeCustomDeck } from "@/lib/sanitize";
 
 test("Starter Decks: provides valid starter decks with non-empty words conforming to regex", () => {
-  assert.ok(STARTER_DECKS.length >= 4);
+  assert.ok(STARTER_DECKS.length >= 5);
+
+  const netSecDeck = STARTER_DECKS.find((d) => d.id === "net_security");
+  assert.ok(netSecDeck, "Networking & Cybersecurity deck must be registered");
+  assert.equal(netSecDeck?.badge, "Security");
+  assert.ok(netSecDeck?.words.includes("handshake"));
+  assert.ok(netSecDeck?.words.includes("firewall"));
+  assert.ok(netSecDeck?.words.includes("payload"));
+  assert.ok(netSecDeck?.words.includes("wireshark"));
+  assert.ok(netSecDeck?.words.includes("telemetry"));
 
   for (const deck of STARTER_DECKS) {
     assert.ok(deck.name.length > 0);
