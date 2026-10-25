@@ -176,3 +176,81 @@ export function downloadSessionScorecardMarkdown(params: Parameters<typeof gener
   document.body.removeChild(anchor);
   URL.revokeObjectURL(url);
 }
+
+export interface SessionTelemetryJson {
+  schemaVersion: "1.0.0";
+  generator: "KeyCaster";
+  exportedAt: string;
+  session: {
+    id?: number;
+    timestamp: string;
+    category: string;
+    totalWords: number;
+    wpm: number;
+    accuracy: number;
+    errors: number;
+    durationSeconds: number;
+    consistencyScore?: number;
+    fingerErgonomics?: FingerZoneStats[];
+  };
+}
+
+/**
+ * Serializes a session record into standardized telemetry JSON with schema versioning.
+ */
+export function exportSessionJson(
+  record: SessionHistoryRecord,
+  options?: {
+    consistencyScore?: number;
+    errorMap?: Record<string, number>;
+  }
+): string {
+  const telemetry: SessionTelemetryJson = {
+    schemaVersion: "1.0.0",
+    generator: "KeyCaster",
+    exportedAt: new Date().toISOString(),
+    session: {
+      id: record.id,
+      timestamp: record.timestamp,
+      category: record.category,
+      totalWords: record.totalWords,
+      wpm: record.wpm,
+      accuracy: record.accuracy,
+      errors: record.errors,
+      durationSeconds: record.duration,
+      ...(typeof options?.consistencyScore === "number" && {
+        consistencyScore: options.consistencyScore,
+      }),
+      ...(options?.errorMap && {
+        fingerErgonomics: calculateFingerErgonomics(options.errorMap),
+      }),
+    },
+  };
+
+  return JSON.stringify(telemetry, null, 2);
+}
+
+/**
+ * Triggers a browser download of standardized session telemetry JSON.
+ */
+export function downloadSessionJson(
+  record: SessionHistoryRecord,
+  options?: {
+    consistencyScore?: number;
+    errorMap?: Record<string, number>;
+  }
+): void {
+  if (typeof window === "undefined") return;
+  const jsonContent = exportSessionJson(record, options);
+  const blob = new Blob([jsonContent], { type: "application/json;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  const today = new Date().toISOString().split("T")[0];
+  anchor.href = url;
+  anchor.download = `keycaster_session_telemetry_${today}.json`;
+  document.body.appendChild(anchor);
+  anchor.click();
+  document.body.removeChild(anchor);
+  URL.revokeObjectURL(url);
+}
+

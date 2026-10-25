@@ -4,6 +4,7 @@ import {
   calculateFingerErgonomics,
   convertSessionsToCsv,
   generateSessionScorecardMarkdown,
+  exportSessionJson,
 } from "../csvExporter";
 
 test("csvExporter: calculates finger ergonomics percentages accurately across zones", () => {
@@ -74,3 +75,34 @@ test("csvExporter: generates a complete Markdown scorecard with all performance 
   assert.ok(md.includes("| **XP Gained** | +420 XP |"));
   assert.ok(md.includes("KeyCaster v3.5"));
 });
+
+test("csvExporter: exportSessionJson formats telemetry payload with schema versioning", () => {
+  const record = {
+    id: 42,
+    timestamp: "2026-10-25T14:05:30.000Z",
+    category: "cybersecurity",
+    totalWords: 30,
+    wpm: 88,
+    accuracy: 99.1,
+    errors: 1,
+    duration: 22,
+  };
+
+  const jsonStr = exportSessionJson(record, {
+    consistencyScore: 94,
+    errorMap: { q: 1 },
+  });
+
+  const parsed = JSON.parse(jsonStr);
+  assert.equal(parsed.schemaVersion, "1.0.0");
+  assert.equal(parsed.generator, "KeyCaster");
+  assert.ok(parsed.exportedAt);
+  assert.equal(parsed.session.id, 42);
+  assert.equal(parsed.session.category, "cybersecurity");
+  assert.equal(parsed.session.wpm, 88);
+  assert.equal(parsed.session.accuracy, 99.1);
+  assert.equal(parsed.session.consistencyScore, 94);
+  assert.ok(Array.isArray(parsed.session.fingerErgonomics));
+  assert.equal(parsed.session.fingerErgonomics.length, 8);
+});
+
