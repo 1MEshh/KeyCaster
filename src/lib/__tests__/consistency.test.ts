@@ -26,7 +26,23 @@ test("calculateConsistency: handles boundary cases gracefully", () => {
   assert.equal(calculateConsistency([]), 100);
   assert.equal(calculateConsistency([150]), 100);
   assert.equal(calculateConsistency([-10, 0]), 100);
+  assert.equal(calculateConsistency([NaN, Infinity, -Infinity]), 100);
   assert.equal(calculateConsistency([100, 100]), 100);
+  assert.equal(calculateConsistency([100, NaN, 100]), 100);
+});
+
+test("calculateRawAndNetWpm: handles non-finite and negative inputs safely", () => {
+  const nanElapsed = calculateRawAndNetWpm(50, 50, NaN);
+  assert.equal(nanElapsed.rawWpm, 0);
+  assert.equal(nanElapsed.netWpm, 0);
+
+  const negElapsed = calculateRawAndNetWpm(50, 50, -500);
+  assert.equal(negElapsed.rawWpm, 0);
+  assert.equal(negElapsed.netWpm, 0);
+
+  const nanKeystrokes = calculateRawAndNetWpm(NaN, NaN, 10000);
+  assert.equal(nanKeystrokes.rawWpm, 0);
+  assert.equal(nanKeystrokes.netWpm, 0);
 });
 
 test("calculateRawAndNetWpm: accurately computes raw vs net WPM", () => {
