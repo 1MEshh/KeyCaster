@@ -174,7 +174,7 @@ export function exportDeckToTxt(words: string[]): string {
   return words.join("\n");
 }
 
-export function parseImportedDeck(rawContent: string): { name?: string; words: string[] } {
+export function parseImportedDeck(rawContent: string): { name?: string; description?: string; words: string[] } {
   const trimmed = rawContent.trim();
   if (!trimmed) {
     throw new Error("File is empty.");
@@ -192,6 +192,7 @@ export function parseImportedDeck(rawContent: string): { name?: string; words: s
 
         return {
           name: typeof parsed.name === "string" && parsed.name.trim() ? parsed.name.trim() : undefined,
+          description: typeof parsed.description === "string" && parsed.description.trim() ? parsed.description.trim() : undefined,
           words: Array.from(new Set(words)),
         };
       }

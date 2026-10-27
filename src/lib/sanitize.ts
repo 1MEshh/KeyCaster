@@ -8,6 +8,7 @@ import type {
 
 export const MAX_BACKUP_FILE_BYTES = 5 * 1024 * 1024; // 5 MB hard limit
 export const MAX_DECK_NAME_LENGTH = 60;
+export const MAX_DECK_DESCRIPTION_LENGTH = 500;
 export const MAX_WORDS_PER_DECK = 1000;
 export const MAX_WORD_LENGTH = 45;
 
@@ -40,29 +41,64 @@ export function hasPrototypePollution(obj: unknown, depth = 0): boolean {
 }
 
 /**
- * Strips HTML tags, control characters, and leading/trailing whitespace.
+ * Strips HTML tags, malformed angle brackets, entity edge cases, control characters,
+ * and leading/trailing whitespace.
  */
 export function sanitizeString(val: unknown, maxLen = 255): string {
   if (typeof val !== "string") return "";
-  // Strip control chars (0x00-0x1F, 0x7F) and basic HTML markup
-  return val
-    .replace(/<[^>]*>/g, "")
+
+  let cleaned = val;
+
+  // Normalize common HTML entity encodings for angle brackets to prevent evasion
+  cleaned = cleaned
+    .replace(/&lt;/gi, "<")
+    .replace(/&gt;/gi, ">")
+    .replace(/&#0*60;/gi, "<")
+    .replace(/&#0*62;/gi, ">")
+    .replace(/&#x0*3c;/gi, "<")
+    .replace(/&#x0*3e;/gi, ">");
+
+  // Recursively strip innermost complete HTML tags until stable
+  let prev = "";
+  while (cleaned !== prev) {
+    prev = cleaned;
+    cleaned = cleaned.replace(/<[^<>]*>/g, "");
+  }
+
+  // Strip unclosed / malformed HTML tags at end of string (e.g. "<img src=x onerror=alert(1)")
+  cleaned = cleaned.replace(/<[a-zA-Z!/][^<>]*$/g, "");
+
+  // Strip any remaining lone angle brackets
+  cleaned = cleaned.replace(/[<>]/g, "");
+
+  // Strip control chars (0x00-0x1F, 0x7F) and trim
+  return cleaned
     .replace(/[\x00-\x1F\x7F]/g, "")
     .trim()
     .slice(0, maxLen);
 }
 
 /**
- * Validates and sanitizes a custom deck name and word list.
+ * Validates and sanitizes a custom deck name, word list, and optional description.
  */
-export function sanitizeCustomDeck(name: string, rawWords: string | string[]): {
+export function sanitizeCustomDeck(
+  name: string,
+  rawWords: string | string[],
+  rawDescription?: string
+): {
   name: string;
   words: string[];
+  description?: string;
 } {
   const cleanName = sanitizeString(name, MAX_DECK_NAME_LENGTH);
   if (!cleanName) {
     throw new Error("Deck name cannot be empty or contain only invalid characters.");
   }
+
+  const cleanDescription =
+    rawDescription !== undefined
+      ? sanitizeString(rawDescription, MAX_DECK_DESCRIPTION_LENGTH)
+      : undefined;
 
   const wordList = Array.isArray(rawWords)
     ? rawWords
@@ -93,6 +129,7 @@ export function sanitizeCustomDeck(name: string, rawWords: string | string[]): {
   return {
     name: cleanName,
     words: sanitizedWords,
+    ...(cleanDescription !== undefined ? { description: cleanDescription } : {}),
   };
 }
 

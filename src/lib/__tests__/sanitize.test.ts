@@ -160,3 +160,37 @@ test("validateBackupPayload: enforces schema integrity and prototype security ac
   assert.equal(validated.translationMastery.length, 1);
   assert.equal(validated.translationMastery[0].easeFactor, 1.3);
 });
+
+test("sanitizeString: neutralizes malformed brackets, unclosed tags, and entity-encoded XSS", () => {
+  // Unclosed tag at end of string
+  const unclosed = "Networking vocabulary <img src=x onerror=alert(1)";
+  assert.equal(sanitizeString(unclosed), "Networking vocabulary");
+
+  // Mangled/nested tags designed to evade simple non-recursive regex
+  const nested = "<<script>script>alert(1)</script>Safe Text";
+  assert.equal(sanitizeString(nested), "alert(1)Safe Text");
+
+  // Entity-encoded HTML tags
+  const encoded = "&lt;script&gt;alert('xss')&lt;/script&gt;Clean Payload";
+  assert.equal(sanitizeString(encoded), "alert('xss')Clean Payload");
+
+  const hexEncoded = "&#x3c;iframe src=javascript:alert(1)&#x3e;Safe Frame";
+  assert.equal(sanitizeString(hexEncoded), "Safe Frame");
+
+  // Lone angle brackets
+  const loneBrackets = "WPM > 100 && Errors < 2";
+  assert.equal(sanitizeString(loneBrackets), "WPM  100 && Errors  2");
+});
+
+test("sanitizeCustomDeck: sanitizes deck description and strips malicious HTML", () => {
+  const deck = sanitizeCustomDeck(
+    "Cyber Defense Deck",
+    ["firewall", "honeypot"],
+    "<script>alert('pwned')</script>Essential cybersecurity terms &lt;b&gt;v1&lt;/b&gt;"
+  );
+
+  assert.equal(deck.name, "Cyber Defense Deck");
+  assert.deepEqual(deck.words, ["firewall", "honeypot"]);
+  assert.equal(deck.description, "alert('pwned')Essential cybersecurity terms v1");
+});
+
