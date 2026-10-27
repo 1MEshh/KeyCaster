@@ -44,8 +44,8 @@ test("Privacy Guard: No local filesystem home directories (/home/ or /Users/) ex
 
       // Verify no absolute paths to user home folders
       assert.ok(
-        !content.includes("/home/user"),
-        `Private user path found in tracked file: ${relPath}`
+        !content.match(/\/home\/[a-zA-Z0-9._-]+/),
+        `Linux user home path found in tracked file: ${relPath}`
       );
       assert.ok(
         !content.includes("/Users/"),
