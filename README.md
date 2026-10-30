@@ -19,7 +19,7 @@
   <b>Kailh Box Navy Switch Synthesis</b>, <b>Interactive Speech Rate & Pitch Tuning</b>, <b>Self-Healing Error Boundary</b>, and <b>Markdown & CSV Scorecard Exports</b>.
 </p>
 
-[KeyCaster 3.5 Highlights](#-keycaster-35-highlights) • [4-in-1 Section Architecture](#-4-in-1-section-architecture) • [Anti-Slop Design Philosophy](#-anti-slop-design-philosophy) • [Global Shortcuts](#-global-shortcuts) • [Getting Started](#-getting-started) • [License](#-license)
+[KeyCaster 3.5 Highlights](#-keycaster-35-highlights) • [4-in-1 Section Architecture](#-4-in-1-section-architecture) • [Anti-Slop Design Philosophy](#-anti-slop-design-philosophy) • [Global Shortcuts](#-global-shortcuts) • [Telemetry & Ergonomics](#-telemetry--ergonomics-formulas) • [Getting Started](#-getting-started) • [License](#-license)
 
 ---
 
@@ -106,6 +106,52 @@ KeyCaster strictly adheres to production-grade, human-crafted frontend aesthetic
 | <kbd>Ctrl</kbd> + <kbd>,</kbd> | Open Settings Drawer |
 | <kbd>Ctrl</kbd> + <kbd>D</kbd> | Open Progress & Analytics Dashboard |
 | <kbd>Esc</kbd> | Exit Zen Mode / Close Modals |
+
+---
+
+## 📊 Telemetry & Ergonomics Formulas
+
+KeyCaster collects high-resolution temporal metrics to compute typing cadence, motor accuracy, and finger fatigue.
+
+### 1. Metronomic Rhythm Consistency
+
+Typing rhythm consistency measures how evenly keystrokes are spaced across time, eliminating burst-pause stuttering:
+
+$$\text{Consistency (\%)} = \max\left(0, \min\left(100, \text{round}\left(100 - \frac{\sigma}{\mu} \times 100\right)\right)\right)$$
+
+- **$\mu$ (Mean Keystroke Delta)**: Average duration (ms) between consecutive keystrokes:
+  $$\mu = \frac{1}{N} \sum_{i=1}^{N} \Delta t_i$$
+- **$\sigma$ (Standard Deviation)**: Keystroke jitter and dispersion around the mean cadence:
+  $$\sigma = \sqrt{\frac{1}{N} \sum_{i=1}^{N} (\Delta t_i - \mu)^2}$$
+- **Interpretation**: A score $\ge 90\%$ indicates fluid, sustained flow state; scores $< 65\%$ reveal hesitations or cognitive translation delays.
+
+### 2. Velocity Metrics: Raw WPM vs. Net WPM
+
+$$\text{Raw WPM} = \text{round}\left(\frac{\text{Total Keystrokes} / 5}{\text{Elapsed Minutes}}\right)$$
+
+$$\text{Net WPM} = \max\left(0, \text{round}\left(\frac{\text{Correct Characters} / 5}{\text{Elapsed Minutes}}\right)\right)$$
+
+Standard typist word normalization uses 5 characters per word (including spaces and punctuation).
+
+### 3. Touch-Typing 8-Zone Ergonomics Distribution
+
+KeyCaster assigns errors across 8 distinct physiological finger zones to identify weak fingers and repetitive strain:
+
+| Finger Zone | Hand | Allocated Keys | Focus & Muscle Group |
+|---|---|---|---|
+| **Left Pinky** | Left | `Q`, `A`, `Z` | Outer extension, high fatigue threshold |
+| **Left Ring** | Left | `W`, `S`, `X` | Flexor tendon isolation |
+| **Left Middle** | Left | `E`, `D`, `C` | Central homing precision |
+| **Left Index** | Left | `R`, `T`, `F`, `G`, `V`, `B` | Lateral split range & high velocity reach |
+| **Right Index** | Right | `Y`, `U`, `H`, `J`, `N`, `M` | Lateral split range & homing index (`J` bump) |
+| **Right Middle** | Right | `I`, `K` | Central vowel column |
+| **Right Ring** | Right | `O`, `L` | Lateral control & vowel coordination |
+| **Right Pinky** | Right | `P` | Boundary reach & punctuation anchor |
+
+### 4. Telemetry Export Formats
+
+- **RFC 4180 CSV**: Standardized columns `Timestamp, Date, Time, Category, TotalWords, WPM, Accuracy, Errors, DurationSeconds`.
+- **JSON Telemetry (`schemaVersion: "1.0.0"`)**: Complete JSON snapshot including raw session metrics, rhythm consistency score, and 8-zone finger ergonomics mistake breakdown.
 
 ---
 
