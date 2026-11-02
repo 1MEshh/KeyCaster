@@ -1220,7 +1220,12 @@
       "sharding",
       "explain",
       "denormalize",
-      "deadlock"
+      "deadlock",
+      "flexbox",
+      "subgrid",
+      "keyframes",
+      "container",
+      "clamping"
     ]
   }
 }
