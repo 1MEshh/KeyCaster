@@ -1195,7 +1195,12 @@
       "broadcast",
       "unicast",
       "multicast",
-      "datagram"
+      "datagram",
+      "consensus",
+      "replication",
+      "partition",
+      "quorum",
+      "idempotent"
     ]
   }
 }
