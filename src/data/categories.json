@@ -1210,7 +1210,12 @@
       "io_uring",
       "futex",
       "mmap",
-      "splice"
+      "splice",
+      "strafing",
+      "flickshot",
+      "crosshair",
+      "headglitch",
+      "peeking"
     ]
   }
 }
