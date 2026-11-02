@@ -1205,7 +1205,12 @@
       "sha256",
       "argon2",
       "keccak",
-      "ed25519"
+      "ed25519",
+      "epoll",
+      "io_uring",
+      "futex",
+      "mmap",
+      "splice"
     ]
   }
 }
