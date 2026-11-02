@@ -1190,7 +1190,12 @@
       "kubernetes",
       "serverless",
       "microservice",
-      "terraform"
+      "terraform",
+      "ethernet",
+      "broadcast",
+      "unicast",
+      "multicast",
+      "datagram"
     ]
   }
 }
