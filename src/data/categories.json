@@ -1215,7 +1215,12 @@
       "flickshot",
       "crosshair",
       "headglitch",
-      "peeking"
+      "peeking",
+      "indexing",
+      "sharding",
+      "explain",
+      "denormalize",
+      "deadlock"
     ]
   }
 }
