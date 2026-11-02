@@ -1200,7 +1200,12 @@
       "replication",
       "partition",
       "quorum",
-      "idempotent"
+      "idempotent",
+      "hmac",
+      "sha256",
+      "argon2",
+      "keccak",
+      "ed25519"
     ]
   }
 }
