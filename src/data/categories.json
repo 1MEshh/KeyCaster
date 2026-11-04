@@ -1268,7 +1268,12 @@
       "decompilation",
       "breakpoint",
       "watchpoint",
-      "unwinding"
+      "unwinding",
+      "mutex",
+      "semaphore",
+      "barrier",
+      "channel",
+      "spinlock"
     ]
   }
 }
