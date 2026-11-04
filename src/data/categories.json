@@ -1238,7 +1238,12 @@
       "ownership",
       "borrowing",
       "dereference",
-      "cell"
+      "cell",
+      "triage",
+      "containment",
+      "eradication",
+      "rootcause",
+      "indicators"
     ]
   }
 }
