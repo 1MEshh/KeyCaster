@@ -1258,7 +1258,12 @@
       "extract",
       "exclude",
       "nonnullable",
-      "returntype"
+      "returntype",
+      "rotation",
+      "flanking",
+      "pinchpoint",
+      "retake",
+      "defusal"
     ]
   }
 }
