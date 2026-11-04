@@ -1243,7 +1243,12 @@
       "containment",
       "eradication",
       "rootcause",
-      "indicators"
+      "indicators",
+      "prometheus",
+      "grafana",
+      "tracing",
+      "opentelemetry",
+      "cardinality"
     ]
   }
 }
