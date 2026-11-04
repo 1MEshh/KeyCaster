@@ -1263,7 +1263,12 @@
       "flanking",
       "pinchpoint",
       "retake",
-      "defusal"
+      "defusal",
+      "disassembly",
+      "decompilation",
+      "breakpoint",
+      "watchpoint",
+      "unwinding"
     ]
   }
 }
