@@ -1233,7 +1233,12 @@
       "namespacing",
       "cgroups",
       "containerd",
-      "podman"
+      "podman",
+      "lifetimes",
+      "ownership",
+      "borrowing",
+      "dereference",
+      "cell"
     ]
   }
 }
