@@ -1228,7 +1228,12 @@
       "clamping",
       "idempotency",
       "webhook",
-      "pagination"
+      "pagination",
+      "overlay",
+      "namespacing",
+      "cgroups",
+      "containerd",
+      "podman"
     ]
   }
 }
