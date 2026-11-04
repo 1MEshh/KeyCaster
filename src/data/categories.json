@@ -1253,7 +1253,12 @@
       "firstpaint",
       "paintmetric",
       "cumulative",
-      "reflow"
+      "reflow",
+      "record",
+      "extract",
+      "exclude",
+      "nonnullable",
+      "returntype"
     ]
   }
 }
