@@ -1278,7 +1278,12 @@
       "harmonics",
       "oscillator",
       "decibels",
-      "equalization"
+      "equalization",
+      "supination",
+      "keytravel",
+      "actuation",
+      "bottomout",
+      "wristrest"
     ]
   }
 }
