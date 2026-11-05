@@ -1273,7 +1273,12 @@
       "semaphore",
       "barrier",
       "channel",
-      "spinlock"
+      "spinlock",
+      "biquad",
+      "harmonics",
+      "oscillator",
+      "decibels",
+      "equalization"
     ]
   }
 }
