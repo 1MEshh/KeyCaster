@@ -1333,7 +1333,12 @@
       "anycast",
       "authoritative",
       "nameserver",
-      "resolver"
+      "resolver",
+      "poll",
+      "select",
+      "readiness",
+      "reactor",
+      "proactor"
     ]
   }
 }
