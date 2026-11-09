@@ -1288,7 +1288,12 @@
       "timeslice",
       "pipe",
       "sharedmemory",
-      "futexes"
+      "futexes",
+      "superblock",
+      "inode",
+      "directory",
+      "journaling",
+      "symlink"
     ]
   }
 }
