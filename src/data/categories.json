@@ -1293,7 +1293,12 @@
       "inode",
       "directory",
       "journaling",
-      "symlink"
+      "symlink",
+      "aslr",
+      "pie",
+      "nx",
+      "relro",
+      "canaries"
     ]
   }
 }
