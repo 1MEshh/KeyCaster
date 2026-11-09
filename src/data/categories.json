@@ -1343,7 +1343,12 @@
       "qemu",
       "passthrough",
       "virtio",
-      "hypervisor"
+      "hypervisor",
+      "hrtf",
+      "binaural",
+      "ambisonics",
+      "reverberation",
+      "attenuation"
     ]
   }
 }
