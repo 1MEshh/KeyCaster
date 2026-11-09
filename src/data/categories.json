@@ -1363,7 +1363,12 @@
       "flamegraph",
       "allocations",
       "callgraph",
-      "overhead"
+      "overhead",
+      "oauth",
+      "oidc",
+      "saml",
+      "claims",
+      "refresh_token"
     ]
   }
 }
