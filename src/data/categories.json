@@ -1358,7 +1358,12 @@
       "compositor",
       "rasterize",
       "stylesheet",
-      "reflows"
+      "reflows",
+      "sampling",
+      "flamegraph",
+      "allocations",
+      "callgraph",
+      "overhead"
     ]
   }
 }
