@@ -1303,7 +1303,12 @@
       "hsts",
       "cors",
       "samesite",
-      "subresource"
+      "subresource",
+      "reuseaddr",
+      "tcpnodelay",
+      "keepalive",
+      "broadcastopt",
+      "linger"
     ]
   }
 }
