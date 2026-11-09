@@ -1298,7 +1298,12 @@
       "pie",
       "nx",
       "relro",
-      "canaries"
+      "canaries",
+      "csp",
+      "hsts",
+      "cors",
+      "samesite",
+      "subresource"
     ]
   }
 }
