@@ -1308,7 +1308,12 @@
       "tcpnodelay",
       "keepalive",
       "broadcastopt",
-      "linger"
+      "linger",
+      "inlining",
+      "unrolling",
+      "vectorization",
+      "lto",
+      "deadcode"
     ]
   }
 }
