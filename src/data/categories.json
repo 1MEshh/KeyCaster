@@ -1323,7 +1323,12 @@
       "treeobj",
       "blobobj",
       "reflog",
-      "packfile"
+      "packfile",
+      "artifact",
+      "workflow",
+      "matrix",
+      "caching",
+      "runner"
     ]
   }
 }
