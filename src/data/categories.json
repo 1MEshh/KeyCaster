@@ -1328,7 +1328,12 @@
       "workflow",
       "matrix",
       "caching",
-      "runner"
+      "runner",
+      "cname",
+      "anycast",
+      "authoritative",
+      "nameserver",
+      "resolver"
     ]
   }
 }
