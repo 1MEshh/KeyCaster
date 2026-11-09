@@ -1368,7 +1368,12 @@
       "oidc",
       "saml",
       "claims",
-      "refresh_token"
+      "refresh_token",
+      "alpn",
+      "sni",
+      "ciphersuite",
+      "certificate",
+      "premaster"
     ]
   }
 }
