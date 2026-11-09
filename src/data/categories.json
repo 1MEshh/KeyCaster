@@ -1283,7 +1283,12 @@
       "keytravel",
       "actuation",
       "bottomout",
-      "wristrest"
+      "wristrest",
+      "contextswitch",
+      "timeslice",
+      "pipe",
+      "sharedmemory",
+      "futexes"
     ]
   }
 }
