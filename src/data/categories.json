@@ -1338,7 +1338,12 @@
       "select",
       "readiness",
       "reactor",
-      "proactor"
+      "proactor",
+      "kvm",
+      "qemu",
+      "passthrough",
+      "virtio",
+      "hypervisor"
     ]
   }
 }
