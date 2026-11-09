@@ -1353,7 +1353,12 @@
       "clicky",
       "linear",
       "optical",
-      "hall_effect"
+      "hall_effect",
+      "domtree",
+      "compositor",
+      "rasterize",
+      "stylesheet",
+      "reflows"
     ]
   }
 }
