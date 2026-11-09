@@ -1318,7 +1318,12 @@
       "windowing",
       "watermark",
       "deduplication",
-      "sink"
+      "sink",
+      "commitobj",
+      "treeobj",
+      "blobobj",
+      "reflog",
+      "packfile"
     ]
   }
 }
