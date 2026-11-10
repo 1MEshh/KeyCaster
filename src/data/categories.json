@@ -1383,7 +1383,12 @@
       "badgateway",
       "unauthorized",
       "notfound",
-      "conflict"
+      "conflict",
+      "lru_cache",
+      "lfu_cache",
+      "eviction",
+      "hitratio",
+      "writeback"
     ]
   }
 }
