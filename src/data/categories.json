@@ -1378,7 +1378,12 @@
       "stdout",
       "heredoc",
       "subshell",
-      "redirection"
+      "redirection",
+      "forbidden",
+      "badgateway",
+      "unauthorized",
+      "notfound",
+      "conflict"
     ]
   }
 }
