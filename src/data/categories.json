@@ -1373,7 +1373,12 @@
       "sni",
       "ciphersuite",
       "certificate",
-      "premaster"
+      "premaster",
+      "stderr",
+      "stdout",
+      "heredoc",
+      "subshell",
+      "redirection"
     ]
   }
 }
